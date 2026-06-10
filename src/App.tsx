@@ -1,6 +1,6 @@
 // 암호화된 포트폴리오를 복호화해 단일 대시보드로 보여준다.
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { AlertTriangle, LockKeyhole, RefreshCw, UnlockKeyhole } from "lucide-react";
+import { AlertTriangle, LockKeyhole, Moon, RefreshCw, Sun, UnlockKeyhole } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -15,9 +15,11 @@ import {
 } from "recharts";
 import { decryptPayload, type EncryptedPayload } from "./lib/crypto";
 import { buildDashboardModel } from "./lib/portfolio";
+import { nextTheme, resolveInitialTheme, type ThemeMode } from "./lib/theme";
 import type { DashboardModel, HoldingSummary, PortfolioPayload, RebalanceRow } from "./types/portfolio";
 
 const allocationColors = ["#0f766e", "#2563eb", "#7c3aed", "#d97706", "#be123c", "#475569"];
+const themeStorageKey = "stock-monitoring-theme";
 
 export function App() {
   const [encrypted, setEncrypted] = useState<EncryptedPayload | null>(null);
@@ -27,10 +29,19 @@ export function App() {
   const [unlockError, setUnlockError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [unlocking, setUnlocking] = useState(false);
+  const [theme, setTheme] = useState<ThemeMode>(() =>
+    resolveInitialTheme(localStorage.getItem(themeStorageKey), window.matchMedia("(prefers-color-scheme: dark)").matches),
+  );
 
   useEffect(() => {
     void loadEncryptedPortfolio();
   }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    localStorage.setItem(themeStorageKey, theme);
+  }, [theme]);
 
   const model = useMemo(() => (payload ? buildDashboardModel(payload) : null), [payload]);
 
@@ -75,6 +86,10 @@ export function App() {
     setUnlockError(null);
   }
 
+  function toggleTheme() {
+    setTheme((currentTheme) => nextTheme(currentTheme));
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -83,6 +98,15 @@ export function App() {
           <p>암호화된 포트폴리오</p>
         </div>
         <div className="topbar-actions">
+          <button
+            className="icon-button"
+            type="button"
+            onClick={toggleTheme}
+            aria-label={theme === "dark" ? "라이트 모드" : "다크 모드"}
+            title={theme === "dark" ? "라이트 모드" : "다크 모드"}
+          >
+            {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
           <button className="icon-button" type="button" onClick={loadEncryptedPortfolio} aria-label="새로고침">
             <RefreshCw size={18} />
           </button>
@@ -96,7 +120,7 @@ export function App() {
       </header>
 
       {model && payload ? (
-        <Dashboard model={model} asOf={payload.asOf} />
+        <Dashboard model={model} asOf={payload.asOf} theme={theme} />
       ) : (
         <UnlockPanel
           encrypted={encrypted}
@@ -165,7 +189,9 @@ function UnlockPanel({
   );
 }
 
-function Dashboard({ model, asOf }: { model: DashboardModel; asOf: string }) {
+function Dashboard({ model, asOf, theme }: { model: DashboardModel; asOf: string; theme: ThemeMode }) {
+  const chartGridColor = theme === "dark" ? "#334155" : "#e2e8f0";
+
   return (
     <section className="dashboard-grid">
       <div className="meta-row">
@@ -229,7 +255,7 @@ function Dashboard({ model, asOf }: { model: DashboardModel; asOf: string }) {
                 { name: "누적 실현", value: model.summary.lifetimeRealizedProfitRate },
               ]}
             >
-              <CartesianGrid vertical={false} stroke="#e2e8f0" />
+              <CartesianGrid vertical={false} stroke={chartGridColor} />
               <XAxis dataKey="name" tickLine={false} axisLine={false} />
               <YAxis tickFormatter={(value) => `${Math.round(Number(value) * 100)}%`} tickLine={false} axisLine={false} />
               <Tooltip formatter={(value) => formatPercent(Number(value))} />

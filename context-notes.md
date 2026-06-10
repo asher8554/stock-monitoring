@@ -36,3 +36,13 @@
 - Browser 플러그인으로 데스크톱과 모바일 잠금 해제, 대시보드 표시, 잠금 복귀를 확인했다.
 - GitHub Pages workflow는 공식 GitHub Pages custom workflow 문서 기준으로 `actions/configure-pages@v5`, `actions/upload-pages-artifact@v4`, `actions/deploy-pages@v4`를 사용한다.
 - 한국투자증권과 토스증권 실 API 어댑터는 아직 구현하지 않았다. 실제 키, 계좌 종류, 응답 샘플 확인 후 별도 작업으로 진행해야 한다.
+
+## 2026-06-11
+
+- 다크모드 토글을 추가했다. 초기값은 `localStorage` 저장값을 우선하고, 저장값이 없으면 시스템 `prefers-color-scheme`을 따른다.
+- 테마는 `document.documentElement.dataset.theme`과 `color-scheme`에 반영한다.
+- 한국투자증권과 토스증권 API 키는 `.env.local`로만 전달한다.
+- `.env.local` parser와 credentials validator를 추가했다.
+- 한국투자증권은 `KIS_APP_KEY`, `KIS_APP_SECRET`, `KIS_ACCOUNT_NO`, `KIS_ACCOUNT_PRODUCT_CODE`, `KIS_ACCOUNT_ALIAS`를 로컬에서 읽는다.
+- 토스증권은 `TOSS_APP_KEY`, `TOSS_APP_SECRET`, `TOSS_ACCOUNT_ALIAS`를 로컬에서 읽는다.
+- GitHub Pages와 암호화 payload에는 API 키와 실제 계좌번호를 넣지 않는다.

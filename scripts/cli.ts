@@ -7,6 +7,7 @@ import { stdin as input, stdout as output } from "node:process";
 import { encryptPayload } from "../src/lib/crypto";
 import type { AccountSnapshot, PortfolioPayload, TargetWeight } from "../src/types/portfolio";
 import { readMiraeAssetPositions } from "./adapters/miraeasset";
+import { loadBrokerCredentials, loadEnvFile } from "./credentials";
 import { buildScheduleCommand } from "./scheduler";
 import { createEmptyPortfolio, mergeTargetsIntoPortfolio, readJsonFile, writeJsonFile } from "./payload";
 
@@ -16,6 +17,7 @@ const portfolioPath = path.join(localDir, "portfolio.local.json");
 const targetsPath = path.join(localDir, "targets.local.json");
 const encryptedOutputPath = path.join(projectDir, "public", "portfolio.enc.json");
 const schedulerConfigPath = path.join(localDir, "scheduler.local.json");
+const envLocalPath = path.join(projectDir, ".env.local");
 
 async function main(): Promise<void> {
   const [command, subcommand, ...args] = process.argv.slice(2);
@@ -39,6 +41,9 @@ async function main(): Promise<void> {
 }
 
 async function collect(): Promise<void> {
+  await loadEnvFile(envLocalPath);
+  loadBrokerCredentials();
+
   const manualPath = path.join(localDir, "imports", "manual", "portfolio.json");
   const portfolio = await readOptionalJson<PortfolioPayload>(manualPath);
   const basePortfolio = portfolio ?? createEmptyPortfolio();
