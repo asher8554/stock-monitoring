@@ -1,0 +1,475 @@
+/* 대시보드 화면의 레이아웃과 시각 토큰을 정의한다. */
+:root {
+  color: #172033;
+  background: #f7f9fb;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-synthesis: none;
+  letter-spacing: 0;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(180deg, #eef4f6 0, #f7f9fb 260px),
+    #f7f9fb;
+}
+
+button,
+input {
+  font: inherit;
+  letter-spacing: 0;
+}
+
+button {
+  border: 0;
+  cursor: pointer;
+}
+
+button:disabled,
+input:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.app-shell {
+  width: min(1180px, calc(100vw - 32px));
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 28px 0 48px;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.topbar h1 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 28px;
+  font-weight: 760;
+  line-height: 1.15;
+}
+
+.topbar p {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-button,
+.secondary-button,
+.unlock-form button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  border-radius: 8px;
+}
+
+.icon-button {
+  width: 40px;
+  color: #334155;
+  background: #ffffff;
+  border: 1px solid #dbe3ea;
+}
+
+.secondary-button {
+  padding: 0 14px;
+  color: #0f172a;
+  background: #ffffff;
+  border: 1px solid #dbe3ea;
+}
+
+.unlock-layout {
+  display: grid;
+  min-height: calc(100vh - 152px);
+  place-items: center;
+}
+
+.unlock-panel {
+  width: min(420px, 100%);
+  padding: 28px;
+  border: 1px solid #dbe3ea;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.08);
+}
+
+.lock-mark {
+  display: grid;
+  width: 56px;
+  height: 56px;
+  place-items: center;
+  margin-bottom: 18px;
+  border-radius: 8px;
+  color: #0f766e;
+  background: #e6f4f1;
+}
+
+.unlock-panel h2 {
+  margin: 0 0 18px;
+  color: #0f172a;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.unlock-form {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.unlock-form input {
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 13px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  outline: none;
+}
+
+.unlock-form input:focus {
+  border-color: #0f766e;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+}
+
+.unlock-form button {
+  min-width: 92px;
+  padding: 0 16px;
+  color: #ffffff;
+  background: #0f766e;
+}
+
+.status-line,
+.error-line {
+  min-height: 20px;
+  margin-top: 14px;
+  font-size: 13px;
+}
+
+.status-line {
+  color: #64748b;
+}
+
+.error-line {
+  color: #be123c;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+}
+
+.meta-row {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.kpi-tile,
+.panel {
+  border: 1px solid #dbe3ea;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 14px 48px rgba(15, 23, 42, 0.05);
+}
+
+.kpi-tile {
+  min-height: 112px;
+  padding: 18px;
+}
+
+.kpi-tile span {
+  display: block;
+  color: #64748b;
+  font-size: 13px;
+}
+
+.kpi-tile strong {
+  display: block;
+  margin-top: 14px;
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.panel {
+  padding: 18px;
+}
+
+.allocation-panel,
+.account-panel,
+.profit-panel {
+  grid-column: span 4;
+  min-height: 316px;
+}
+
+.wide-panel {
+  grid-column: 1 / -1;
+}
+
+.section-heading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.section-heading p {
+  margin: 2px 0 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.chart-wrap,
+.bar-wrap {
+  width: 100%;
+  height: 236px;
+}
+
+.account-list {
+  display: grid;
+  gap: 10px;
+}
+
+.account-row {
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.account-row strong,
+.account-row span {
+  display: block;
+}
+
+.account-row strong {
+  color: #0f172a;
+  font-size: 14px;
+}
+
+.account-row span {
+  margin-top: 5px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #e2e8f0;
+  text-align: right;
+  white-space: nowrap;
+}
+
+th:first-child,
+td:first-child {
+  text-align: left;
+}
+
+th {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+td {
+  color: #172033;
+  font-size: 14px;
+}
+
+td strong,
+td span {
+  display: block;
+}
+
+td span {
+  margin-top: 4px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.positive {
+  color: #15803d !important;
+}
+
+.negative {
+  color: #be123c !important;
+}
+
+.neutral {
+  color: #172033 !important;
+}
+
+.action-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 28px;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.action-pill.buy {
+  color: #166534;
+  background: #dcfce7;
+}
+
+.action-pill.trim {
+  color: #9f1239;
+  background: #ffe4e6;
+}
+
+.action-pill.hold {
+  color: #475569;
+  background: #e2e8f0;
+}
+
+.warning-strip {
+  display: flex;
+  grid-column: 1 / -1;
+  gap: 10px;
+  padding: 14px 16px;
+  border: 1px solid #f5c16c;
+  border-radius: 8px;
+  color: #92400e;
+  background: #fff7ed;
+}
+
+.warning-strip p {
+  margin: 0 0 4px;
+  font-size: 13px;
+}
+
+.warning-strip p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    width: min(100vw - 22px, 720px);
+    padding-top: 18px;
+  }
+
+  .topbar {
+    align-items: flex-start;
+  }
+
+  .kpi-grid,
+  .dashboard-grid {
+    gap: 12px;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .allocation-panel,
+  .account-panel,
+  .profit-panel {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    flex-direction: column;
+  }
+
+  .topbar h1 {
+    font-size: 24px;
+  }
+
+  .topbar-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .unlock-panel {
+    padding: 22px;
+  }
+
+  .unlock-form {
+    grid-template-columns: 1fr;
+  }
+
+  .unlock-form button {
+    width: 100%;
+  }
+
+  .meta-row,
+  .section-heading {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-tile {
+    min-height: 92px;
+  }
+}

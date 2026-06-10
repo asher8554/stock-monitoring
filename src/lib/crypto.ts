@@ -27,7 +27,7 @@ export async function encryptPayload(payload: unknown, password: string, options
   const iterations = options.iterations ?? DEFAULT_ITERATIONS;
   const key = await deriveAesKey(password, salt, iterations);
   const plaintext = textEncoder.encode(JSON.stringify(payload));
-  const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, plaintext);
+  const ciphertext = await crypto.subtle.encrypt({ name: "AES-GCM", iv: toArrayBuffer(iv) }, key, toArrayBuffer(plaintext));
 
   return {
     version: 1,
@@ -47,7 +47,7 @@ export async function decryptPayload(encrypted: EncryptedPayload, password: stri
   const iv = fromBase64(encrypted.iv);
   const ciphertext = fromBase64(encrypted.ciphertext);
   const key = await deriveAesKey(password, salt, encrypted.iterations);
-  const plaintext = await crypto.subtle.decrypt({ name: encrypted.algorithm, iv }, key, ciphertext);
+  const plaintext = await crypto.subtle.decrypt({ name: encrypted.algorithm, iv: toArrayBuffer(iv) }, key, toArrayBuffer(ciphertext));
   return JSON.parse(textDecoder.decode(plaintext));
 }
 
@@ -57,7 +57,7 @@ async function deriveAesKey(password: string, salt: Uint8Array, iterations: numb
     {
       name: "PBKDF2",
       hash: "SHA-256",
-      salt,
+      salt: toArrayBuffer(salt),
       iterations,
     },
     baseKey,
@@ -99,4 +99,8 @@ function fromBase64(value: string): Uint8Array {
     bytes[index] = binary.charCodeAt(index);
   }
   return bytes;
+}
+
+function toArrayBuffer(bytes: Uint8Array): ArrayBuffer {
+  return bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer;
 }

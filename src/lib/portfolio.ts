@@ -11,7 +11,7 @@ import type {
 
 export function buildDashboardModel(payload: PortfolioPayload): DashboardModel {
   const warnings = [...payload.warnings];
-  const eligiblePositions = payload.positions.filter((position) => {
+  const eligiblePositions = payload.positions.filter((position): position is EligiblePosition => {
     if (position.krwValuationAvailable && position.valuationKrw !== null) {
       return true;
     }

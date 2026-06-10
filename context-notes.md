@@ -23,3 +23,16 @@
 - 리밸런싱은 사용자가 로컬에서 입력한 종목별 목표 비중과 현재 비중 차이로 판단한다.
 - 로컬 실행은 수동이 기본이다. 나중에 Windows 작업 스케줄러를 enable/disable할 수 있게 CLI 명령을 둔다.
 - `publish-data`는 암호화 파일 생성까지만 한다. git commit/push는 수동이다.
+
+## 2026-06-10 구현 진행
+
+- Superpowers의 TDD 흐름으로 암호화, 포트폴리오 집계, 리밸런싱, 스케줄러 명령, payload 병합, 미래에셋 파서 테스트를 먼저 작성했다.
+- `xlsx`와 `exceljs`는 audit 문제가 남아 `read-excel-file`로 대체했다.
+- 현재 `npm audit --json` 결과 취약점은 0개다.
+- `public/portfolio.enc.json`은 더미 데이터용 암호문이다. 데모 비밀번호는 `demo-password`다.
+- React 대시보드는 비밀번호 입력 전에는 데이터를 표시하지 않는다.
+- 복호화 성공 후 모바일에서 입력 포커스 스크롤이 남는 문제가 있어 성공 시 `window.scrollTo(0, 0)`로 보정했다.
+- Recharts 초기 측정 경고는 `ResponsiveContainer`의 `initialDimension`으로 해결했다.
+- Browser 플러그인으로 데스크톱과 모바일 잠금 해제, 대시보드 표시, 잠금 복귀를 확인했다.
+- GitHub Pages workflow는 공식 GitHub Pages custom workflow 문서 기준으로 `actions/configure-pages@v5`, `actions/upload-pages-artifact@v4`, `actions/deploy-pages@v4`를 사용한다.
+- 한국투자증권과 토스증권 실 API 어댑터는 아직 구현하지 않았다. 실제 키, 계좌 종류, 응답 샘플 확인 후 별도 작업으로 진행해야 한다.

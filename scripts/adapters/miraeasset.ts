@@ -27,7 +27,7 @@ export async function readMiraeAssetPositions(importDir: string, options: MiraeA
       positions.push(...parseMiraeAssetRows(await readCsvRows(filePath), options));
     }
     if (extension === ".xlsx") {
-      positions.push(...parseMiraeAssetRows(await readXlsxFile(filePath), options));
+      positions.push(...parseMiraeAssetRows((await readXlsxFile(filePath)) as unknown as TableRow[], options));
     }
   }
 

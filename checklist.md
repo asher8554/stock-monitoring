@@ -10,18 +10,20 @@
 
 ## 구현 예정
 
-- [ ] Vite + React + TypeScript 앱을 생성한다.
-- [ ] Node.js CLI 구조를 만든다.
-- [ ] `PBKDF2-SHA-256 + AES-GCM` 암호화와 브라우저 복호화를 구현한다.
-- [ ] `portfolio.enc.json` 로드와 비밀번호 입력 화면을 구현한다.
-- [ ] 단일 대시보드 화면을 구현한다.
+- [x] Vite + React + TypeScript 앱을 생성한다.
+- [x] Node.js CLI 구조를 만든다.
+- [x] `PBKDF2-SHA-256 + AES-GCM` 암호화와 브라우저 복호화를 구현한다.
+- [x] `portfolio.enc.json` 로드와 비밀번호 입력 화면을 구현한다.
+- [x] 단일 대시보드 화면을 구현한다.
 - [ ] 한국투자증권 API 어댑터를 구현한다.
 - [ ] 토스증권 API 어댑터를 구현한다.
-- [ ] 미래에셋 CSV/XLSX 어댑터를 구현한다.
-- [ ] `targets.local.json` 기반 리밸런싱 계산을 구현한다.
-- [ ] Windows 작업 스케줄러 enable/disable 명령을 구현한다.
-- [ ] 샘플 미래에셋 파일 기반 파서 테스트를 추가한다.
-- [ ] 빌드와 테스트를 통과시킨다.
+- [x] 미래에셋 표준 CSV/XLSX 어댑터를 구현한다.
+- [x] `targets.local.json` 기반 리밸런싱 계산을 구현한다.
+- [x] Windows 작업 스케줄러 enable/disable 명령을 구현한다.
+- [x] 샘플 미래에셋 파일 기반 파서 테스트를 추가한다.
+- [x] 빌드와 테스트를 통과시킨다.
+- [x] GitHub Pages Actions 배포 workflow를 추가한다.
+- [ ] 실제 미래에셋 샘플 파일 기준으로 헤더 매핑을 보강한다.
 
 ## 나중에 검토
 
