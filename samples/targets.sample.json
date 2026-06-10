@@ -1,0 +1,23 @@
+[
+  {
+    "id": "KRX:005930",
+    "market": "KRX",
+    "symbol": "005930",
+    "targetWeight": 0.3,
+    "rebalanceThreshold": 0.05
+  },
+  {
+    "id": "NASDAQ:NVDA",
+    "market": "NASDAQ",
+    "symbol": "NVDA",
+    "targetWeight": 0.25,
+    "rebalanceThreshold": 0.05
+  },
+  {
+    "id": "KRX:000660",
+    "market": "KRX",
+    "symbol": "000660",
+    "targetWeight": 0.2,
+    "rebalanceThreshold": 0.05
+  }
+]

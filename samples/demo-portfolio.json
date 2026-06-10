@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "baseCurrency": "KRW",
+  "asOf": "2026-06-10T15:30:00+09:00",
+  "accounts": [
+    {
+      "id": "korea-investment-isa",
+      "broker": "korea-investment",
+      "alias": "한국투자 ISA",
+      "currency": "KRW",
+      "valuationKrw": 12450000,
+      "cashKrw": 850000,
+      "unrealizedProfitKrw": 1450000,
+      "unrealizedProfitRate": 0.132
+    },
+    {
+      "id": "toss-general",
+      "broker": "toss",
+      "alias": "토스 일반",
+      "currency": "KRW",
+      "valuationKrw": 8320000,
+      "cashKrw": 430000,
+      "unrealizedProfitKrw": -320000,
+      "unrealizedProfitRate": -0.037
+    },
+    {
+      "id": "miraeasset-general",
+      "broker": "miraeasset",
+      "alias": "미래에셋 일반",
+      "currency": "KRW",
+      "valuationKrw": 5120000,
+      "cashKrw": 210000,
+      "unrealizedProfitKrw": 410000,
+      "unrealizedProfitRate": 0.087
+    }
+  ],
+  "positions": [
+    {
+      "id": "KRX:005930",
+      "market": "KRX",
+      "symbol": "005930",
+      "name": "삼성전자",
+      "broker": "korea-investment",
+      "accountId": "korea-investment-isa",
+      "quantity": 80,
+      "currency": "KRW",
+      "valuation": 5840000,
+      "valuationKrw": 5840000,
+      "costBasis": 5200000,
+      "costBasisKrw": 5200000,
+      "unrealizedProfit": 640000,
+      "unrealizedProfitKrw": 640000,
+      "unrealizedProfitRate": 0.1231,
+      "krwValuationAvailable": true
+    },
+    {
+      "id": "NASDAQ:NVDA",
+      "market": "NASDAQ",
+      "symbol": "NVDA",
+      "name": "NVIDIA",
+      "broker": "toss",
+      "accountId": "toss-general",
+      "quantity": 16,
+      "currency": "USD",
+      "valuation": 2304,
+      "valuationKrw": 3170000,
+      "costBasis": 2120,
+      "costBasisKrw": 2910000,
+      "unrealizedProfit": 184,
+      "unrealizedProfitKrw": 260000,
+      "unrealizedProfitRate": 0.0893,
+      "krwValuationAvailable": true
+    },
+    {
+      "id": "KRX:000660",
+      "market": "KRX",
+      "symbol": "000660",
+      "name": "SK하이닉스",
+      "broker": "miraeasset",
+      "accountId": "miraeasset-general",
+      "quantity": 20,
+      "currency": "KRW",
+      "valuation": 4120000,
+      "valuationKrw": 4120000,
+      "costBasis": 3840000,
+      "costBasisKrw": 3840000,
+      "unrealizedProfit": 280000,
+      "unrealizedProfitKrw": 280000,
+      "unrealizedProfitRate": 0.0729,
+      "krwValuationAvailable": true
+    },
+    {
+      "id": "NASDAQ:ABC",
+      "market": "NASDAQ",
+      "symbol": "ABC",
+      "name": "ABC Corp",
+      "broker": "toss",
+      "accountId": "toss-general",
+      "quantity": 4,
+      "currency": "USD",
+      "valuation": 520,
+      "valuationKrw": null,
+      "costBasis": 480,
+      "costBasisKrw": null,
+      "unrealizedProfit": 40,
+      "unrealizedProfitKrw": null,
+      "unrealizedProfitRate": 0.0833,
+      "krwValuationAvailable": false
+    }
+  ],
+  "realizedProfit": {
+    "ytd": {
+      "profitKrw": 730000,
+      "profitRate": 0.041
+    },
+    "lifetime": {
+      "profitKrw": 2680000,
+      "profitRate": 0.128
+    }
+  },
+  "targets": [],
+  "warnings": []
+}
