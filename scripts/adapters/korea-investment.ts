@@ -137,23 +137,44 @@ async function fetchAccessToken(
   credentials: KoreaInvestmentCredentials,
   fetcher: typeof fetch,
 ): Promise<string> {
-  const response = await fetchJson(`${baseUrl}${TOKEN_PATH}`, fetcher, {
-    method: "POST",
-    headers: {
+  const response = await fetchKisPost(
+    "KIS access token",
+    `${baseUrl}${TOKEN_PATH}`,
+    {
+      grant_type: "client_credentials",
+      appkey: credentials.appKey,
+      appsecret: credentials.appSecret,
+    },
+    {
       "Content-Type": "application/json",
       Accept: "text/plain",
       charset: "UTF-8",
     },
-    body: JSON.stringify({
-      grant_type: "client_credentials",
-      appkey: credentials.appKey,
-      appsecret: credentials.appSecret,
-    }),
-  });
+    fetcher,
+  );
   if (!response.access_token) {
     throw new Error("KIS token response did not include access_token");
   }
   return response.access_token;
+}
+
+async function fetchKisPost(
+  label: string,
+  url: string,
+  body: Record<string, string>,
+  requestHeaders: Record<string, string>,
+  fetcher: typeof fetch,
+): Promise<KisJsonResponse> {
+  try {
+    return await fetchJson(url, fetcher, {
+      method: "POST",
+      headers: requestHeaders,
+      body: JSON.stringify(body),
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    throw new Error(`${label} failed: ${message}`);
+  }
 }
 
 async function fetchDomesticBalance(
