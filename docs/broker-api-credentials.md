@@ -24,6 +24,7 @@ KIS_APP_SECRET=
 KIS_ACCOUNT_NO=
 KIS_ACCOUNT_PRODUCT_CODE=
 KIS_ACCOUNT_ALIAS=한국투자 ISA
+KIS_ENVIRONMENT=real
 
 TOSS_APP_KEY=
 TOSS_APP_SECRET=
@@ -41,8 +42,23 @@ TOSS_ACCOUNT_ALIAS=토스 일반
 - `KIS_ACCOUNT_NO`.
 - `KIS_ACCOUNT_PRODUCT_CODE`.
 - `KIS_ACCOUNT_ALIAS`.
+- `KIS_ENVIRONMENT`. 기본값은 `real`이고 모의투자는 `demo`다.
 
 계좌번호는 API 호출에만 사용한다. 암호화 payload와 GitHub Pages 화면에는 계좌 별칭만 남긴다.
+
+현재 구현된 한국투자증권 수집 범위는 국내주식 잔고와 미국주식 잔고다. 미국주식 잔고는 한국투자증권 실전 API의 `NASD` 거래소 코드로 조회한다.
+
+### 한국투자증권 오류 확인
+
+`KIS domestic balance failed: KIS API APBK1271: 해당계좌 정보가 없습니다.(Not Found)`가 나오면 인증 토큰은 발급됐지만 국내주식 잔고 조회에서 계좌를 찾지 못한 상태다.
+
+먼저 다음을 확인한다.
+
+- `KIS_ACCOUNT_NO`는 계좌번호 앞 8자리만 입력한다.
+- `KIS_ACCOUNT_PRODUCT_CODE`는 계좌번호 뒤 2자리만 입력한다.
+- 실전 API 키면 `KIS_ENVIRONMENT=real`, 모의 API 키면 `KIS_ENVIRONMENT=demo`로 둔다.
+- KIS Developers에서 해당 계좌로 Open API 서비스 신청과 앱키 발급이 완료되어 있어야 한다.
+- 앱키와 앱시크릿이 같은 계좌와 같은 환경에서 발급된 값이어야 한다.
 
 ## 토스증권
 
@@ -55,6 +71,8 @@ TOSS_ACCOUNT_ALIAS=토스 일반
 - `TOSS_ACCOUNT_ALIAS`.
 
 토스증권에서 계좌 식별값이 별도로 필요하면 `TOSS_ACCOUNT_ID`를 추가한다. 실제 어댑터 구현 시 공식 응답 샘플을 보고 확정한다.
+
+토스증권 API 키가 아직 없으면 `TOSS_*` 값을 비워 둔다. 이 상태에서 `npm run collect`는 토스 수집을 건너뛴다.
 
 ## 전달 방법
 

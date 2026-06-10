@@ -46,3 +46,13 @@
 - 한국투자증권은 `KIS_APP_KEY`, `KIS_APP_SECRET`, `KIS_ACCOUNT_NO`, `KIS_ACCOUNT_PRODUCT_CODE`, `KIS_ACCOUNT_ALIAS`를 로컬에서 읽는다.
 - 토스증권은 `TOSS_APP_KEY`, `TOSS_APP_SECRET`, `TOSS_ACCOUNT_ALIAS`를 로컬에서 읽는다.
 - GitHub Pages와 암호화 payload에는 API 키와 실제 계좌번호를 넣지 않는다.
+
+## 2026-06-11 한국투자 API 연결
+
+- 사용자가 토스증권 API를 아직 받지 못했으므로 이번 작업은 한국투자증권 실제 수집만 진행한다.
+- KIS 공식 샘플 기준 OAuth endpoint는 `/oauth2/tokenP`, 국내주식 잔고 endpoint는 `/uapi/domestic-stock/v1/trading/inquire-balance`, 해외주식 잔고 endpoint는 `/uapi/overseas-stock/v1/trading/inquire-balance`다.
+- 국내주식 잔고 TR ID는 실전 `TTTC8434R`, 모의 `VTTC8434R`다.
+- 해외주식 잔고 TR ID는 실전 `TTTS3012R`, 모의 `VTTS3012R`다.
+- `.env.local`에는 KIS 키만 실제 값으로 두고, 토스 키가 비어 있으면 collect가 토스 없이 진행해야 한다.
+- 실제 `npm run collect` 실행 결과 KIS 토큰 발급 후 국내 잔고 조회에서 `APBK1271: 해당계좌 정보가 없습니다.(Not Found)`가 반환됐다.
+- 계좌번호 길이는 앞 8자리와 상품코드 2자리 형식으로 보였으므로, KIS Developers 계좌 연결, 실전/모의 환경, 계좌상품코드가 다음 확인 대상이다.

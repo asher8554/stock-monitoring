@@ -22,6 +22,7 @@ describe("broker credentials", () => {
       accountNo: "12345678",
       accountProductCode: "01",
       accountAlias: "한국투자 ISA",
+      environment: "real",
     });
     expect(credentials.toss).toEqual({
       appKey: "toss-app-key",
@@ -48,6 +49,31 @@ KIS_APP_SECRET="kis-app-secret"
     ).toEqual({
       KIS_APP_KEY: "kis-app-key",
       KIS_APP_SECRET: "kis-app-secret",
+    });
+  });
+
+  test("loads Korea Investment demo environment when explicitly configured", () => {
+    const credentials = loadBrokerCredentials({
+      KIS_APP_KEY: "kis-app-key",
+      KIS_APP_SECRET: "kis-app-secret",
+      KIS_ACCOUNT_NO: "12345678",
+      KIS_ACCOUNT_PRODUCT_CODE: "01",
+      KIS_ACCOUNT_ALIAS: "한국투자 ISA",
+      KIS_ENVIRONMENT: "demo",
+    });
+
+    expect(credentials.koreaInvestment?.environment).toBe("demo");
+  });
+
+  test("does not treat display aliases alone as configured broker credentials", () => {
+    const credentials = loadBrokerCredentials({
+      KIS_ACCOUNT_ALIAS: "한국투자 ISA",
+      TOSS_ACCOUNT_ALIAS: "토스 일반",
+    });
+
+    expect(credentials).toEqual({
+      koreaInvestment: null,
+      toss: null,
     });
   });
 });

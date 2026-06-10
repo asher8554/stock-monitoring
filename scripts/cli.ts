@@ -5,8 +5,10 @@ import path from "node:path";
 import { createInterface } from "node:readline/promises";
 import { stdin as input, stdout as output } from "node:process";
 import { encryptPayload } from "../src/lib/crypto";
-import type { AccountSnapshot, PortfolioPayload, TargetWeight } from "../src/types/portfolio";
+import type { PortfolioPayload, TargetWeight } from "../src/types/portfolio";
+import { fetchKoreaInvestmentPortfolio } from "./adapters/korea-investment";
 import { readMiraeAssetPositions } from "./adapters/miraeasset";
+import { mergeCollectedPortfolio } from "./collect";
 import { loadBrokerCredentials, loadEnvFile } from "./credentials";
 import { buildScheduleCommand } from "./scheduler";
 import { createEmptyPortfolio, mergeTargetsIntoPortfolio, readJsonFile, writeJsonFile } from "./payload";
@@ -42,22 +44,25 @@ async function main(): Promise<void> {
 
 async function collect(): Promise<void> {
   await loadEnvFile(envLocalPath);
-  loadBrokerCredentials();
+  const credentials = loadBrokerCredentials();
 
   const manualPath = path.join(localDir, "imports", "manual", "portfolio.json");
   const portfolio = await readOptionalJson<PortfolioPayload>(manualPath);
   const basePortfolio = portfolio ?? createEmptyPortfolio();
+  const koreaInvestment = credentials.koreaInvestment
+    ? await fetchKoreaInvestmentPortfolio(credentials.koreaInvestment)
+    : null;
   const miraePositions = await readMiraeAssetPositions(path.join(localDir, "imports", "miraeasset"), {
     accountId: "miraeasset-general",
     accountAlias: "미래에셋 일반",
   });
 
-  const merged: PortfolioPayload = {
-    ...basePortfolio,
+  const merged = mergeCollectedPortfolio({
+    basePortfolio,
     asOf: new Date().toISOString(),
-    accounts: ensureMiraeAccount(basePortfolio.accounts, miraePositions),
-    positions: [...basePortfolio.positions.filter((position) => position.broker !== "miraeasset"), ...miraePositions],
-  };
+    koreaInvestment,
+    miraeAssetPositions: miraePositions,
+  });
 
   await writeJsonFile(portfolioPath, merged);
   console.log(`portfolio.local.json written: ${portfolioPath}`);
@@ -115,29 +120,6 @@ async function readPassword(): Promise<string> {
   const password = await reader.question("암호화 비밀번호 입력. ");
   reader.close();
   return password;
-}
-
-function ensureMiraeAccount(accounts: AccountSnapshot[], positions: PortfolioPayload["positions"]): AccountSnapshot[] {
-  if (positions.length === 0 || accounts.some((account) => account.id === "miraeasset-general")) {
-    return accounts;
-  }
-
-  const valuationKrw = positions.reduce((total, position) => total + (position.valuationKrw ?? 0), 0);
-  const unrealizedProfitKrw = positions.reduce((total, position) => total + (position.unrealizedProfitKrw ?? 0), 0);
-
-  return [
-    ...accounts,
-    {
-      id: "miraeasset-general",
-      broker: "miraeasset",
-      alias: "미래에셋 일반",
-      currency: "KRW",
-      valuationKrw,
-      cashKrw: 0,
-      unrealizedProfitKrw,
-      unrealizedProfitRate: valuationKrw > 0 ? unrealizedProfitKrw / (valuationKrw - unrealizedProfitKrw) : 0,
-    },
-  ];
 }
 
 function readTimeArg(args: string[]): string | null {

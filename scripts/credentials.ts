@@ -12,6 +12,7 @@ export interface KoreaInvestmentCredentials {
   accountNo: string;
   accountProductCode: string;
   accountAlias: string;
+  environment: "real" | "demo";
 }
 
 export interface TossCredentials {
@@ -69,31 +70,43 @@ export function parseEnvFile(content: string): Record<string, string> {
 }
 
 function loadKisCredentials(env: EnvMap): KoreaInvestmentCredentials | null {
-  const values = {
+  const configuredValues = {
     appKey: readEnv(env, "KIS_APP_KEY"),
     appSecret: readEnv(env, "KIS_APP_SECRET"),
     accountNo: readEnv(env, "KIS_ACCOUNT_NO"),
     accountProductCode: readEnv(env, "KIS_ACCOUNT_PRODUCT_CODE"),
+  };
+  const requiredValues = {
+    ...configuredValues,
     accountAlias: readEnv(env, "KIS_ACCOUNT_ALIAS"),
   };
 
-  if (allEmpty(values)) {
+  if (allEmpty(configuredValues)) {
     return null;
   }
-  if (someEmpty(values)) {
+  if (someEmpty(requiredValues)) {
     throw new Error("KIS credentials are incomplete");
   }
-  return values as KoreaInvestmentCredentials;
+
+  const environment = readEnv(env, "KIS_ENVIRONMENT") || "real";
+  if (environment !== "real" && environment !== "demo") {
+    throw new Error("KIS_ENVIRONMENT must be real or demo");
+  }
+
+  return { ...requiredValues, environment };
 }
 
 function loadTossCredentials(env: EnvMap): TossCredentials | null {
-  const values = {
+  const configuredValues = {
     appKey: readEnv(env, "TOSS_APP_KEY"),
     appSecret: readEnv(env, "TOSS_APP_SECRET"),
+  };
+  const values = {
+    ...configuredValues,
     accountAlias: readEnv(env, "TOSS_ACCOUNT_ALIAS"),
   };
 
-  if (allEmpty(values)) {
+  if (allEmpty(configuredValues)) {
     return null;
   }
   if (someEmpty(values)) {

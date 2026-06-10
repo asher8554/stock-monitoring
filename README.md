@@ -10,6 +10,7 @@ GitHub Pages에서 암호화된 포트폴리오 파일을 복호화해 수익률
 - 라이트/다크 모드 토글과 로컬 테마 저장.
 - 전체 평가금액, YTD 실현손익, 평가손익률, 현금 비중 KPI.
 - 계좌별 요약, 종목별 통합, 리밸런싱 테이블.
+- 한국투자증권 Open API 국내주식 잔고와 미국주식 잔고 수집.
 - 미래에셋 표준 CSV/XLSX 행 파서.
 - Windows 작업 스케줄러 enable/disable 명령.
 - GitHub Pages Actions 배포 workflow.
@@ -63,7 +64,6 @@ npm run schedule:disable
 
 ## 아직 남은 것
 
-- 한국투자증권 Open API 실제 계좌 조회 어댑터.
 - 토스증권 Open API 실제 계좌 조회 어댑터.
 - 사용자가 제공할 미래에셋 실제 샘플 파일 기준 파서 매핑 보강.
 
