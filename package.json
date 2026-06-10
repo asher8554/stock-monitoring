@@ -1,0 +1,35 @@
+{
+  "name": "stock-monitoring",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc -p tsconfig.json && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "vitest run",
+    "collect": "tsx scripts/cli.ts collect",
+    "encrypt": "tsx scripts/cli.ts encrypt",
+    "publish-data": "tsx scripts/cli.ts publish-data",
+    "schedule:enable": "tsx scripts/cli.ts schedule enable",
+    "schedule:disable": "tsx scripts/cli.ts schedule disable",
+    "demo:data": "tsx scripts/demo-data.ts"
+  },
+  "dependencies": {
+    "lucide-react": "^1.17.0",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "read-excel-file": "^9.1.1",
+    "recharts": "^3.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "tsx": "^4.22.4",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.16",
+    "vitest": "^4.1.8"
+  }
+}
