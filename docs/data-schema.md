@@ -113,6 +113,8 @@
 - 목표 비중은 `targets.local.json`에서 관리한다.
 - GitHub에는 평문 목표 비중을 올리지 않는다.
 - 현재 비중과 목표 비중의 차이가 `rebalanceThreshold`를 넘으면 리밸런싱 필요로 표시한다.
+- 대시보드 UI에서 수정한 목표 비중과 허용오차는 브라우저 `localStorage`에 저장되며, 암호화 payload의 `targets`보다 우선 적용된다.
+- UI 설정을 초기화하면 `targets` 값으로 돌아간다. `targets`가 없는 보유 종목은 현재 비중과 기본 허용오차 5%를 사용한다.
 
 ## Warning
 

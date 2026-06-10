@@ -1,6 +1,6 @@
 // 암호화된 포트폴리오를 복호화해 단일 대시보드로 보여준다.
 import { FormEvent, useEffect, useMemo, useState } from "react";
-import { AlertTriangle, LockKeyhole, Moon, RefreshCw, Sun, UnlockKeyhole } from "lucide-react";
+import { AlertTriangle, LockKeyhole, Moon, RefreshCw, RotateCcw, SlidersHorizontal, Sun, UnlockKeyhole } from "lucide-react";
 import {
   Bar,
   BarChart,
@@ -15,11 +15,20 @@ import {
 } from "recharts";
 import { decryptPayload, type EncryptedPayload } from "./lib/crypto";
 import { buildDashboardModel } from "./lib/portfolio";
+import {
+  buildRebalanceSettings,
+  formatPercentInput,
+  parsePercentInput,
+  toTargetWeights,
+  type RebalanceSetting,
+  type StoredRebalanceTarget,
+} from "./lib/rebalance-settings";
 import { nextTheme, resolveInitialTheme, type ThemeMode } from "./lib/theme";
 import type { DashboardModel, HoldingSummary, PortfolioPayload, RebalanceRow } from "./types/portfolio";
 
 const allocationColors = ["#0f766e", "#2563eb", "#7c3aed", "#d97706", "#be123c", "#475569"];
 const themeStorageKey = "stock-monitoring-theme";
+const rebalanceStorageKey = "stock-monitoring-rebalance-targets";
 
 export function App() {
   const [encrypted, setEncrypted] = useState<EncryptedPayload | null>(null);
@@ -29,6 +38,7 @@ export function App() {
   const [unlockError, setUnlockError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [unlocking, setUnlocking] = useState(false);
+  const [storedRebalanceTargets, setStoredRebalanceTargets] = useState<StoredRebalanceTarget[]>(readStoredRebalanceTargets);
   const [theme, setTheme] = useState<ThemeMode>(() =>
     resolveInitialTheme(localStorage.getItem(themeStorageKey), window.matchMedia("(prefers-color-scheme: dark)").matches),
   );
@@ -43,7 +53,20 @@ export function App() {
     localStorage.setItem(themeStorageKey, theme);
   }, [theme]);
 
-  const model = useMemo(() => (payload ? buildDashboardModel(payload) : null), [payload]);
+  useEffect(() => {
+    localStorage.setItem(rebalanceStorageKey, JSON.stringify(storedRebalanceTargets));
+  }, [storedRebalanceTargets]);
+
+  const baseModel = useMemo(() => (payload ? buildDashboardModel(payload) : null), [payload]);
+  const rebalanceSettings = useMemo(
+    () => (payload && baseModel ? buildRebalanceSettings(baseModel.holdings, payload.targets, storedRebalanceTargets) : []),
+    [baseModel, payload, storedRebalanceTargets],
+  );
+  const effectivePayload = useMemo(
+    () => (payload ? { ...payload, targets: toTargetWeights(rebalanceSettings) } : null),
+    [payload, rebalanceSettings],
+  );
+  const model = useMemo(() => (effectivePayload ? buildDashboardModel(effectivePayload) : null), [effectivePayload]);
 
   async function loadEncryptedPortfolio() {
     setLoading(true);
@@ -90,6 +113,31 @@ export function App() {
     setTheme((currentTheme) => nextTheme(currentTheme));
   }
 
+  function updateRebalanceSetting(id: string, field: "targetWeight" | "rebalanceThreshold", rawValue: string) {
+    const setting = rebalanceSettings.find((item) => item.id === id);
+    if (!setting) {
+      return;
+    }
+
+    const value = parsePercentInput(rawValue, setting[field]);
+    setStoredRebalanceTargets((currentTargets) => {
+      const targetById = new Map(currentTargets.map((target) => [target.id, target]));
+      const currentTarget = targetById.get(id);
+      targetById.set(id, {
+        id,
+        targetWeight: field === "targetWeight" ? value : (currentTarget?.targetWeight ?? setting.targetWeight),
+        rebalanceThreshold:
+          field === "rebalanceThreshold" ? value : (currentTarget?.rebalanceThreshold ?? setting.rebalanceThreshold),
+      });
+      return [...targetById.values()];
+    });
+  }
+
+  function resetRebalanceSettings() {
+    localStorage.removeItem(rebalanceStorageKey);
+    setStoredRebalanceTargets([]);
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -120,7 +168,14 @@ export function App() {
       </header>
 
       {model && payload ? (
-        <Dashboard model={model} asOf={payload.asOf} theme={theme} />
+        <Dashboard
+          model={model}
+          asOf={payload.asOf}
+          theme={theme}
+          rebalanceSettings={rebalanceSettings}
+          onRebalanceSettingChange={updateRebalanceSetting}
+          onRebalanceSettingsReset={resetRebalanceSettings}
+        />
       ) : (
         <UnlockPanel
           encrypted={encrypted}
@@ -189,7 +244,21 @@ function UnlockPanel({
   );
 }
 
-function Dashboard({ model, asOf, theme }: { model: DashboardModel; asOf: string; theme: ThemeMode }) {
+function Dashboard({
+  model,
+  asOf,
+  theme,
+  rebalanceSettings,
+  onRebalanceSettingChange,
+  onRebalanceSettingsReset,
+}: {
+  model: DashboardModel;
+  asOf: string;
+  theme: ThemeMode;
+  rebalanceSettings: RebalanceSetting[];
+  onRebalanceSettingChange: (id: string, field: "targetWeight" | "rebalanceThreshold", value: string) => void;
+  onRebalanceSettingsReset: () => void;
+}) {
   const chartGridColor = theme === "dark" ? "#334155" : "#e2e8f0";
 
   return (
@@ -266,8 +335,92 @@ function Dashboard({ model, asOf, theme }: { model: DashboardModel; asOf: string
       </section>
 
       <HoldingsTable holdings={model.holdings} />
+      <RebalanceSettingsPanel
+        settings={rebalanceSettings}
+        onChange={onRebalanceSettingChange}
+        onReset={onRebalanceSettingsReset}
+      />
       <RebalanceTable rows={model.rebalance} />
       <Warnings warnings={model.warnings} />
+    </section>
+  );
+}
+
+function RebalanceSettingsPanel({
+  settings,
+  onChange,
+  onReset,
+}: {
+  settings: RebalanceSetting[];
+  onChange: (id: string, field: "targetWeight" | "rebalanceThreshold", value: string) => void;
+  onReset: () => void;
+}) {
+  const targetTotal = settings.reduce((total, setting) => total + setting.targetWeight, 0);
+
+  return (
+    <section className="panel wide-panel">
+      <div className="section-heading rebalance-settings-heading">
+        <div>
+          <h2>리밸런싱 설정</h2>
+          <p>목표 합계 {formatPercent(targetTotal)}</p>
+        </div>
+        <button className="secondary-button" type="button" onClick={onReset}>
+          <RotateCcw size={16} />
+          초기화
+        </button>
+      </div>
+      <div className="table-scroll">
+        <table className="settings-table">
+          <thead>
+            <tr>
+              <th>종목</th>
+              <th>목표비중</th>
+              <th>허용오차</th>
+            </tr>
+          </thead>
+          <tbody>
+            {settings.map((setting) => (
+              <tr key={setting.id}>
+                <td>
+                  <strong>{setting.name}</strong>
+                  <span>{setting.id}</span>
+                </td>
+                <td>
+                  <label className="percent-field">
+                    <SlidersHorizontal size={15} />
+                    <input
+                      aria-label={`${setting.name} 목표비중`}
+                      inputMode="decimal"
+                      max="100"
+                      min="0"
+                      onChange={(event) => onChange(setting.id, "targetWeight", event.target.value)}
+                      step="0.1"
+                      type="number"
+                      value={formatPercentInput(setting.targetWeight)}
+                    />
+                    <span>%</span>
+                  </label>
+                </td>
+                <td>
+                  <label className="percent-field">
+                    <input
+                      aria-label={`${setting.name} 허용오차`}
+                      inputMode="decimal"
+                      max="100"
+                      min="0"
+                      onChange={(event) => onChange(setting.id, "rebalanceThreshold", event.target.value)}
+                      step="0.1"
+                      type="number"
+                      value={formatPercentInput(setting.rebalanceThreshold)}
+                    />
+                    <span>%</span>
+                  </label>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 }
@@ -346,6 +499,7 @@ function RebalanceTable({ rows }: { rows: RebalanceRow[] }) {
               <th>종목</th>
               <th>현재</th>
               <th>목표</th>
+              <th>허용</th>
               <th>차이</th>
               <th>판정</th>
             </tr>
@@ -359,6 +513,7 @@ function RebalanceTable({ rows }: { rows: RebalanceRow[] }) {
                 </td>
                 <td>{formatPercent(row.currentWeight)}</td>
                 <td>{formatPercent(row.targetWeight)}</td>
+                <td>{formatPercent(row.threshold)}</td>
                 <td className={toneClass(row.difference)}>{formatPercent(row.difference)}</td>
                 <td>
                   <span className={`action-pill ${row.needsRebalance ? row.action : "hold"}`}>{actionLabel(row.action)}</span>
@@ -369,6 +524,39 @@ function RebalanceTable({ rows }: { rows: RebalanceRow[] }) {
         </table>
       </div>
     </section>
+  );
+}
+
+function readStoredRebalanceTargets(): StoredRebalanceTarget[] {
+  try {
+    const raw = localStorage.getItem(rebalanceStorageKey);
+    if (!raw) {
+      return [];
+    }
+
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed.filter(isStoredRebalanceTarget);
+  } catch {
+    return [];
+  }
+}
+
+function isStoredRebalanceTarget(value: unknown): value is StoredRebalanceTarget {
+  if (!value || typeof value !== "object") {
+    return false;
+  }
+
+  const candidate = value as Record<string, unknown>;
+  return (
+    typeof candidate.id === "string" &&
+    typeof candidate.targetWeight === "number" &&
+    Number.isFinite(candidate.targetWeight) &&
+    typeof candidate.rebalanceThreshold === "number" &&
+    Number.isFinite(candidate.rebalanceThreshold)
   );
 }
 

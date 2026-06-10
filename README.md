@@ -10,6 +10,7 @@ GitHub Pages에서 암호화된 포트폴리오 파일을 복호화해 수익률
 - 라이트/다크 모드 토글과 로컬 테마 저장.
 - 전체 평가금액, YTD 실현손익, 평가손익률, 현금 비중 KPI.
 - 계좌별 요약, 종목별 통합, 리밸런싱 테이블.
+- 대시보드 내 목표비중과 허용오차 설정, 브라우저 로컬 저장.
 - 한국투자증권 Open API 국내주식 잔고와 미국주식 잔고 수집.
 - 미래에셋 표준 CSV/XLSX 행 파서.
 - Windows 작업 스케줄러 enable/disable 명령.
@@ -45,6 +46,14 @@ Remove-Item Env:\PORTFOLIO_PASSWORD
 ```
 
 `npm run publish-data`는 `public/portfolio.enc.json`만 만든다. git commit과 push는 직접 한다.
+
+## 리밸런싱 설정
+
+대시보드 잠금 해제 후 `리밸런싱 설정`에서 종목별 목표비중과 허용오차를 수정할 수 있다.
+
+이 설정은 현재 브라우저의 `localStorage`에 저장된다. 암호화 payload나 GitHub에는 자동 반영되지 않는다.
+
+초기화 버튼을 누르면 암호화 payload의 `targets.local.json` 값으로 돌아가고, payload 목표값이 없는 종목은 현재 비중을 기본 목표값으로 사용한다.
 
 ## 로컬 파일 위치
 

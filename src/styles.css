@@ -319,6 +319,10 @@ input:disabled {
   font-size: 12px;
 }
 
+.rebalance-settings-heading {
+  align-items: center;
+}
+
 .chart-wrap,
 .bar-wrap {
   width: 100%;
@@ -400,6 +404,53 @@ td span {
   margin-top: 4px;
   color: var(--muted);
   font-size: 12px;
+}
+
+.settings-table {
+  min-width: 640px;
+}
+
+.settings-table td:nth-child(2),
+.settings-table td:nth-child(3) {
+  width: 180px;
+}
+
+.percent-field {
+  display: inline-flex;
+  width: 138px;
+  min-height: 38px;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-soft);
+}
+
+.percent-field svg {
+  flex: 0 0 auto;
+  color: var(--muted);
+}
+
+.percent-field input {
+  width: 72px;
+  min-width: 0;
+  color: var(--text);
+  background: transparent;
+  border: 0;
+  outline: none;
+  text-align: right;
+}
+
+.percent-field input::-webkit-inner-spin-button,
+.percent-field input::-webkit-outer-spin-button {
+  margin: 0;
+}
+
+.percent-field:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
 }
 
 .positive {
