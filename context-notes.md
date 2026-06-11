@@ -66,3 +66,14 @@
 - payload 목표비중이 없는 보유 종목은 현재 비중을 초기 목표비중으로 사용하고 허용오차는 5%로 둔다.
 - Browser QA에서 데모 암호문으로 잠금 해제 후 삼성전자 목표비중을 10%로 수정했고, 리밸런싱 표가 `목표 10%`, `차이 34.48%`, `축소검토`로 즉시 갱신되는 것을 확인했다.
 - 새로고침 후 다시 잠금 해제해도 삼성전자 목표비중 10%가 유지되는 것을 확인했다.
+
+## 2026-06-11 실현손익 자동 수집
+
+- KIS 공식 샘플에서 국내 기간별손익일별합산조회 endpoint는 `/uapi/domestic-stock/v1/trading/inquire-period-profit`, TR ID는 `TTTC8708R`다.
+- KIS 공식 샘플에서 해외주식 기간손익 endpoint는 `/uapi/overseas-stock/v1/trading/inquire-period-profit`, TR ID는 `TTTS3039R`다.
+- YTD 실현손익은 올해 1월 1일부터 collect 실행일 기준으로 조회한다.
+- 누적 실현손익은 `.env.local`의 `KIS_LIFETIME_START_DATE`부터 collect 실행일 기준으로 조회한다. 값이 없으면 `20000101`을 기본 시작일로 사용한다.
+- 실현손익률은 API 요약의 총실현손익을 총매수거래금액으로 나눈 값으로 계산한다. 매수거래금액이 없으면 0으로 둔다.
+- 실제 KIS 기간별손익 조회는 `APBK1633: 조회기간은 10년 이내이어야 합니다.`를 반환하므로 `KIS_LIFETIME_START_DATE`가 더 오래되어도 실행일 기준 10년 전 다음 날로 보정한다.
+- 실제 수집 중 토큰 재발급 단계에서 `403 Forbidden`이 발생할 수 있어 KIS OAuth 접근 토큰을 `local/kis-token.local.json`에 캐시한다.
+- 토큰 캐시는 GitHub에 올리지 않는 로컬 파일이며, 만료 1분 전부터는 새 토큰을 요청한다.

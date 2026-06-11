@@ -23,6 +23,7 @@ describe("broker credentials", () => {
       accountProductCode: "01",
       accountAlias: "한국투자 ISA",
       environment: "real",
+      lifetimeStartDate: "20000101",
     });
     expect(credentials.toss).toEqual({
       appKey: "toss-app-key",
@@ -63,6 +64,19 @@ KIS_APP_SECRET="kis-app-secret"
     });
 
     expect(credentials.koreaInvestment?.environment).toBe("demo");
+  });
+
+  test("loads Korea Investment lifetime start date when explicitly configured", () => {
+    const credentials = loadBrokerCredentials({
+      KIS_APP_KEY: "kis-app-key",
+      KIS_APP_SECRET: "kis-app-secret",
+      KIS_ACCOUNT_NO: "12345678",
+      KIS_ACCOUNT_PRODUCT_CODE: "01",
+      KIS_ACCOUNT_ALIAS: "한국투자 ISA",
+      KIS_LIFETIME_START_DATE: "20210101",
+    });
+
+    expect(credentials.koreaInvestment?.lifetimeStartDate).toBe("20210101");
   });
 
   test("does not treat display aliases alone as configured broker credentials", () => {

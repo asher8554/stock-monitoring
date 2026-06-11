@@ -131,3 +131,14 @@
 
 - 원화 환산금액이 없는 해외 자산은 0원 처리하지 않는다.
 - 사용자에게 경고하고 총액과 비중 계산에서 제외한다.
+
+### Realized Profit 자동수집 기준
+
+한국투자증권 계좌가 설정되어 있으면 `npm run collect`가 `realizedProfit.ytd`와 `realizedProfit.lifetime`을 API 응답으로 갱신한다.
+
+- `ytd.profitKrw`는 실행 연도 1월 1일부터 실행일까지의 총실현손익이다.
+- `lifetime.profitKrw`는 `KIS_LIFETIME_START_DATE`부터 실행일까지의 총실현손익이다.
+- KIS 기간별손익 API는 조회기간이 10년 이내여야 하므로 누적 시작일은 필요하면 자동으로 실행일 기준 10년 전 다음 날로 보정된다.
+- `profitRate`는 총실현손익을 총매수거래금액으로 나눈 값이다.
+- 한국투자증권 계좌가 설정되지 않았으면 기존 로컬 payload 값을 유지한다.
+- 한국투자증권 계좌가 설정되어 있는데 API가 실패하면 수집 명령이 실패한다.

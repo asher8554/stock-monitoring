@@ -25,6 +25,7 @@ export function mergeCollectedPortfolio(input: MergeCollectedPortfolioInput): Po
     ...input.basePortfolio,
     asOf: input.asOf,
     accounts: ensureMiraeAccount(accounts, input.miraeAssetPositions),
+    realizedProfit: input.koreaInvestment?.realizedProfit ?? input.basePortfolio.realizedProfit,
     positions: [
       ...brokerPositions,
       ...(input.koreaInvestment?.positions ?? []),

@@ -13,6 +13,7 @@ export interface KoreaInvestmentCredentials {
   accountProductCode: string;
   accountAlias: string;
   environment: "real" | "demo";
+  lifetimeStartDate: string;
 }
 
 export interface TossCredentials {
@@ -93,7 +94,12 @@ function loadKisCredentials(env: EnvMap): KoreaInvestmentCredentials | null {
     throw new Error("KIS_ENVIRONMENT must be real or demo");
   }
 
-  return { ...requiredValues, environment };
+  const lifetimeStartDate = readEnv(env, "KIS_LIFETIME_START_DATE") || "20000101";
+  if (!/^\d{8}$/.test(lifetimeStartDate)) {
+    throw new Error("KIS_LIFETIME_START_DATE must be YYYYMMDD");
+  }
+
+  return { ...requiredValues, environment, lifetimeStartDate };
 }
 
 function loadTossCredentials(env: EnvMap): TossCredentials | null {

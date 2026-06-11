@@ -10,6 +10,7 @@ import { fetchKoreaInvestmentPortfolio } from "./adapters/korea-investment";
 import { readMiraeAssetPositions } from "./adapters/miraeasset";
 import { mergeCollectedPortfolio } from "./collect";
 import { loadBrokerCredentials, loadEnvFile } from "./credentials";
+import { createFileKisTokenCache } from "./kis-token-cache";
 import { buildScheduleCommand } from "./scheduler";
 import { createEmptyPortfolio, mergeTargetsIntoPortfolio, readJsonFile, writeJsonFile } from "./payload";
 
@@ -19,6 +20,7 @@ const portfolioPath = path.join(localDir, "portfolio.local.json");
 const targetsPath = path.join(localDir, "targets.local.json");
 const encryptedOutputPath = path.join(projectDir, "public", "portfolio.enc.json");
 const schedulerConfigPath = path.join(localDir, "scheduler.local.json");
+const kisTokenCachePath = path.join(localDir, "kis-token.local.json");
 const envLocalPath = path.join(projectDir, ".env.local");
 
 async function main(): Promise<void> {
@@ -50,7 +52,9 @@ async function collect(): Promise<void> {
   const portfolio = await readOptionalJson<PortfolioPayload>(manualPath);
   const basePortfolio = portfolio ?? createEmptyPortfolio();
   const koreaInvestment = credentials.koreaInvestment
-    ? await fetchKoreaInvestmentPortfolio(credentials.koreaInvestment)
+    ? await fetchKoreaInvestmentPortfolio(credentials.koreaInvestment, {
+        tokenCache: createFileKisTokenCache(kisTokenCachePath),
+      })
     : null;
   const miraePositions = await readMiraeAssetPositions(path.join(localDir, "imports", "miraeasset"), {
     accountId: "miraeasset-general",

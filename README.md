@@ -77,3 +77,11 @@ npm run schedule:disable
 - 사용자가 제공할 미래에셋 실제 샘플 파일 기준 파서 매핑 보강.
 
 API 키 전달 방식은 [docs/broker-api-credentials.md](docs/broker-api-credentials.md)에 정리했다.
+
+## KIS 실현손익 자동수집
+
+`npm run collect`는 한국투자증권 국내 기간별손익일별합산조회 API로 YTD와 누적 실현손익을 자동 갱신한다.
+
+YTD는 실행 연도의 1월 1일부터 실행일까지 조회한다. 누적은 `.env.local`의 `KIS_LIFETIME_START_DATE`부터 조회하되, KIS API 조회기간 제한 때문에 실행일 기준 10년 전 다음 날로 자동 보정한다.
+
+KIS OAuth 접근 토큰은 `local/kis-token.local.json`에 저장해 재발급 403을 줄인다. `local/`은 Git에 커밋하지 않는다.

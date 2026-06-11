@@ -87,3 +87,25 @@ TOSS_ACCOUNT_ALIAS=토스 일반
 - 한국투자증권 Open API 포털: https://apiportal.koreainvestment.com/.
 - 토스증권 Open API 페이지: https://corp.tossinvest.com/ko/open-api.
 - 토스증권 Open API 서비스 이용 약관: https://home.tossinvest.com/ko/terms/v2?id=752.
+
+## 한국투자증권 실현손익 자동수집
+
+`npm run collect`는 한국투자증권 국내 기간별손익일별합산조회 API를 두 번 호출한다.
+
+- YTD 실현손익은 실행 연도 1월 1일부터 실행일까지 조회한다.
+- 누적 실현손익은 `KIS_LIFETIME_START_DATE`부터 실행일까지 조회한다.
+- KIS API는 기간별손익 조회기간을 10년 이내로 제한하므로 더 오래된 시작일은 실행일 기준 10년 전 다음 날로 자동 보정한다.
+- 실현손익률은 API 요약의 총실현손익을 총매수거래금액으로 나눈 값이다.
+
+`.env.local`에 선택적으로 설정할 수 있다.
+
+```dotenv
+KIS_LIFETIME_START_DATE=20000101
+```
+
+KIS OAuth 접근 토큰은 `local/kis-token.local.json`에 로컬 캐시한다. 캐시는 재발급 제한과 `403 Forbidden` 가능성을 줄이기 위한 것이며, `local/`은 `.gitignore`로 제외되어 GitHub에 올라가지 않는다.
+
+공식 샘플 기준 구현이다.
+
+- 국내 기간별손익일별합산조회 샘플: https://github.com/koreainvestment/open-trading-api/blob/main/examples_llm/domestic_stock/inquire_period_profit/inquire_period_profit.py.
+- 해외 기간손익 샘플: https://github.com/koreainvestment/open-trading-api/blob/main/examples_llm/overseas_stock/inquire_period_profit/inquire_period_profit.py.

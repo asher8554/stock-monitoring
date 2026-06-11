@@ -1,10 +1,11 @@
 // 한국투자증권 Open API 응답을 포트폴리오 스냅샷으로 변환한다.
-import type { AccountSnapshot, PortfolioWarning, PositionSnapshot } from "../../src/types/portfolio";
+import type { AccountSnapshot, PortfolioWarning, PositionSnapshot, RealizedProfitSummary } from "../../src/types/portfolio";
 import type { KoreaInvestmentCredentials } from "../credentials";
 
 const REAL_BASE_URL = "https://openapi.koreainvestment.com:9443";
 const DEMO_BASE_URL = "https://openapivts.koreainvestment.com:29443";
 const DOMESTIC_BALANCE_PATH = "/uapi/domestic-stock/v1/trading/inquire-balance";
+const DOMESTIC_PERIOD_PROFIT_PATH = "/uapi/domestic-stock/v1/trading/inquire-period-profit";
 const OVERSEAS_BALANCE_PATH = "/uapi/overseas-stock/v1/trading/inquire-balance";
 const TOKEN_PATH = "/oauth2/tokenP";
 const MAX_PAGE_COUNT = 10;
@@ -12,12 +13,28 @@ const MAX_PAGE_COUNT = 10;
 export interface KoreaInvestmentPortfolioResult {
   account: AccountSnapshot;
   positions: PositionSnapshot[];
+  realizedProfit: {
+    ytd: RealizedProfitSummary;
+    lifetime: RealizedProfitSummary;
+  };
   warnings: PortfolioWarning[];
 }
 
 export interface KoreaInvestmentFetchOptions {
   fetcher?: typeof fetch;
   overseasMarkets?: OverseasMarket[];
+  today?: Date;
+  tokenCache?: KisAccessTokenCache;
+}
+
+export interface KisAccessTokenCache {
+  read(): Promise<CachedKisAccessToken | null>;
+  write(token: CachedKisAccessToken): Promise<void>;
+}
+
+export interface CachedKisAccessToken {
+  accessToken: string;
+  expiresAt: string;
 }
 
 interface OverseasMarket {
@@ -36,6 +53,8 @@ interface KisJsonResponse {
   ctx_area_fk200?: string;
   ctx_area_nk200?: string;
   access_token?: string;
+  access_token_token_expired?: string;
+  expires_in?: string | number;
   tr_cont?: string;
 }
 
@@ -72,7 +91,20 @@ export function mapDomesticBalanceResponse(
       unrealizedProfitRate: roundRate(costBasisKrw > 0 ? unrealizedProfitKrw / costBasisKrw : 0),
     },
     positions,
+    realizedProfit: emptyRealizedProfit(),
     warnings: [],
+  };
+}
+
+export function mapDomesticPeriodProfitResponse(response: unknown): RealizedProfitSummary {
+  const summary = readRecord(readArray(readRecord(response).output2)[0] ?? readRecord(response).output2);
+  const rows = readArray(readRecord(response).output1).map(readRecord);
+  const profitKrw = readNumber(summary.tot_rlzt_pfls) || sumNumbers(rows.map((row) => readNullableNumber(row.rlzt_pfls)));
+  const buyAmount = readNumber(summary.buy_tr_amt_smtl) || sumNumbers(rows.map((row) => readNullableNumber(row.buy_amt)));
+
+  return {
+    profitKrw,
+    profitRate: roundRate(buyAmount > 0 ? profitKrw / buyAmount : 0),
   };
 }
 
@@ -104,7 +136,8 @@ export async function fetchKoreaInvestmentPortfolio(
 ): Promise<KoreaInvestmentPortfolioResult> {
   const fetcher = options.fetcher ?? fetch;
   const baseUrl = credentials.environment === "demo" ? DEMO_BASE_URL : REAL_BASE_URL;
-  const token = await fetchAccessToken(baseUrl, credentials, fetcher);
+  const today = options.today ?? new Date();
+  const token = await fetchAccessToken(baseUrl, credentials, fetcher, options.tokenCache, today);
   const domesticResponse = await fetchDomesticBalance(baseUrl, credentials, token, fetcher);
   const domestic = mapDomesticBalanceResponse(domesticResponse, credentials);
   const overseasResults = await Promise.all(
@@ -114,10 +147,27 @@ export async function fetchKoreaInvestmentPortfolio(
       ),
     ),
   );
+  const ytdRealizedProfit = mapDomesticPeriodProfitResponse(
+    await fetchDomesticPeriodProfit(baseUrl, credentials, token, fetcher, firstDayOfYear(today), formatKisDate(today)),
+  );
+  const lifetimeRealizedProfit = mapDomesticPeriodProfitResponse(
+    await fetchDomesticPeriodProfit(
+      baseUrl,
+      credentials,
+      token,
+      fetcher,
+      clampStartDateToTenYears(credentials.lifetimeStartDate, today),
+      formatKisDate(today),
+    ),
+  );
 
   return {
     account: domestic.account,
     positions: [...domestic.positions, ...overseasResults.flatMap((result) => result.positions)],
+    realizedProfit: {
+      ytd: ytdRealizedProfit,
+      lifetime: lifetimeRealizedProfit,
+    },
     warnings: overseasResults.flatMap((result) => result.warnings),
   };
 }
@@ -136,7 +186,14 @@ async function fetchAccessToken(
   baseUrl: string,
   credentials: KoreaInvestmentCredentials,
   fetcher: typeof fetch,
+  tokenCache?: KisAccessTokenCache,
+  now: Date = new Date(),
 ): Promise<string> {
+  const cached = await readCachedAccessToken(tokenCache, now);
+  if (cached) {
+    return cached.accessToken;
+  }
+
   const response = await fetchKisPost(
     "KIS access token",
     `${baseUrl}${TOKEN_PATH}`,
@@ -155,7 +212,44 @@ async function fetchAccessToken(
   if (!response.access_token) {
     throw new Error("KIS token response did not include access_token");
   }
-  return response.access_token;
+  const token = {
+    accessToken: response.access_token,
+    expiresAt: readTokenExpiresAt(response, now).toISOString(),
+  };
+  await tokenCache?.write(token);
+  return token.accessToken;
+}
+
+async function readCachedAccessToken(
+  tokenCache: KisAccessTokenCache | undefined,
+  now: Date,
+): Promise<CachedKisAccessToken | null> {
+  const cached = await tokenCache?.read();
+  if (!cached?.accessToken) {
+    return null;
+  }
+  const expiresAt = new Date(cached.expiresAt).getTime();
+  if (!Number.isFinite(expiresAt) || expiresAt - now.getTime() <= 60_000) {
+    return null;
+  }
+  return cached;
+}
+
+function readTokenExpiresAt(response: KisJsonResponse, now: Date): Date {
+  const explicitExpiry = readText(response.access_token_token_expired);
+  if (explicitExpiry) {
+    const parsedExpiry = new Date(explicitExpiry.replace(" ", "T"));
+    if (Number.isFinite(parsedExpiry.getTime())) {
+      return parsedExpiry;
+    }
+  }
+
+  const expiresIn = readNullableNumber(response.expires_in);
+  if (expiresIn && expiresIn > 0) {
+    return new Date(now.getTime() + expiresIn * 1000);
+  }
+
+  return new Date(now.getTime() + 23 * 60 * 60 * 1000);
 }
 
 async function fetchKisPost(
@@ -243,6 +337,51 @@ async function fetchOverseasBalance(
     }
     fk200 = next.fk;
     nk200 = next.nk;
+    trCont = "N";
+  }
+
+  return mergePagedResponses(outputs);
+}
+
+async function fetchDomesticPeriodProfit(
+  baseUrl: string,
+  credentials: KoreaInvestmentCredentials,
+  token: string,
+  fetcher: typeof fetch,
+  startDate: string,
+  endDate: string,
+): Promise<KisJsonResponse> {
+  const outputs: KisJsonResponse[] = [];
+  let fk100 = "";
+  let nk100 = "";
+  let trCont = "";
+
+  for (let page = 0; page < MAX_PAGE_COUNT; page += 1) {
+    const response = await fetchKisGet(
+      "KIS domestic period profit",
+      `${baseUrl}${DOMESTIC_PERIOD_PROFIT_PATH}`,
+      {
+        CANO: credentials.accountNo,
+        ACNT_PRDT_CD: credentials.accountProductCode,
+        INQR_STRT_DT: startDate,
+        INQR_END_DT: endDate,
+        SORT_DVSN: "00",
+        INQR_DVSN: "00",
+        CBLC_DVSN: "00",
+        PDNO: "",
+        CTX_AREA_FK100: fk100,
+        CTX_AREA_NK100: nk100,
+      },
+      headers(credentials, token, "TTTC8708R", trCont),
+      fetcher,
+    );
+    outputs.push(response);
+    const next = readContinuation(response, "100");
+    if (!next.hasNext) {
+      break;
+    }
+    fk100 = next.fk;
+    nk100 = next.nk;
     trCont = "N";
   }
 
@@ -409,6 +548,32 @@ function mapOverseasMarket(exchangeCode: string): string {
     return "TSE";
   }
   return normalized || "OVERSEAS";
+}
+
+function emptyRealizedProfit(): KoreaInvestmentPortfolioResult["realizedProfit"] {
+  return {
+    ytd: { profitKrw: 0, profitRate: 0 },
+    lifetime: { profitKrw: 0, profitRate: 0 },
+  };
+}
+
+function formatKisDate(value: Date): string {
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
+  return `${year}${month}${day}`;
+}
+
+function firstDayOfYear(value: Date): string {
+  return `${value.getFullYear()}0101`;
+}
+
+function clampStartDateToTenYears(startDate: string, today: Date): string {
+  const earliest = new Date(today);
+  earliest.setFullYear(earliest.getFullYear() - 10);
+  earliest.setDate(earliest.getDate() + 1);
+  const earliestDate = formatKisDate(earliest);
+  return startDate < earliestDate ? earliestDate : startDate;
 }
 
 function readRecord(value: unknown): UnknownRecord {

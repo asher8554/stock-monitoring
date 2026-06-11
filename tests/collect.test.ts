@@ -47,6 +47,10 @@ describe("collect merge", () => {
       koreaInvestment: {
         account: kisAccount,
         positions: [kisPosition],
+        realizedProfit: {
+          ytd: { profitKrw: 15000, profitRate: 0.15 },
+          lifetime: { profitKrw: 55000, profitRate: 0.11 },
+        },
         warnings: [kisWarning],
       },
       miraeAssetPositions: [miraePosition],
@@ -58,6 +62,10 @@ describe("collect merge", () => {
       "korea-investment-isa",
       "miraeasset-general",
     ]);
+    expect(merged.realizedProfit).toEqual({
+      ytd: { profitKrw: 15000, profitRate: 0.15 },
+      lifetime: { profitKrw: 55000, profitRate: 0.11 },
+    });
     expect(merged.positions.map((row) => row.id)).toEqual(["KRX:035420", "KRX:005930", "KRX:068270"]);
     expect(merged.warnings).toEqual([kisWarning]);
   });

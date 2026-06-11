@@ -49,3 +49,12 @@
 - [x] 설정값을 브라우저 `localStorage`에 저장하고 초기화할 수 있도록 구현한다.
 - [x] 리밸런싱 테이블이 설정 변경 즉시 다시 계산되도록 구현한다.
 - [x] 테스트, 빌드, 브라우저 QA 후 commit/push한다.
+
+## 2026-06-11 실현손익 자동 수집
+
+- [x] 한국투자 기간별손익일별합산조회 응답 매핑 테스트를 추가한다.
+- [x] 한국투자 기간손익 API로 YTD와 누적 실현손익을 수집한다.
+- [x] `npm run collect`가 `realizedProfit`을 자동 갱신하도록 병합한다.
+- [x] 누적 시작일을 `.env.local`에서 설정할 수 있도록 문서화한다.
+- [x] KIS OAuth 토큰을 `local/kis-token.local.json`에 캐시한다.
+- [x] 실제 collect, 테스트, 빌드 후 commit/push한다.

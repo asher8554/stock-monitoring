@@ -4,6 +4,7 @@ import {
   buildKisAccountId,
   fetchKoreaInvestmentPortfolio,
   mapDomesticBalanceResponse,
+  mapDomesticPeriodProfitResponse,
   mapOverseasBalanceResponse,
 } from "../scripts/adapters/korea-investment";
 import type { KoreaInvestmentCredentials } from "../scripts/credentials";
@@ -15,6 +16,7 @@ const credentials: KoreaInvestmentCredentials = {
   accountProductCode: "01",
   accountAlias: "한국투자 ISA",
   environment: "real",
+  lifetimeStartDate: "20200101",
 };
 
 describe("korea investment adapter", () => {
@@ -144,6 +146,7 @@ describe("korea investment adapter", () => {
 
     await fetchKoreaInvestmentPortfolio(credentials, {
       fetcher,
+      today: new Date("2026-06-11T00:00:00.000Z"),
       overseasMarkets: [
         { exchangeCode: "NASD", currency: "USD" },
         { exchangeCode: "SEHK", currency: "HKD" },
@@ -157,8 +160,12 @@ describe("korea investment adapter", () => {
       "/uapi/overseas-stock/v1/trading/inquire-balance",
       "/uapi/overseas-stock/v1/trading/inquire-balance",
       "/uapi/overseas-stock/v1/trading/inquire-balance",
+      "/uapi/domestic-stock/v1/trading/inquire-period-profit",
+      "/uapi/domestic-stock/v1/trading/inquire-period-profit",
     ]);
     expect(calls.map((call) => new URL(call.url).origin)).toEqual([
+      "https://openapi.koreainvestment.com:9443",
+      "https://openapi.koreainvestment.com:9443",
       "https://openapi.koreainvestment.com:9443",
       "https://openapi.koreainvestment.com:9443",
       "https://openapi.koreainvestment.com:9443",
@@ -170,7 +177,77 @@ describe("korea investment adapter", () => {
       "TTTS3012R",
       "TTTS3012R",
       "TTTS3012R",
+      "TTTC8708R",
+      "TTTC8708R",
     ]);
+    expect(new URL(calls[5].url).searchParams.get("INQR_STRT_DT")).toBe("20260101");
+    expect(new URL(calls[5].url).searchParams.get("INQR_END_DT")).toBe("20260611");
+    expect(new URL(calls[6].url).searchParams.get("INQR_STRT_DT")).toBe("20200101");
+    expect(new URL(calls[6].url).searchParams.get("INQR_END_DT")).toBe("20260611");
+  });
+
+  test("limits lifetime realized profit requests to the KIS 10 year range", async () => {
+    const calls: Array<{ url: string; init: RequestInit }> = [];
+    const fetcher = async (url: string | URL | Request, init?: RequestInit): Promise<Response> => {
+      calls.push({ url: String(url), init: init ?? {} });
+      if (String(url).endsWith("/oauth2/tokenP")) {
+        return jsonResponse({ access_token: "token" });
+      }
+      return jsonResponse({ rt_cd: "0", output1: [], output2: [{}] });
+    };
+
+    await fetchKoreaInvestmentPortfolio(
+      { ...credentials, lifetimeStartDate: "20000101" },
+      {
+        fetcher,
+        today: new Date("2026-06-11T00:00:00.000Z"),
+        overseasMarkets: [],
+      },
+    );
+
+    const periodProfitCalls = calls.filter((call) => new URL(call.url).pathname.endsWith("/inquire-period-profit"));
+    expect(new URL(periodProfitCalls[1].url).searchParams.get("INQR_STRT_DT")).toBe("20160612");
+  });
+
+  test("maps domestic period profit summary to realized profit", () => {
+    expect(
+      mapDomesticPeriodProfitResponse({
+        output1: [
+          { trad_dt: "20260610", rlzt_pfls: "5000", buy_amt: "50000" },
+          { trad_dt: "20260611", rlzt_pfls: "10000", buy_amt: "50000" },
+        ],
+        output2: {
+          tot_rlzt_pfls: "15000",
+          buy_tr_amt_smtl: "100000",
+        },
+      }),
+    ).toEqual({
+      profitKrw: 15000,
+      profitRate: 0.15,
+    });
+  });
+
+  test("reuses cached KIS access tokens without requesting a new token", async () => {
+    const calls: Array<{ url: string; init: RequestInit }> = [];
+    const fetcher = async (url: string | URL | Request, init?: RequestInit): Promise<Response> => {
+      calls.push({ url: String(url), init: init ?? {} });
+      return jsonResponse({ rt_cd: "0", output1: [], output2: [{}] });
+    };
+
+    await fetchKoreaInvestmentPortfolio(credentials, {
+      fetcher,
+      today: new Date("2026-06-11T00:00:00.000Z"),
+      overseasMarkets: [],
+      tokenCache: {
+        read: async () => ({ accessToken: "cached-token", expiresAt: "2026-06-11T10:00:00.000Z" }),
+        write: async () => {
+          throw new Error("write should not be called");
+        },
+      },
+    });
+
+    expect(calls.map((call) => new URL(call.url).pathname)).not.toContain("/oauth2/tokenP");
+    expect(calls[0].init.headers).toMatchObject({ authorization: "Bearer cached-token" });
   });
 
   test("builds stable account ids from aliases without leaking account numbers", () => {
