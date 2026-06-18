@@ -536,6 +536,7 @@ function HoldingsTable({ holdings }: { holdings: HoldingSummary[] }) {
             <tr>
               <th>종목</th>
               <th>평가금액</th>
+              <th>매수금액</th>
               <th>비중</th>
               <th>평가손익</th>
               <th>수익률</th>
@@ -550,6 +551,7 @@ function HoldingsTable({ holdings }: { holdings: HoldingSummary[] }) {
                   <span>{holding.id}</span>
                 </td>
                 <td>{formatCurrency(holding.valuationKrw)}</td>
+                <td>{formatCurrency(holding.costBasisKrw)}</td>
                 <td>{formatPercent(holding.weight)}</td>
                 <td className={toneClass(holding.unrealizedProfitKrw)}>{formatCurrency(holding.unrealizedProfitKrw)}</td>
                 <td className={toneClass(holding.unrealizedProfitKrw)}>{formatPercent(holding.unrealizedProfitRate)}</td>

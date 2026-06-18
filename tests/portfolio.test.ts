@@ -113,6 +113,7 @@ describe("portfolio dashboard model", () => {
       id: "KRX:005930",
       quantity: 15,
       valuationKrw: 1125000,
+      costBasisKrw: 1100000,
       unrealizedProfitKrw: 25000,
       weight: 1,
     });
