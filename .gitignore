@@ -1,6 +1,7 @@
 node_modules/
 dist/
 coverage/
+.forge/
 
 .env
 .env.local

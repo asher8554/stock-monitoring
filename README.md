@@ -9,7 +9,7 @@ GitHub Pages에서 암호화된 포트폴리오 파일을 복호화해 수익률
 - `portfolio.enc.json` 기반 비밀번호 잠금 화면.
 - 라이트/다크 모드 토글과 로컬 테마 저장.
 - 전체 평가금액, YTD 실현손익, 평가손익률, 현금 비중 KPI.
-- 계좌별 요약, 종목별 통합, 리밸런싱 테이블.
+- 포트폴리오 비중 범례, 종목별 통합, 리밸런싱 테이블.
 - 대시보드 내 목표비중과 허용오차 설정, 브라우저 로컬 저장.
 - 한국투자증권 Open API 국내주식 잔고와 미국주식 잔고 수집.
 - 미래에셋 표준 CSV/XLSX 행 파서.
@@ -104,10 +104,10 @@ npm run schedule:disable
 
 작업 스케줄러는 로컬 PC에서만 의미가 있다. 등록된 작업은 `npm run daily-update`를 실행하므로 `.env.local`에 `PORTFOLIO_PASSWORD`가 있어야 한다.
 
-## 아직 남은 것
+## 외부 입력 필요
 
-- 토스증권 Open API 실제 계좌 조회 어댑터.
-- 사용자가 제공할 미래에셋 실제 샘플 파일 기준 파서 매핑 보강.
+- 토스증권 Open API 실제 계좌 조회 어댑터는 공식 API 접근 권한, 최신 문서, 실제 응답 샘플이 필요하다.
+- 미래에셋 실제 샘플 파일 기준 파서 매핑 보강은 사용자가 내려받은 실제 CSV/XLSX 샘플이 필요하다.
 
 API 키 전달 방식은 [docs/broker-api-credentials.md](docs/broker-api-credentials.md)에 정리했다.
 

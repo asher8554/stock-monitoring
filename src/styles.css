@@ -320,7 +320,7 @@ input:disabled {
 }
 
 .allocation-panel,
-.account-panel,
+.legend-panel,
 .profit-panel {
   grid-column: span 4;
   min-height: 316px;
@@ -369,7 +369,7 @@ input:disabled {
 .allocation-legend {
   display: grid;
   gap: 8px;
-  max-height: 142px;
+  max-height: 236px;
   margin: 0;
   padding: 0;
   overflow-y: auto;
@@ -407,38 +407,6 @@ input:disabled {
   grid-column: 2 / -1;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
-}
-
-.account-list {
-  display: grid;
-  gap: 10px;
-}
-
-.account-row {
-  display: flex;
-  min-height: 68px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 12px;
-  border: 1px solid var(--border-soft);
-  border-radius: 8px;
-}
-
-.account-row strong,
-.account-row span {
-  display: block;
-}
-
-.account-row strong {
-  color: var(--heading);
-  font-size: 14px;
-}
-
-.account-row span {
-  margin-top: 5px;
-  color: var(--muted);
-  font-size: 12px;
 }
 
 .table-scroll {
@@ -608,7 +576,7 @@ td span {
   }
 
   .allocation-panel,
-  .account-panel,
+  .legend-panel,
   .profit-panel {
     grid-column: 1 / -1;
   }

@@ -14,7 +14,8 @@
 2. 한국투자증권과 토스증권에서 발급받은 앱키와 시크릿키를 `.env.local`에 입력한다.
 3. `npm run collect`가 `.env.local`을 읽고 로컬에서만 API를 호출한다.
 4. `npm run publish-data`가 `portfolio.local.json`과 `targets.local.json`을 암호화한다.
-5. GitHub에는 `public/portfolio.enc.json`만 커밋한다.
+5. `npm run daily-update` 또는 `Update-StockMonitoring`은 수집, 암호화, commit, push를 한 번에 실행한다.
+6. GitHub에는 `public/portfolio.enc.json`만 커밋한다.
 
 ## `.env.local` 형식
 
@@ -62,7 +63,7 @@ TOSS_ACCOUNT_ALIAS=토스 일반
 
 ## 토스증권
 
-토스증권 Open API도 신청 후 앱키와 시크릿키를 발급받는 구조로 잡는다.
+토스증권 Open API도 신청 후 앱키와 시크릿키를 발급받는 구조로 잡는다. 실제 어댑터 구현은 공식 API 접근 권한, 최신 문서, 실제 응답 샘플이 확보된 뒤 진행한다.
 
 로컬에는 다음 값이 필요하다.
 

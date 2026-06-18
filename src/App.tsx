@@ -374,38 +374,24 @@ function Dashboard({
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <ul className="allocation-legend" aria-label="포트폴리오 비중 범례">
-            {allocationItems.map((item, index) => (
-              <li key={item.id}>
-                <span className="legend-swatch" style={{ backgroundColor: allocationColors[index % allocationColors.length] }} />
-                <span className="legend-name">{item.name}</span>
-                <span className="legend-value">{formatPercent(item.weight)}</span>
-                <span className="legend-amount">{formatCurrency(item.valuationKrw)}</span>
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
-      <section className="panel account-panel">
+      <section className="panel legend-panel">
         <div className="section-heading">
-          <h2>계좌별 요약</h2>
-          <p>{model.accounts.length}개 계좌</p>
+          <h2>비중 범례</h2>
+          <p>금액과 비중</p>
         </div>
-        <div className="account-list">
-          {model.accounts.map((account) => (
-            <div className="account-row" key={account.id}>
-              <div>
-                <strong>{account.alias}</strong>
-                <span>{brokerLabel(account.broker)}</span>
-              </div>
-              <div>
-                <strong>{formatCurrency(account.valuationKrw)}</strong>
-                <span className={toneClass(account.unrealizedProfitKrw)}>{formatPercent(account.unrealizedProfitRate)}</span>
-              </div>
-            </div>
+        <ul className="allocation-legend" aria-label="포트폴리오 비중 범례">
+          {allocationItems.map((item, index) => (
+            <li key={item.id}>
+              <span className="legend-swatch" style={{ backgroundColor: allocationColors[index % allocationColors.length] }} />
+              <span className="legend-name">{item.name}</span>
+              <span className="legend-value">{formatPercent(item.weight)}</span>
+              <span className="legend-amount">{formatCurrency(item.valuationKrw)}</span>
+            </li>
           ))}
-        </div>
+        </ul>
       </section>
 
       <section className="panel profit-panel">

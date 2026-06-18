@@ -10,16 +10,17 @@
 
 ## 데이터 흐름
 
-1. 사용자가 로컬에서 `npm run collect`를 실행한다.
-2. 한국투자증권과 토스증권 데이터는 API 어댑터가 수집한다.
+1. 사용자가 로컬에서 `Update-StockMonitoring` 또는 `npm run daily-update`를 실행한다.
+2. 한국투자증권 데이터는 API 어댑터가 수집한다.
 3. 미래에셋 데이터는 `local/imports/miraeasset/`의 CSV/XLSX 파일에서 읽는다.
 4. 수집 결과는 `portfolio.local.json`으로 정규화된다.
 5. 목표 비중은 `targets.local.json`에서 읽는다.
-6. 사용자가 `npm run publish-data`를 실행한다.
-7. CLI가 `portfolio.local.json`과 `targets.local.json`을 합쳐 `portfolio.enc.json`을 만든다.
-8. 사용자가 암호화 파일을 커밋하고 push한다.
-9. GitHub Pages 앱이 `portfolio.enc.json`을 내려받는다.
-10. 사용자가 비밀번호를 입력하면 브라우저에서 복호화하고 대시보드를 표시한다.
+6. CLI가 `portfolio.local.json`과 `targets.local.json`을 합쳐 `portfolio.enc.json`을 만든다.
+7. `daily-update`가 암호화 파일을 commit하고 push한다.
+8. GitHub Pages 앱이 `portfolio.enc.json`을 내려받는다.
+9. 사용자가 비밀번호를 입력하면 브라우저에서 복호화하고 대시보드를 표시한다.
+
+수동 점검이 필요할 때는 `npm run collect`와 `npm run publish-data`를 따로 실행할 수 있다.
 
 ## 책임 경계
 
@@ -30,6 +31,7 @@
 - CSV/XLSX 원본 읽기.
 - 평문 정규화 파일 생성.
 - 암호화 파일 생성.
+- 암호화 파일 commit과 push.
 - Windows 작업 스케줄러 등록과 해제.
 
 GitHub Pages 앱은 민감한 입력을 보관하지 않는다.
@@ -52,7 +54,7 @@ GitHub Pages 앱은 민감한 입력을 보관하지 않는다.
 각 증권사는 독립 어댑터로 구현한다.
 
 - 한국투자증권: 공식 Open API 기반.
-- 토스증권: 공식 Open API 기반.
+- 토스증권: 공식 Open API 접근 권한과 응답 샘플 확보 후 구현.
 - 미래에셋: CSV/XLSX 파일 기반.
 
 어댑터 출력은 공통 스키마로 맞춘다. 대시보드는 증권사별 원본 차이를 알지 않아야 한다.
@@ -72,5 +74,6 @@ Windows 작업 스케줄러 지원은 로컬 CLI 명령으로 제공한다.
 
 - `npm run schedule:enable`.
 - `npm run schedule:disable`.
+- 등록된 작업은 `npm run daily-update`를 실행한다.
 - 설정값은 로컬 파일에 저장한다.
 - GitHub Pages에는 스케줄러 설정을 올리지 않는다.

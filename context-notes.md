@@ -142,3 +142,14 @@
 - PowerShell 프로필에는 `Update-StockMonitoring` 함수만 등록해 어느 위치에서나 wrapper를 호출하게 한다.
 - `Update-StockMonitoring.ps1 -Help`와 프로필 함수 경유 `Update-StockMonitoring -Help`가 모두 통과했다.
 - `npm test`는 10개 파일 27개 테스트 통과, `npm run build`도 통과했다.
+
+## 2026-06-18 계좌 요약 제거와 프로젝트 마무리
+
+- 사용자는 계좌별 요약을 제거하고 포트폴리오 비중 legend를 그 위치로 옮기길 원했다.
+- 계좌 데이터는 총 잔고와 현금 계산에 필요하므로 payload, schema, model에서는 유지하고 화면 패널만 제거한다.
+- 포트폴리오 비중 chart와 같은 `allocationItems` 순서를 사용해 legend 색상과 금액이 chart와 맞게 유지되도록 한다.
+- 상단 checklist의 한국투자 API 어댑터 미체크는 오래된 상태다. 이후 2026-06-11 섹션에서 실제 구현과 검증이 완료되어 완료로 정리한다.
+- 토스증권 API 어댑터와 미래에셋 실제 샘플 헤더 보강은 외부 API 접근 권한, 최신 문서, 실제 샘플 파일이 있어야 하므로 남은 외부 입력 항목으로 분리한다.
+- 정적 grep에서 계좌별 요약 UI 문자열과 account panel/list/row class가 제거됐고, `비중 범례`와 `allocation-legend`가 남아 있음을 확인했다.
+- `npm test`는 10개 파일 27개 테스트 통과, `npm run build`는 성공했다.
+- Edge headless QA에서 desktop 1280x900과 mobile 390x900 모두 잠금 해제 후 `계좌별 요약` 0개, legend 항목 4개, heading 순서 `포트폴리오 비중`, `비중 범례`, `손익률`을 확인했다.
