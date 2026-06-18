@@ -55,6 +55,21 @@ npm run daily-update
 
 `npm run daily-update`는 수집, 암호화, `public/portfolio.enc.json` 커밋, push를 순서대로 실행한다. 변경된 암호화 payload가 없으면 commit과 push를 건너뛴다.
 
+홈 폴더처럼 프로젝트 밖에서 실행하려면 새 PowerShell 창에서 다음 명령만 입력한다.
+
+```powershell
+Update-StockMonitoring
+```
+
+현재 열려 있는 PowerShell 창에서 바로 쓰려면 한 번만 프로필을 다시 읽는다.
+
+```powershell
+. $PROFILE
+Update-StockMonitoring
+```
+
+`Update-StockMonitoring`은 `E:\Github\stock-monitoring`으로 이동해 `npm run daily-update`를 실행하고, 비밀번호가 현재 세션에 없으면 실행 중에만 입력받는다. GitHub CLI `gh`가 있으면 push 뒤 Pages 배포도 기다린다.
+
 ## 화면 새로고침
 
 잠금 해제 후 화면은 10분마다 GitHub Pages의 최신 `portfolio.enc.json`을 다시 확인한다.

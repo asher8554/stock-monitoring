@@ -133,3 +133,12 @@
 - `npm test`와 `npm run build`는 통과했다.
 - 데스크톱 QA에서 legend에 삼성전자, SK하이닉스, NVIDIA, 현금 비중과 금액이 표시됨을 확인했다.
 - 모바일 QA에서 총 잔고, 종목 평가금액, 현금 KPI가 세로로 깨지지 않고 표시됨을 확인했다.
+
+## 2026-06-18 홈 폴더 갱신 명령
+
+- 사용자는 `C:\Users\asher`에서 `npm run daily-update`를 실행해 `package.json`을 찾지 못하는 오류를 겪었다.
+- 기존 daily update 흐름은 유지하고, repo 밖에서 호출 가능한 `Update-StockMonitoring.ps1` wrapper를 추가하기로 했다.
+- wrapper는 비밀번호를 저장하지 않고 `PORTFOLIO_PASSWORD`가 없을 때만 실행 중 입력받는다.
+- PowerShell 프로필에는 `Update-StockMonitoring` 함수만 등록해 어느 위치에서나 wrapper를 호출하게 한다.
+- `Update-StockMonitoring.ps1 -Help`와 프로필 함수 경유 `Update-StockMonitoring -Help`가 모두 통과했다.
+- `npm test`는 10개 파일 27개 테스트 통과, `npm run build`도 통과했다.
