@@ -31,6 +31,13 @@ const themeStorageKey = "stock-monitoring-theme";
 const rebalanceStorageKey = "stock-monitoring-rebalance-targets";
 const portfolioRefreshIntervalMs = 10 * 60 * 1000;
 
+interface AllocationItem {
+  id: string;
+  name: string;
+  valuationKrw: number;
+  weight: number;
+}
+
 export function App() {
   const [encrypted, setEncrypted] = useState<EncryptedPayload | null>(null);
   const [password, setPassword] = useState("");
@@ -329,6 +336,7 @@ function Dashboard({
   onRebalanceSettingsReset: () => void;
 }) {
   const chartGridColor = theme === "dark" ? "#334155" : "#e2e8f0";
+  const allocationItems = buildAllocationItems(model);
 
   return (
     <section className="dashboard-grid">
@@ -351,19 +359,31 @@ function Dashboard({
       <section className="panel allocation-panel">
         <div className="section-heading">
           <h2>포트폴리오 비중</h2>
-          <p>{model.holdings.length}개 종목</p>
+          <p>{allocationItems.length}개 자산</p>
         </div>
-        <div className="chart-wrap">
-          <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={236} initialDimension={{ width: 360, height: 236 }}>
-            <PieChart>
-              <Pie data={model.holdings} dataKey="valuationKrw" nameKey="name" innerRadius="58%" outerRadius="82%" paddingAngle={2}>
-                {model.holdings.map((holding, index) => (
-                  <Cell key={holding.id} fill={allocationColors[index % allocationColors.length]} />
-                ))}
-              </Pie>
-              <Tooltip formatter={(value) => formatCurrency(Number(value))} />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="allocation-content">
+          <div className="chart-wrap">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={210} initialDimension={{ width: 360, height: 210 }}>
+              <PieChart>
+                <Pie data={allocationItems} dataKey="valuationKrw" nameKey="name" innerRadius="58%" outerRadius="82%" paddingAngle={2}>
+                  {allocationItems.map((item, index) => (
+                    <Cell key={item.id} fill={allocationColors[index % allocationColors.length]} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(value) => formatCurrency(Number(value))} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <ul className="allocation-legend" aria-label="포트폴리오 비중 범례">
+            {allocationItems.map((item, index) => (
+              <li key={item.id}>
+                <span className="legend-swatch" style={{ backgroundColor: allocationColors[index % allocationColors.length] }} />
+                <span className="legend-name">{item.name}</span>
+                <span className="legend-value">{formatPercent(item.weight)}</span>
+                <span className="legend-amount">{formatCurrency(item.valuationKrw)}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
@@ -505,10 +525,11 @@ function RebalanceSettingsPanel({
 
 function KpiGrid({ model }: { model: DashboardModel }) {
   const kpis = [
-    { label: "전체 평가금액", value: formatCurrency(model.summary.totalValuationKrw), tone: "neutral" },
+    { label: "총 잔고", value: formatCurrency(model.summary.totalBalanceKrw), tone: "neutral" },
+    { label: "종목 평가금액", value: formatCurrency(model.summary.totalValuationKrw), tone: "neutral" },
+    { label: "현금", value: formatCurrency(model.summary.totalCashKrw), tone: "neutral" },
     { label: "YTD 실현손익", value: formatCurrency(model.summary.ytdRealizedProfitKrw), tone: toneClass(model.summary.ytdRealizedProfitKrw) },
     { label: "평가손익률", value: formatPercent(model.summary.unrealizedProfitRate), tone: toneClass(model.summary.unrealizedProfitKrw) },
-    { label: "현금 비중", value: formatPercent(model.summary.cashWeight), tone: "neutral" },
   ];
 
   return (
@@ -705,6 +726,27 @@ function actionLabel(action: RebalanceRow["action"]): string {
     trim: "축소검토",
     hold: "유지",
   }[action];
+}
+
+function buildAllocationItems(model: DashboardModel): AllocationItem[] {
+  const total = model.summary.totalBalanceKrw;
+  const items = model.holdings.map((holding) => ({
+    id: holding.id,
+    name: holding.name,
+    valuationKrw: holding.valuationKrw,
+    weight: total > 0 ? holding.valuationKrw / total : 0,
+  }));
+
+  if (model.summary.totalCashKrw > 0) {
+    items.push({
+      id: "CASH:KRW",
+      name: "현금",
+      valuationKrw: model.summary.totalCashKrw,
+      weight: total > 0 ? model.summary.totalCashKrw / total : 0,
+    });
+  }
+
+  return items;
 }
 
 async function fetchEncryptedPortfolio(): Promise<EncryptedPayload> {

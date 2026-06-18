@@ -39,6 +39,7 @@ export function buildDashboardModel(payload: PortfolioPayload): DashboardModel {
 
   return {
     summary: {
+      totalBalanceKrw: totalValuationKrw + totalCashKrw,
       totalValuationKrw,
       totalCashKrw,
       unrealizedProfitKrw,

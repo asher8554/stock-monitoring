@@ -97,6 +97,7 @@ export interface RebalanceRow {
 
 export interface DashboardModel {
   summary: {
+    totalBalanceKrw: number;
     totalValuationKrw: number;
     totalCashKrw: number;
     unrealizedProfitKrw: number;

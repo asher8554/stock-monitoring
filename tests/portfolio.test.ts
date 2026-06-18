@@ -105,6 +105,7 @@ describe("portfolio dashboard model", () => {
   test("aggregates holdings by market symbol and excludes missing KRW valuation from totals", () => {
     const model = buildDashboardModel(payload);
 
+    expect(model.summary.totalBalanceKrw).toBe(1275000);
     expect(model.summary.totalValuationKrw).toBe(1125000);
     expect(model.summary.totalCashKrw).toBe(150000);
     expect(model.summary.unrealizedProfitKrw).toBe(70000);
