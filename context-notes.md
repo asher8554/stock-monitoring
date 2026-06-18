@@ -92,3 +92,17 @@
 - `npm run daily-update`를 추가해 수집, 암호화, encrypted payload commit, push를 한 번에 수행하게 했다.
 - `schedule:enable`은 이제 `npm run daily-update`를 등록한다.
 - `npm test`와 `npm run build`는 통과했다.
+
+## 2026-06-18 화면 자동 새로고침
+
+- 현재 topbar refresh 버튼은 `loadEncryptedPortfolio`만 실행한다.
+- 잠금 해제 뒤에는 비밀번호를 지우므로 새 암호문을 받아도 기존 payload를 다시 복호화하지 못한다.
+- 화면에서 할 수 있는 갱신은 GitHub Pages의 `portfolio.enc.json`을 재조회하는 것이다.
+- 실제 증권사 수집과 push는 로컬 `npm run daily-update` 또는 Windows 작업 스케줄러가 담당한다.
+- UI 변경은 이 경계를 유지하면서 10분 자동 확인과 수동 확인 버튼을 추가한다.
+- 잠금 해제 성공 후 비밀번호는 브라우저 메모리에만 유지하고, 잠금 시 삭제한다.
+- 메모리의 비밀번호로 10분마다 새 encrypted payload를 다시 복호화한다.
+- `fetch` URL에는 `?ts=` 값을 붙여 GitHub Pages 캐시를 우회한다.
+- 대시보드 meta row는 기준 시각, 마지막 확인 시각, 자동 확인 10분, 수동 `새 데이터 확인` 버튼을 보여준다.
+- QA는 실제 비밀번호를 모르므로 임시 정적 서버와 demo payload로 대시보드 unlock, 수동 확인 버튼, desktop/mobile 레이아웃을 검증했다.
+- `npm test`와 `npm run build`는 통과했다.

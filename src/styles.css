@@ -244,10 +244,42 @@ input:disabled {
   grid-column: 1 / -1;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
   gap: 10px;
   color: #64748b;
   color: var(--muted);
   font-size: 13px;
+}
+
+.meta-stack {
+  display: grid;
+  gap: 4px;
+}
+
+.meta-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.refresh-button {
+  min-width: 132px;
+}
+
+.refresh-error {
+  color: var(--negative);
+}
+
+.spin-icon {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .kpi-grid {
@@ -568,6 +600,11 @@ td span {
   .section-heading {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .meta-actions {
+    width: 100%;
+    justify-content: space-between;
   }
 
   .kpi-grid {

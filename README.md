@@ -55,6 +55,14 @@ npm run daily-update
 
 `npm run daily-update`는 수집, 암호화, `public/portfolio.enc.json` 커밋, push를 순서대로 실행한다. 변경된 암호화 payload가 없으면 commit과 push를 건너뛴다.
 
+## 화면 새로고침
+
+잠금 해제 후 화면은 10분마다 GitHub Pages의 최신 `portfolio.enc.json`을 다시 확인한다.
+
+`새 데이터 확인` 버튼을 누르면 즉시 같은 확인을 실행한다.
+
+이 기능은 이미 배포된 암호화 파일을 다시 받는 것이다. 증권사 수집과 배포는 로컬 `npm run daily-update` 또는 작업 스케줄러가 먼저 실행해야 한다.
+
 ## 리밸런싱 설정
 
 대시보드 잠금 해제 후 `리밸런싱 설정`에서 종목별 목표비중과 허용오차를 수정할 수 있다.

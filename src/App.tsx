@@ -1,5 +1,5 @@
 // 암호화된 포트폴리오를 복호화해 단일 대시보드로 보여준다.
-import { FormEvent, useEffect, useMemo, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useState } from "react";
 import { AlertTriangle, LockKeyhole, Moon, RefreshCw, RotateCcw, SlidersHorizontal, Sun, UnlockKeyhole } from "lucide-react";
 import {
   Bar,
@@ -29,6 +29,7 @@ import type { DashboardModel, HoldingSummary, PortfolioPayload, RebalanceRow } f
 const allocationColors = ["#0f766e", "#2563eb", "#7c3aed", "#d97706", "#be123c", "#475569"];
 const themeStorageKey = "stock-monitoring-theme";
 const rebalanceStorageKey = "stock-monitoring-rebalance-targets";
+const portfolioRefreshIntervalMs = 10 * 60 * 1000;
 
 export function App() {
   const [encrypted, setEncrypted] = useState<EncryptedPayload | null>(null);
@@ -36,8 +37,12 @@ export function App() {
   const [payload, setPayload] = useState<PortfolioPayload | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [unlockError, setUnlockError] = useState<string | null>(null);
+  const [refreshError, setRefreshError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [unlocking, setUnlocking] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [lastCheckedAt, setLastCheckedAt] = useState<string | null>(null);
+  const [sessionPassword, setSessionPassword] = useState<string | null>(null);
   const [storedRebalanceTargets, setStoredRebalanceTargets] = useState<StoredRebalanceTarget[]>(readStoredRebalanceTargets);
   const [theme, setTheme] = useState<ThemeMode>(() =>
     resolveInitialTheme(localStorage.getItem(themeStorageKey), window.matchMedia("(prefers-color-scheme: dark)").matches),
@@ -68,15 +73,51 @@ export function App() {
   );
   const model = useMemo(() => (effectivePayload ? buildDashboardModel(effectivePayload) : null), [effectivePayload]);
 
+  const refreshUnlockedPortfolio = useCallback(
+    async ({ showProgress = true }: { showProgress?: boolean } = {}) => {
+      if (!sessionPassword) {
+        return;
+      }
+
+      if (showProgress) {
+        setRefreshing(true);
+      }
+      setRefreshError(null);
+      try {
+        const nextEncrypted = await fetchEncryptedPortfolio();
+        const nextPayload = (await decryptPayload(nextEncrypted, sessionPassword)) as PortfolioPayload;
+        setEncrypted(nextEncrypted);
+        setPayload(nextPayload);
+        setLastCheckedAt(new Date().toISOString());
+      } catch {
+        setRefreshError("최신 데이터를 확인하지 못했습니다. 기존 데이터를 유지합니다.");
+      } finally {
+        if (showProgress) {
+          setRefreshing(false);
+        }
+      }
+    },
+    [sessionPassword],
+  );
+
+  useEffect(() => {
+    if (!payload || !sessionPassword) {
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      void refreshUnlockedPortfolio({ showProgress: false });
+    }, portfolioRefreshIntervalMs);
+
+    return () => window.clearInterval(intervalId);
+  }, [payload, refreshUnlockedPortfolio, sessionPassword]);
+
   async function loadEncryptedPortfolio() {
     setLoading(true);
     setLoadError(null);
     try {
-      const response = await fetch("./portfolio.enc.json", { cache: "no-store" });
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
-      setEncrypted((await response.json()) as EncryptedPayload);
+      setEncrypted(await fetchEncryptedPortfolio());
+      setLastCheckedAt(new Date().toISOString());
     } catch {
       setLoadError("암호화된 데이터 파일을 불러오지 못했습니다.");
     } finally {
@@ -94,6 +135,7 @@ export function App() {
     setUnlockError(null);
     try {
       setPayload((await decryptPayload(encrypted, password)) as PortfolioPayload);
+      setSessionPassword(password);
       setPassword("");
       requestAnimationFrame(() => window.scrollTo({ top: 0, left: 0 }));
     } catch {
@@ -106,7 +148,9 @@ export function App() {
   function lock() {
     setPayload(null);
     setPassword("");
+    setSessionPassword(null);
     setUnlockError(null);
+    setRefreshError(null);
   }
 
   function toggleTheme() {
@@ -138,6 +182,15 @@ export function App() {
     setStoredRebalanceTargets([]);
   }
 
+  function refreshPortfolio() {
+    if (payload) {
+      void refreshUnlockedPortfolio();
+      return;
+    }
+
+    void loadEncryptedPortfolio();
+  }
+
   return (
     <main className="app-shell">
       <header className="topbar">
@@ -155,8 +208,15 @@ export function App() {
           >
             {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
           </button>
-          <button className="icon-button" type="button" onClick={loadEncryptedPortfolio} aria-label="새로고침">
-            <RefreshCw size={18} />
+          <button
+            className="icon-button"
+            type="button"
+            onClick={refreshPortfolio}
+            disabled={loading || refreshing}
+            aria-label="상단 새 데이터 확인"
+            title="상단 새 데이터 확인"
+          >
+            <RefreshCw className={refreshing ? "spin-icon" : undefined} size={18} />
           </button>
           {payload ? (
             <button className="secondary-button" type="button" onClick={lock}>
@@ -173,6 +233,10 @@ export function App() {
           asOf={payload.asOf}
           theme={theme}
           rebalanceSettings={rebalanceSettings}
+          lastCheckedAt={lastCheckedAt}
+          refreshError={refreshError}
+          refreshing={refreshing}
+          onRefresh={refreshPortfolio}
           onRebalanceSettingChange={updateRebalanceSetting}
           onRebalanceSettingsReset={resetRebalanceSettings}
         />
@@ -249,6 +313,10 @@ function Dashboard({
   asOf,
   theme,
   rebalanceSettings,
+  lastCheckedAt,
+  refreshError,
+  refreshing,
+  onRefresh,
   onRebalanceSettingChange,
   onRebalanceSettingsReset,
 }: {
@@ -256,6 +324,10 @@ function Dashboard({
   asOf: string;
   theme: ThemeMode;
   rebalanceSettings: RebalanceSetting[];
+  lastCheckedAt: string | null;
+  refreshError: string | null;
+  refreshing: boolean;
+  onRefresh: () => void;
   onRebalanceSettingChange: (id: string, field: "targetWeight" | "rebalanceThreshold", value: string) => void;
   onRebalanceSettingsReset: () => void;
 }) {
@@ -264,8 +336,17 @@ function Dashboard({
   return (
     <section className="dashboard-grid">
       <div className="meta-row">
-        <span>기준 시각 {formatDateTime(asOf)}</span>
-        <span>KRW 기준</span>
+        <div className="meta-stack">
+          <span>기준 시각 {formatDateTime(asOf)}</span>
+          <span>마지막 확인 {lastCheckedAt ? formatDateTime(lastCheckedAt) : "없음"} · 자동 확인 10분</span>
+        </div>
+        <div className="meta-actions">
+          {refreshError ? <span className="refresh-error" role="alert">{refreshError}</span> : <span>KRW 기준</span>}
+          <button className="secondary-button refresh-button" type="button" onClick={onRefresh} disabled={refreshing}>
+            <RefreshCw className={refreshing ? "spin-icon" : undefined} size={16} />
+            {refreshing ? "확인 중" : "새 데이터 확인"}
+          </button>
+        </div>
       </div>
 
       <KpiGrid model={model} />
@@ -625,4 +706,12 @@ function actionLabel(action: RebalanceRow["action"]): string {
     trim: "축소검토",
     hold: "유지",
   }[action];
+}
+
+async function fetchEncryptedPortfolio(): Promise<EncryptedPayload> {
+  const response = await fetch(`./portfolio.enc.json?ts=${Date.now()}`, { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+  return (await response.json()) as EncryptedPayload;
 }
