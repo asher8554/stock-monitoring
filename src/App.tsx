@@ -230,7 +230,6 @@ export function App() {
       {model && payload ? (
         <Dashboard
           model={model}
-          asOf={payload.asOf}
           theme={theme}
           rebalanceSettings={rebalanceSettings}
           lastCheckedAt={lastCheckedAt}
@@ -310,7 +309,6 @@ function UnlockPanel({
 
 function Dashboard({
   model,
-  asOf,
   theme,
   rebalanceSettings,
   lastCheckedAt,
@@ -321,7 +319,6 @@ function Dashboard({
   onRebalanceSettingsReset,
 }: {
   model: DashboardModel;
-  asOf: string;
   theme: ThemeMode;
   rebalanceSettings: RebalanceSetting[];
   lastCheckedAt: string | null;
@@ -337,8 +334,8 @@ function Dashboard({
     <section className="dashboard-grid">
       <div className="meta-row">
         <div className="meta-stack">
-          <span>기준 시각 {formatDateTime(asOf)}</span>
-          <span>마지막 확인 {lastCheckedAt ? formatDateTime(lastCheckedAt) : "없음"} · 자동 확인 10분</span>
+          <span>데이터 확인 {lastCheckedAt ? formatDateTime(lastCheckedAt) : "없음"}</span>
+          <span>10분마다 자동 확인</span>
         </div>
         <div className="meta-actions">
           {refreshError ? <span className="refresh-error" role="alert">{refreshError}</span> : <span>KRW 기준</span>}
