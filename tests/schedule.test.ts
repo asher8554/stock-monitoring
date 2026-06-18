@@ -21,7 +21,7 @@ describe("windows scheduler command", () => {
       "/ST",
       "16:10",
       "/TR",
-      'cmd.exe /d /s /c "cd /d E:\\Github\\stock-monitoring && npm run publish-data"',
+      'cmd.exe /d /s /c "cd /d E:\\Github\\stock-monitoring && npm run daily-update"',
       "/F",
     ]);
   });

@@ -58,3 +58,11 @@
 - [x] 누적 시작일을 `.env.local`에서 설정할 수 있도록 문서화한다.
 - [x] KIS OAuth 토큰을 `local/kis-token.local.json`에 캐시한다.
 - [x] 실제 collect, 테스트, 빌드 후 commit/push한다.
+
+## 2026-06-18 매일 데이터 갱신 진단
+
+- [x] GitHub Actions workflow가 매일 수집을 담당하는지 확인한다.
+- [x] Windows 작업 스케줄러 등록 상태와 마지막 실행 결과를 확인한다.
+- [x] `public/portfolio.enc.json`과 원격 배포 데이터의 갱신 시각을 비교한다.
+- [x] 필요한 경우 스케줄러 또는 publish 흐름을 최소 수정한다.
+- [x] 테스트와 필요한 명령 검증을 실행한다.

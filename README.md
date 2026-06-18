@@ -47,6 +47,14 @@ Remove-Item Env:\PORTFOLIO_PASSWORD
 
 `npm run publish-data`는 `public/portfolio.enc.json`만 만든다. git commit과 push는 직접 한다.
 
+매일 사이트까지 갱신하려면 `.env.local`에 `PORTFOLIO_PASSWORD`를 추가한 뒤 다음 명령을 사용한다.
+
+```powershell
+npm run daily-update
+```
+
+`npm run daily-update`는 수집, 암호화, `public/portfolio.enc.json` 커밋, push를 순서대로 실행한다. 변경된 암호화 payload가 없으면 commit과 push를 건너뛴다.
+
 ## 리밸런싱 설정
 
 대시보드 잠금 해제 후 `리밸런싱 설정`에서 종목별 목표비중과 허용오차를 수정할 수 있다.
@@ -69,7 +77,7 @@ npm run schedule:enable -- --time 16:10
 npm run schedule:disable
 ```
 
-작업 스케줄러는 로컬 PC에서만 의미가 있다.
+작업 스케줄러는 로컬 PC에서만 의미가 있다. 등록된 작업은 `npm run daily-update`를 실행하므로 `.env.local`에 `PORTFOLIO_PASSWORD`가 있어야 한다.
 
 ## 아직 남은 것
 

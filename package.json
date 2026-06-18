@@ -11,6 +11,7 @@
     "collect": "tsx scripts/cli.ts collect",
     "encrypt": "tsx scripts/cli.ts encrypt",
     "publish-data": "tsx scripts/cli.ts publish-data",
+    "daily-update": "tsx scripts/cli.ts daily-update",
     "schedule:enable": "tsx scripts/cli.ts schedule enable",
     "schedule:disable": "tsx scripts/cli.ts schedule disable",
     "demo:data": "tsx scripts/demo-data.ts"

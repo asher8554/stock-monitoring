@@ -77,3 +77,18 @@
 - 실제 KIS 기간별손익 조회는 `APBK1633: 조회기간은 10년 이내이어야 합니다.`를 반환하므로 `KIS_LIFETIME_START_DATE`가 더 오래되어도 실행일 기준 10년 전 다음 날로 보정한다.
 - 실제 수집 중 토큰 재발급 단계에서 `403 Forbidden`이 발생할 수 있어 KIS OAuth 접근 토큰을 `local/kis-token.local.json`에 캐시한다.
 - 토큰 캐시는 GitHub에 올리지 않는 로컬 파일이며, 만료 1분 전부터는 새 토큰을 요청한다.
+
+## 2026-06-18 매일 데이터 갱신 진단
+
+- 사용자 증상은 사이트 자체는 정상 구동되지만 매일 데이터가 갱신되지 않는 것이다.
+- 기존 설계상 GitHub Actions는 Pages 빌드/배포 담당이고, 실제 증권사 수집은 로컬 CLI와 Windows 작업 스케줄러가 담당한다.
+- 진단은 로컬 스케줄 작업, `npm run collect`, `npm run publish-data`, git push, Pages 배포 순서로 끊긴 지점을 확인한다.
+- `.github/workflows/pages.yml`에는 `schedule` 이벤트가 없고 push 또는 수동 실행만 있다.
+- Windows `StockMonitoring` 작업은 등록되어 있지 않았고 `local/scheduler.local.json`도 없었다.
+- 라이브 `https://asher8554.github.io/stock-monitoring/portfolio.enc.json`의 `createdAt`은 `2026-06-11T07:07:13.936Z`였다.
+- 기존 scheduler 명령은 `npm run publish-data`만 실행해서 실제 API 수집과 git push를 하지 않았다.
+- `.env.local`, 사용자 환경변수, 머신 환경변수에 `PORTFOLIO_PASSWORD`가 없어 비대화형 publish가 실패했다.
+- `npm run collect`는 성공했고 `local/portfolio.local.json`의 `asOf`가 `2026-06-18T01:37:13.497Z`로 갱신됐다.
+- `npm run daily-update`를 추가해 수집, 암호화, encrypted payload commit, push를 한 번에 수행하게 했다.
+- `schedule:enable`은 이제 `npm run daily-update`를 등록한다.
+- `npm test`와 `npm run build`는 통과했다.

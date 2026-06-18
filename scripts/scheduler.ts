@@ -30,7 +30,7 @@ export function buildScheduleCommand(input: ScheduleCommandInput): ShellCommandS
       "/ST",
       input.runAt,
       "/TR",
-      `cmd.exe /d /s /c "cd /d ${input.projectDir} && npm run publish-data"`,
+      `cmd.exe /d /s /c "cd /d ${input.projectDir} && npm run daily-update"`,
       "/F",
     ],
   };

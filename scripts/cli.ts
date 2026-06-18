@@ -31,6 +31,11 @@ async function main(): Promise<void> {
     return;
   }
 
+  if (command === "daily-update") {
+    await dailyUpdate();
+    return;
+  }
+
   if (command === "encrypt" || command === "publish-data") {
     await publishData();
     return;
@@ -73,6 +78,7 @@ async function collect(): Promise<void> {
 }
 
 async function publishData(): Promise<void> {
+  await loadEnvFile(envLocalPath);
   const portfolio = await readJsonFile<PortfolioPayload>(portfolioPath);
   const targets = await readOptionalJson<TargetWeight[]>(targetsPath) ?? [];
   const payload = mergeTargetsIntoPortfolio(portfolio, targets);
@@ -81,6 +87,20 @@ async function publishData(): Promise<void> {
 
   await writeJsonFile(encryptedOutputPath, encrypted);
   console.log(`portfolio.enc.json written: ${encryptedOutputPath}`);
+}
+
+async function dailyUpdate(): Promise<void> {
+  await collect();
+  await publishData();
+
+  if (!hasGitChanges("public/portfolio.enc.json")) {
+    console.log("No encrypted portfolio changes to publish.");
+    return;
+  }
+
+  runGit(["add", "public/portfolio.enc.json"]);
+  runGit(["commit", "-m", "데이터 자동 갱신", "--", "public/portfolio.enc.json"]);
+  runGit(["push"]);
 }
 
 async function updateSchedule(mode: "enable" | "disable", args: string[]): Promise<void> {
@@ -117,7 +137,7 @@ async function readPassword(): Promise<string> {
   }
 
   if (!input.isTTY) {
-    throw new Error("PORTFOLIO_PASSWORD environment variable is required in non-interactive mode");
+    throw new Error("PORTFOLIO_PASSWORD is required for non-interactive publish. Add it to .env.local before running daily-update or schedule:enable.");
   }
 
   const reader = createInterface({ input, output });
@@ -132,6 +152,25 @@ function readTimeArg(args: string[]): string | null {
     return null;
   }
   return args[index + 1] ?? null;
+}
+
+function hasGitChanges(filePath: string): boolean {
+  const result = spawnSync("git", ["status", "--porcelain", "--", filePath], {
+    cwd: projectDir,
+    encoding: "utf8",
+    windowsHide: true,
+  });
+  if (result.status !== 0) {
+    throw new Error(`git status failed with status ${result.status ?? "unknown"}`);
+  }
+  return result.stdout.trim().length > 0;
+}
+
+function runGit(args: string[]): void {
+  const result = spawnSync("git", args, { cwd: projectDir, stdio: "inherit", windowsHide: true });
+  if (result.status !== 0) {
+    throw new Error(`git ${args[0]} failed with status ${result.status ?? "unknown"}`);
+  }
 }
 
 await mkdir(localDir, { recursive: true });
