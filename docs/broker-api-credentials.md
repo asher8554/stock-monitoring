@@ -63,7 +63,7 @@ TOSS_ACCOUNT_ALIAS=토스 일반
 
 ## 토스증권
 
-토스증권 Open API도 신청 후 앱키와 시크릿키를 발급받는 구조로 잡는다. 실제 어댑터 구현은 공식 API 접근 권한, 최신 문서, 실제 응답 샘플이 확보된 뒤 진행한다.
+토스증권 Open API도 신청 후 앱키와 시크릿키를 발급받는 구조다.
 
 로컬에는 다음 값이 필요하다.
 
@@ -71,7 +71,7 @@ TOSS_ACCOUNT_ALIAS=토스 일반
 - `TOSS_APP_SECRET`.
 - `TOSS_ACCOUNT_ALIAS`.
 
-토스증권에서 계좌 식별값이 별도로 필요하면 `TOSS_ACCOUNT_ID`를 추가한다. 실제 어댑터 구현 시 공식 응답 샘플을 보고 확정한다.
+수집기는 `GET /api/v1/accounts`의 `accountSeq`를 `X-Tossinvest-Account` 헤더로 사용해 보유 주식을 조회한다.
 
 토스증권 API 키가 아직 없으면 `TOSS_*` 값을 비워 둔다. 이 상태에서 `npm run collect`는 토스 수집을 건너뛴다.
 

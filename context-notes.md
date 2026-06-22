@@ -153,3 +153,17 @@
 - 정적 grep에서 계좌별 요약 UI 문자열과 account panel/list/row class가 제거됐고, `비중 범례`와 `allocation-legend`가 남아 있음을 확인했다.
 - `npm test`는 10개 파일 27개 테스트 통과, `npm run build`는 성공했다.
 - Edge headless QA에서 desktop 1280x900과 mobile 390x900 모두 잠금 해제 후 `계좌별 요약` 0개, legend 항목 4개, heading 순서 `포트폴리오 비중`, `비중 범례`, `손익률`을 확인했다.
+
+## 2026-06-22 토스증권 수집과 시각화
+
+- 사용자는 토스 API 값을 입력했고 토스 관련 데이터도 화면에서 시각적으로 보이길 원했다.
+- 공식 `https://developers.tossinvest.com/llms.txt`는 OpenAPI JSON을 source of truth로 지정한다.
+- 필요한 최소 endpoint는 `POST /oauth2/token`, `GET /api/v1/accounts`, `GET /api/v1/holdings`, USD 보유분 환산용 `GET /api/v1/exchange-rate`다.
+- 계좌와 보유 주식 조회에는 `Authorization: Bearer`와 `X-Tossinvest-Account` 헤더가 필요하다.
+- 주문, 체결, 거래내역은 이번 요구보다 크므로 제외한다.
+- 토스 USD 보유 주식은 공식 환율 조회를 한 번 호출해 KRW로 환산한다.
+- 대시보드는 새 chart dependency 없이 CSS bar 기반 증권사 비중 패널만 추가한다.
+- 실제 `npm run collect`는 토스 계좌 1개를 수집했다. 현재 응답의 토스 보유 종목은 0건이다.
+- 데모 payload 기준 Edge headless QA에서 desktop 1280x900과 mobile 390x900 모두 `증권사 비중`, `토스증권`, `NVIDIA` 토스 보유 표시를 확인했다.
+- `npm test`는 11개 파일 29개 테스트 통과, `npm run build`는 성공했다.
+- 토스증권 API 어댑터는 구현 완료다. 남은 외부 입력 항목은 미래에셋 실제 샘플 파일 기반 헤더 매핑 보강이다.

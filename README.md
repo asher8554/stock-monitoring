@@ -12,6 +12,7 @@ GitHub Pages에서 암호화된 포트폴리오 파일을 복호화해 수익률
 - 포트폴리오 비중 범례, 종목별 통합, 리밸런싱 테이블.
 - 대시보드 내 목표비중과 허용오차 설정, 브라우저 로컬 저장.
 - 한국투자증권 Open API 국내주식 잔고와 미국주식 잔고 수집.
+- 토스증권 Open API 보유 주식 수집.
 - 미래에셋 표준 CSV/XLSX 행 파서.
 - Windows 작업 스케줄러 enable/disable 명령.
 - GitHub Pages Actions 배포 workflow.
@@ -106,7 +107,6 @@ npm run schedule:disable
 
 ## 외부 입력 필요
 
-- 토스증권 Open API 실제 계좌 조회 어댑터는 공식 API 접근 권한, 최신 문서, 실제 응답 샘플이 필요하다.
 - 미래에셋 실제 샘플 파일 기준 파서 매핑 보강은 사용자가 내려받은 실제 CSV/XLSX 샘플이 필요하다.
 
 API 키 전달 방식은 [docs/broker-api-credentials.md](docs/broker-api-credentials.md)에 정리했다.

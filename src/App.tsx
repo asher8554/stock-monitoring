@@ -27,11 +27,19 @@ import { nextTheme, resolveInitialTheme, type ThemeMode } from "./lib/theme";
 import type { DashboardModel, HoldingSummary, PortfolioPayload, RebalanceRow } from "./types/portfolio";
 
 const allocationColors = ["#0f766e", "#2563eb", "#7c3aed", "#d97706", "#be123c", "#475569"];
+const brokerColors = ["#0f766e", "#2563eb", "#be123c", "#d97706"];
 const themeStorageKey = "stock-monitoring-theme";
 const rebalanceStorageKey = "stock-monitoring-rebalance-targets";
 const portfolioRefreshIntervalMs = 10 * 60 * 1000;
 
 interface AllocationItem {
+  id: string;
+  name: string;
+  valuationKrw: number;
+  weight: number;
+}
+
+interface BrokerItem {
   id: string;
   name: string;
   valuationKrw: number;
@@ -356,6 +364,8 @@ function Dashboard({
 
       <KpiGrid model={model} />
 
+      <BrokerBreakdownPanel items={buildBrokerItems(model)} />
+
       <section className="panel allocation-panel">
         <div className="section-heading">
           <h2>포트폴리오 비중</h2>
@@ -526,6 +536,37 @@ function KpiGrid({ model }: { model: DashboardModel }) {
           <strong className={kpi.tone}>{kpi.value}</strong>
         </div>
       ))}
+    </section>
+  );
+}
+
+function BrokerBreakdownPanel({ items }: { items: BrokerItem[] }) {
+  return (
+    <section className="panel wide-panel broker-panel">
+      <div className="section-heading">
+        <h2>증권사 비중</h2>
+        <p>계좌 평가 기준</p>
+      </div>
+      <div className="broker-list" aria-label="증권사별 비중">
+        {items.map((item, index) => (
+          <div className="broker-row" key={item.id}>
+            <div className="broker-row-meta">
+              <strong>{item.name}</strong>
+              <span>{formatCurrency(item.valuationKrw)}</span>
+              <span>{formatPercent(item.weight)}</span>
+            </div>
+            <div className="broker-track">
+              <span
+                className="broker-fill"
+                style={{
+                  width: item.weight > 0 ? `${Math.max(item.weight * 100, 1)}%` : 0,
+                  backgroundColor: brokerColors[index % brokerColors.length],
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
@@ -733,6 +774,22 @@ function buildAllocationItems(model: DashboardModel): AllocationItem[] {
   }
 
   return items;
+}
+
+function buildBrokerItems(model: DashboardModel): BrokerItem[] {
+  const byBroker = new Map<string, number>();
+  model.accounts.forEach((account) => {
+    byBroker.set(account.broker, (byBroker.get(account.broker) ?? 0) + account.valuationKrw);
+  });
+  const total = [...byBroker.values()].reduce((sum, value) => sum + value, 0);
+  return [...byBroker.entries()]
+    .map(([id, valuationKrw]) => ({
+      id,
+      name: brokerLabel(id),
+      valuationKrw,
+      weight: total > 0 ? valuationKrw / total : 0,
+    }))
+    .sort((left, right) => right.valuationKrw - left.valuationKrw);
 }
 
 async function fetchEncryptedPortfolio(): Promise<EncryptedPayload> {

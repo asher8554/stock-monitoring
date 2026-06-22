@@ -1,22 +1,28 @@
 // 로컬 수집 결과를 공통 포트폴리오 payload로 병합한다.
 import type { AccountSnapshot, PortfolioPayload } from "../src/types/portfolio";
 import type { KoreaInvestmentPortfolioResult } from "./adapters/korea-investment";
+import type { TossPortfolioResult } from "./adapters/toss";
 
 export interface MergeCollectedPortfolioInput {
   basePortfolio: PortfolioPayload;
   asOf: string;
   koreaInvestment?: KoreaInvestmentPortfolioResult | null;
+  toss?: TossPortfolioResult | null;
   miraeAssetPositions: PortfolioPayload["positions"];
 }
 
 export function mergeCollectedPortfolio(input: MergeCollectedPortfolioInput): PortfolioPayload {
   const brokerAccounts = input.basePortfolio.accounts.filter(
-    (account) => account.broker !== "korea-investment" && account.broker !== "miraeasset",
+    (account) => account.broker !== "korea-investment" && account.broker !== "toss" && account.broker !== "miraeasset",
   );
   const brokerPositions = input.basePortfolio.positions.filter(
-    (position) => position.broker !== "korea-investment" && position.broker !== "miraeasset",
+    (position) => position.broker !== "korea-investment" && position.broker !== "toss" && position.broker !== "miraeasset",
   );
-  const accounts = input.koreaInvestment ? [...brokerAccounts, input.koreaInvestment.account] : brokerAccounts;
+  const accounts = [
+    ...brokerAccounts,
+    ...(input.koreaInvestment ? [input.koreaInvestment.account] : []),
+    ...(input.toss ? [input.toss.account] : []),
+  ];
   const warnings = input.koreaInvestment
     ? [...input.basePortfolio.warnings, ...input.koreaInvestment.warnings]
     : input.basePortfolio.warnings;
@@ -29,6 +35,7 @@ export function mergeCollectedPortfolio(input: MergeCollectedPortfolioInput): Po
     positions: [
       ...brokerPositions,
       ...(input.koreaInvestment?.positions ?? []),
+      ...(input.toss?.positions ?? []),
       ...input.miraeAssetPositions,
     ],
     warnings,

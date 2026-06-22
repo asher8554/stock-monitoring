@@ -5,7 +5,7 @@ import { createEmptyPortfolio } from "../scripts/payload";
 import type { AccountSnapshot, PositionSnapshot, PortfolioWarning } from "../src/types/portfolio";
 
 describe("collect merge", () => {
-  test("replaces broker-owned Korea Investment and MiraeAsset rows while keeping manual rows", () => {
+  test("replaces broker-owned Korea Investment, Toss, and MiraeAsset rows while keeping manual rows", () => {
     const manualAccount: AccountSnapshot = {
       id: "manual-cash",
       broker: "manual",
@@ -17,6 +17,7 @@ describe("collect merge", () => {
       unrealizedProfitRate: 0,
     };
     const staleKisPosition = position("KRX:000660", "korea-investment", "korea-investment-isa");
+    const staleTossPosition = position("US:AAPL", "toss", "toss-general");
     const manualPosition = position("KRX:035420", "manual", "manual-cash");
     const kisAccount: AccountSnapshot = {
       id: "korea-investment-isa",
@@ -29,6 +30,17 @@ describe("collect merge", () => {
       unrealizedProfitRate: 0.071429,
     };
     const kisPosition = position("KRX:005930", "korea-investment", "korea-investment-isa");
+    const tossAccount: AccountSnapshot = {
+      id: "toss-general",
+      broker: "toss",
+      alias: "토스 일반",
+      currency: "KRW",
+      valuationKrw: 300000,
+      cashKrw: 0,
+      unrealizedProfitKrw: 30000,
+      unrealizedProfitRate: 0.111111,
+    };
+    const tossPosition = position("US:MSFT", "toss", "toss-general");
     const miraePosition = position("KRX:068270", "miraeasset", "miraeasset-general");
     const kisWarning: PortfolioWarning = {
       code: "MISSING_KRW_VALUATION",
@@ -40,8 +52,8 @@ describe("collect merge", () => {
     const merged = mergeCollectedPortfolio({
       basePortfolio: {
         ...createEmptyPortfolio("2026-06-10T00:00:00.000Z"),
-        accounts: [manualAccount, { ...kisAccount, valuationKrw: 1 }],
-        positions: [manualPosition, staleKisPosition],
+        accounts: [manualAccount, { ...kisAccount, valuationKrw: 1 }, { ...tossAccount, valuationKrw: 1 }],
+        positions: [manualPosition, staleKisPosition, staleTossPosition],
       },
       asOf: "2026-06-11T00:00:00.000Z",
       koreaInvestment: {
@@ -53,6 +65,10 @@ describe("collect merge", () => {
         },
         warnings: [kisWarning],
       },
+      toss: {
+        account: tossAccount,
+        positions: [tossPosition],
+      },
       miraeAssetPositions: [miraePosition],
     });
 
@@ -60,13 +76,14 @@ describe("collect merge", () => {
     expect(merged.accounts.map((account) => account.id)).toEqual([
       "manual-cash",
       "korea-investment-isa",
+      "toss-general",
       "miraeasset-general",
     ]);
     expect(merged.realizedProfit).toEqual({
       ytd: { profitKrw: 15000, profitRate: 0.15 },
       lifetime: { profitKrw: 55000, profitRate: 0.11 },
     });
-    expect(merged.positions.map((row) => row.id)).toEqual(["KRX:035420", "KRX:005930", "KRX:068270"]);
+    expect(merged.positions.map((row) => row.id)).toEqual(["KRX:035420", "KRX:005930", "US:MSFT", "KRX:068270"]);
     expect(merged.warnings).toEqual([kisWarning]);
   });
 });

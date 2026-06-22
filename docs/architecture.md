@@ -11,7 +11,7 @@
 ## 데이터 흐름
 
 1. 사용자가 로컬에서 `Update-StockMonitoring` 또는 `npm run daily-update`를 실행한다.
-2. 한국투자증권 데이터는 API 어댑터가 수집한다.
+2. 한국투자증권과 토스증권 데이터는 API 어댑터가 수집한다.
 3. 미래에셋 데이터는 `local/imports/miraeasset/`의 CSV/XLSX 파일에서 읽는다.
 4. 수집 결과는 `portfolio.local.json`으로 정규화된다.
 5. 목표 비중은 `targets.local.json`에서 읽는다.
@@ -54,7 +54,7 @@ GitHub Pages 앱은 민감한 입력을 보관하지 않는다.
 각 증권사는 독립 어댑터로 구현한다.
 
 - 한국투자증권: 공식 Open API 기반.
-- 토스증권: 공식 Open API 접근 권한과 응답 샘플 확보 후 구현.
+- 토스증권: 공식 Open API 기반.
 - 미래에셋: CSV/XLSX 파일 기반.
 
 어댑터 출력은 공통 스키마로 맞춘다. 대시보드는 증권사별 원본 차이를 알지 않아야 한다.

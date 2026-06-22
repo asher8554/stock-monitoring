@@ -8,6 +8,7 @@ import { encryptPayload } from "../src/lib/crypto";
 import type { PortfolioPayload, TargetWeight } from "../src/types/portfolio";
 import { fetchKoreaInvestmentPortfolio } from "./adapters/korea-investment";
 import { readMiraeAssetPositions } from "./adapters/miraeasset";
+import { fetchTossPortfolio } from "./adapters/toss";
 import { mergeCollectedPortfolio } from "./collect";
 import { loadBrokerCredentials, loadEnvFile } from "./credentials";
 import { createFileKisTokenCache } from "./kis-token-cache";
@@ -61,6 +62,7 @@ async function collect(): Promise<void> {
         tokenCache: createFileKisTokenCache(kisTokenCachePath),
       })
     : null;
+  const toss = credentials.toss ? await fetchTossPortfolio(credentials.toss) : null;
   const miraePositions = await readMiraeAssetPositions(path.join(localDir, "imports", "miraeasset"), {
     accountId: "miraeasset-general",
     accountAlias: "미래에셋 일반",
@@ -70,6 +72,7 @@ async function collect(): Promise<void> {
     basePortfolio,
     asOf: new Date().toISOString(),
     koreaInvestment,
+    toss,
     miraeAssetPositions: miraePositions,
   });
 

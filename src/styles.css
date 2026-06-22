@@ -330,6 +330,11 @@ input:disabled {
   grid-column: 1 / -1;
 }
 
+.broker-panel {
+  display: grid;
+  gap: 2px;
+}
+
 .section-heading {
   display: flex;
   align-items: start;
@@ -407,6 +412,45 @@ input:disabled {
   grid-column: 2 / -1;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
+}
+
+.broker-list {
+  display: grid;
+  gap: 12px;
+}
+
+.broker-row {
+  display: grid;
+  gap: 8px;
+}
+
+.broker-row-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 12px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.broker-row-meta strong {
+  overflow: hidden;
+  color: var(--heading);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.broker-track {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border-soft);
+}
+
+.broker-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
 }
 
 .table-scroll {
