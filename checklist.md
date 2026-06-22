@@ -120,3 +120,12 @@
 - [x] 대시보드에 증권사별 비중 패널을 추가한다.
 - [x] 테스트, 빌드, 브라우저 스모크를 실행한다.
 - [x] commit과 push를 완료한다.
+
+## 2026-06-22 비밀번호 저장 동작 정리
+
+- [x] wrapper가 `.env.local`의 `PORTFOLIO_PASSWORD`를 먼저 확인하게 한다.
+- [x] `Update-StockMonitoring -SavePassword` 저장 옵션을 추가한다.
+- [x] README와 도움말을 갱신한다.
+- [x] wrapper 문법과 테스트를 검증한다.
+- [x] 실제 `Update-StockMonitoring` 흐름으로 암호화 payload를 갱신한다.
+- [x] commit과 push를 완료한다.

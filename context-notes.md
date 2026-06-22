@@ -167,3 +167,14 @@
 - 데모 payload 기준 Edge headless QA에서 desktop 1280x900과 mobile 390x900 모두 `증권사 비중`, `토스증권`, `NVIDIA` 토스 보유 표시를 확인했다.
 - `npm test`는 11개 파일 29개 테스트 통과, `npm run build`는 성공했다.
 - 토스증권 API 어댑터는 구현 완료다. 남은 외부 입력 항목은 미래에셋 실제 샘플 파일 기반 헤더 매핑 보강이다.
+
+## 2026-06-22 비밀번호 저장 동작 정리
+
+- 사용자는 `PORTFOLIO_PASSWORD`를 앞으로 묻지 않기로 했던 것 같다고 지적했다.
+- 기존 `Update-StockMonitoring.ps1`은 npm 실행 전에 현재 PowerShell 세션의 `$env:PORTFOLIO_PASSWORD`만 확인했다.
+- 이 구조에서는 `.env.local`에 `PORTFOLIO_PASSWORD`가 있어도 wrapper가 먼저 물을 수 있다.
+- `.env.local`에 저장된 비밀번호가 있으면 wrapper가 묻지 않게 하고, 필요하면 `Update-StockMonitoring -SavePassword`로 한 번 저장하는 흐름을 추가한다.
+- 2026-06-22 안전 확인에서 Toss Open API는 계좌 1개, 보유 종목 0건을 반환했다. 그래서 종목별 통합에 토스 종목이 안 나오는 것은 현재 응답 기준 정상이다.
+- 사용자가 `.env.local`에 `PORTFOLIO_PASSWORD`를 저장한 뒤 `Update-StockMonitoring.ps1 -NoWaitPages`를 실행했다.
+- 실제 payload 갱신은 `92c5fa5 데이터 자동 갱신` commit으로 push됐다.
+- 갱신 직후 로컬 포트폴리오는 토스 계좌 1개와 한국투자 보유 종목 4건을 포함했고, 토스 보유 종목은 계속 0건이다.

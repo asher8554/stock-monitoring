@@ -3,16 +3,18 @@
 param(
     [string]$ProjectDir = "E:\Github\stock-monitoring",
     [switch]$NoWaitPages,
+    [switch]$SavePassword,
     [switch]$Help
 )
 
 $ErrorActionPreference = "Stop"
 
 if ($Help) {
-    Write-Host "Usage: Update-StockMonitoring [-NoWaitPages] [-ProjectDir <path>]"
+    Write-Host "Usage: Update-StockMonitoring [-SavePassword] [-NoWaitPages] [-ProjectDir <path>]"
     Write-Host ""
     Write-Host "Runs npm run daily-update from the stock-monitoring project."
-    Write-Host "Prompts for PORTFOLIO_PASSWORD only when it is not already set."
+    Write-Host "Uses PORTFOLIO_PASSWORD from the current session or .env.local when available."
+    Write-Host "Use -SavePassword once to store PORTFOLIO_PASSWORD in local .env.local."
     return
 }
 
@@ -26,6 +28,111 @@ function Convert-SecureStringToPlainText {
     finally {
         [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($pointer)
     }
+}
+
+function ConvertFrom-EnvValue {
+    param([string]$Value)
+
+    if ($Value.Length -ge 2) {
+        $first = $Value.Substring(0, 1)
+        $last = $Value.Substring($Value.Length - 1, 1)
+        if (($first -eq '"' -and $last -eq '"') -or ($first -eq "'" -and $last -eq "'")) {
+            return $Value.Substring(1, $Value.Length - 2)
+        }
+    }
+
+    return $Value
+}
+
+function ConvertTo-EnvValue {
+    param([string]$Value)
+
+    if ($Value -match "[`r`n]") {
+        throw "비밀번호에는 줄바꿈을 넣을 수 없습니다."
+    }
+    if ($Value -notmatch "\s" -and -not $Value.Contains('"') -and -not $Value.Contains("'")) {
+        return $Value
+    }
+    if (-not $Value.Contains('"')) {
+        return '"' + $Value + '"'
+    }
+    if (-not $Value.Contains("'")) {
+        return "'" + $Value + "'"
+    }
+
+    throw "비밀번호에 작은따옴표와 큰따옴표가 모두 있어 자동 저장할 수 없습니다. .env.local에 직접 입력하세요."
+}
+
+function Get-EnvFileValue {
+    param(
+        [string]$FilePath,
+        [string]$Key
+    )
+
+    if (-not (Test-Path -LiteralPath $FilePath -PathType Leaf)) {
+        return $null
+    }
+
+    foreach ($line in Get-Content -LiteralPath $FilePath -Encoding UTF8) {
+        $trimmed = $line.Trim()
+        if ([string]::IsNullOrWhiteSpace($trimmed) -or $trimmed.StartsWith("#")) {
+            continue
+        }
+
+        $separatorIndex = $trimmed.IndexOf("=")
+        if ($separatorIndex -lt 0) {
+            continue
+        }
+
+        $name = $trimmed.Substring(0, $separatorIndex).Trim()
+        if ($name -eq $Key) {
+            $rawValue = $trimmed.Substring($separatorIndex + 1).Trim()
+            return ConvertFrom-EnvValue $rawValue
+        }
+    }
+
+    return $null
+}
+
+function Set-EnvFileValue {
+    param(
+        [string]$FilePath,
+        [string]$Key,
+        [string]$Value
+    )
+
+    $lineValue = "$Key=$(ConvertTo-EnvValue $Value)"
+    if (-not (Test-Path -LiteralPath $FilePath -PathType Leaf)) {
+        Set-Content -LiteralPath $FilePath -Encoding UTF8 -Value @($lineValue)
+        return
+    }
+
+    $lines = @(Get-Content -LiteralPath $FilePath -Encoding UTF8)
+    $updated = $false
+    for ($index = 0; $index -lt $lines.Count; $index += 1) {
+        $trimmed = $lines[$index].Trim()
+        if ([string]::IsNullOrWhiteSpace($trimmed) -or $trimmed.StartsWith("#")) {
+            continue
+        }
+
+        $separatorIndex = $trimmed.IndexOf("=")
+        if ($separatorIndex -lt 0) {
+            continue
+        }
+
+        $name = $trimmed.Substring(0, $separatorIndex).Trim()
+        if ($name -eq $Key) {
+            $lines[$index] = $lineValue
+            $updated = $true
+            break
+        }
+    }
+
+    if (-not $updated) {
+        $lines += $lineValue
+    }
+
+    Set-Content -LiteralPath $FilePath -Encoding UTF8 -Value $lines
 }
 
 function Invoke-NativeCommand {
@@ -75,12 +182,33 @@ try {
         throw "package.json not found in $ProjectDir"
     }
 
+    $savedPassword = Get-EnvFileValue -FilePath ".env.local" -Key "PORTFOLIO_PASSWORD"
+    $hasSavedPassword = -not [string]::IsNullOrWhiteSpace($savedPassword)
+
     $beforeHead = (& git rev-parse HEAD).Trim()
     if ($LASTEXITCODE -ne 0) {
         throw "git rev-parse failed before update"
     }
 
-    if (-not $hadPassword) {
+    if ($SavePassword) {
+        if ($hadPassword) {
+            $plainPassword = $env:PORTFOLIO_PASSWORD
+        }
+        else {
+            $securePassword = Read-Host "저장할 사이트 잠금해제 비밀번호" -AsSecureString
+            $plainPassword = Convert-SecureStringToPlainText $securePassword
+            if ([string]::IsNullOrWhiteSpace($plainPassword)) {
+                throw "비밀번호가 비어 있습니다."
+            }
+            $env:PORTFOLIO_PASSWORD = $plainPassword
+            $passwordSetByScript = $true
+        }
+
+        Set-EnvFileValue -FilePath ".env.local" -Key "PORTFOLIO_PASSWORD" -Value $plainPassword
+        $hasSavedPassword = $true
+        Write-Host ".env.local에 PORTFOLIO_PASSWORD 저장 완료."
+    }
+    elseif (-not $hadPassword -and -not $hasSavedPassword) {
         $securePassword = Read-Host "사이트 잠금해제 비밀번호" -AsSecureString
         $plainPassword = Convert-SecureStringToPlainText $securePassword
         if ([string]::IsNullOrWhiteSpace($plainPassword)) {

@@ -62,6 +62,18 @@ npm run daily-update
 Update-StockMonitoring
 ```
 
+비밀번호를 매번 묻지 않게 하려면 `.env.local`에 다음 값을 한 번 저장한다.
+
+```env
+PORTFOLIO_PASSWORD="사이트 잠금해제 비밀번호"
+```
+
+또는 PowerShell에서 한 번만 저장 옵션을 실행한다.
+
+```powershell
+Update-StockMonitoring -SavePassword
+```
+
 현재 열려 있는 PowerShell 창에서 바로 쓰려면 한 번만 프로필을 다시 읽는다.
 
 ```powershell
@@ -69,7 +81,7 @@ Update-StockMonitoring
 Update-StockMonitoring
 ```
 
-`Update-StockMonitoring`은 `E:\Github\stock-monitoring`으로 이동해 `npm run daily-update`를 실행하고, 비밀번호가 현재 세션에 없으면 실행 중에만 입력받는다. GitHub CLI `gh`가 있으면 push 뒤 Pages 배포도 기다린다.
+`Update-StockMonitoring`은 `E:\Github\stock-monitoring`으로 이동해 `npm run daily-update`를 실행하고, 현재 세션이나 `.env.local`에 비밀번호가 없을 때만 실행 중에 입력받는다. GitHub CLI `gh`가 있으면 push 뒤 Pages 배포도 기다린다.
 
 ## 화면 새로고침
 
