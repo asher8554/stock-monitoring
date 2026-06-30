@@ -7,7 +7,7 @@
 - [x] update-data workflow를 한국시간 오전 10시와 오후 8시 실행으로 바꿨다.
 - [x] 30년 데이터 계약 테스트를 추가했다.
 - [x] `npm run cycle:data`, `npm run yield:data`, `npm test`, `npm run build`를 실행했다.
-- [ ] commit, push, Pages 배포를 확인한다.
+- [x] commit, push, Pages 배포를 확인했다.
 
 ## 2026-06-30 장단기금리차 경기 위험 모듈
 

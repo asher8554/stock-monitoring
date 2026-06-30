@@ -9,6 +9,8 @@
 - 재생성 후 `annual_cycle.json`은 1997년부터 2026년까지 30개 연도다.
 - 재생성 후 `yield_curve.json`은 1997-01부터 2026-06까지 354개 월간 행이다.
 - `npm test`는 13개 파일 40개 테스트 통과, `npm run build`는 성공했다.
+- commit `1da2c2a`를 push했고 Pages run `28443025689`가 성공했다.
+- 라이브 JSON도 annual 30개, yield 354개 월간 행으로 확인했다.
 
 ## 2026-06-30 장단기금리차 경기 위험 모듈
 
