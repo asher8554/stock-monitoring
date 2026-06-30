@@ -1,4 +1,6 @@
 // 투자 사이클 phase 유틸의 포맷과 위치 계산을 검증한다.
+import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { formatIndicator, formatPercent, phasePositionText, phaseTransitionPoint, type CycleYear } from "../src/lib/phase";
 
@@ -42,5 +44,13 @@ describe("phase utilities", () => {
       y: 350,
     });
     expect(phasePositionText(row)).toBe("C 구간");
+  });
+
+  it("keeps generated annual cycle data at a 30-year window", () => {
+    const rows = JSON.parse(readFileSync(resolve(process.cwd(), "public/data/annual_cycle.json"), "utf-8")) as CycleYear[];
+    const latest = rows[rows.length - 1];
+
+    expect(rows).toHaveLength(30);
+    expect(rows[0].year).toBe(latest.year - 29);
   });
 });

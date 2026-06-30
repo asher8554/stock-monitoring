@@ -2,7 +2,8 @@ name: Update Cycle Data
 
 on:
   schedule:
-    - cron: "20 0 1 * *"
+    - cron: "0 1 * * *"
+    - cron: "0 11 * * *"
   workflow_dispatch:
 
 permissions:

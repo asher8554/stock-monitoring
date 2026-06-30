@@ -10,7 +10,7 @@ from classify_cycle import classify_annual_rows
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_DIR / "public" / "data"
-START_YEAR = 2000
+LOOKBACK_YEARS = 30
 
 PHASE_TEMPLATES = {
     "A": {
@@ -120,13 +120,22 @@ def main() -> None:
 
 def mock_rows(current_year: int) -> list[dict]:
     rows = []
-    for year in range(START_YEAR, current_year + 1):
-        phase = PHASE_SEQUENCE.get(year, PHASE_SEQUENCE[max(PHASE_SEQUENCE)])
+    start_year = current_year - LOOKBACK_YEARS + 1
+    for year in range(start_year, current_year + 1):
+        phase = phase_for_year(year)
         template = PHASE_TEMPLATES[phase]
-        wave = math.sin((year - START_YEAR) * 0.83)
+        wave = math.sin((year - start_year) * 0.83)
         indicators = {key: round(value + wave * noise_for(key), 2) for key, value in template.items()}
         rows.append({"year": year, "indicators": indicators})
     return rows
+
+
+def phase_for_year(year: int) -> str:
+    if year in PHASE_SEQUENCE:
+        return PHASE_SEQUENCE[year]
+    if year < min(PHASE_SEQUENCE):
+        return PHASE_SEQUENCE[min(PHASE_SEQUENCE)]
+    return PHASE_SEQUENCE[max(PHASE_SEQUENCE)]
 
 
 def noise_for(key: str) -> float:

@@ -68,7 +68,7 @@ describe("yield curve data contract", () => {
     expect(data.latest.riskLevel).toBeTruthy();
     expect(Array.isArray(data.latest.cycleBias)).toBe(true);
     expect(Array.isArray(data.series)).toBe(true);
-    expect(data.series.length).toBeGreaterThan(0);
+    expect(data.series.length).toBeGreaterThanOrEqual(300);
     expect(YIELD_CURVE_METRICS.every((key) => Object.prototype.hasOwnProperty.call(data.latest, key))).toBe(true);
     expect(hasKoreanYieldData(data)).toBe(false);
   });

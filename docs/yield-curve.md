@@ -8,6 +8,7 @@
 2. `scripts/classify_yield_curve.py`가 raw 데이터를 월간 시계열로 정리하고 `public/data/yield_curve.json`을 생성합니다.
 3. React 앱은 `yield_curve.json`만 fetch합니다.
 4. API 키가 필요한 수집은 GitHub Actions 또는 로컬 Python 실행에서만 처리합니다.
+5. 생성 범위는 최신 연도 포함 30년 월간 데이터입니다.
 
 ## 지표
 

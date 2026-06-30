@@ -1,5 +1,14 @@
 # Checklist
 
+## 2026-06-30 30년 데이터와 하루 2회 갱신
+
+- [x] annual cycle 생성 범위를 최신 연도 포함 30개 연도로 조정했다.
+- [x] yield curve 생성 범위를 30년 월간 데이터로 조정했다.
+- [x] update-data workflow를 한국시간 오전 10시와 오후 8시 실행으로 바꿨다.
+- [x] 30년 데이터 계약 테스트를 추가했다.
+- [x] `npm run cycle:data`, `npm run yield:data`, `npm test`, `npm run build`를 실행했다.
+- [ ] commit, push, Pages 배포를 확인한다.
+
 ## 2026-06-30 장단기금리차 경기 위험 모듈
 
 - [x] 작업 계획과 판단 기준을 `plan.md`, `context-notes.md`에 기록했다.

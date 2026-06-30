@@ -13,7 +13,8 @@
 - Python mock data 생성과 rule-based scoring.
 - `public/data/annual_cycle.json`과 `public/data/current_cycle.json`만 읽는 프론트엔드.
 - `public/data/yield_curve.json` 기반 장단기금리차 경기 위험 보조 신호.
-- 월 1회 자동 실행과 수동 실행을 지원하는 GitHub Actions 데이터 갱신 workflow.
+- 최신 연도 포함 30년 분석 데이터.
+- 매일 한국시간 오전 10시와 오후 8시 자동 실행, 수동 실행을 지원하는 GitHub Actions 데이터 갱신 workflow.
 
 ## 데이터 출처
 
@@ -105,7 +106,7 @@ npm run cycle:data
 
 `main` 브랜치에 push하면 `.github/workflows/pages.yml`이 사이트를 빌드하고 GitHub Pages에 배포합니다.
 
-데이터 갱신은 `.github/workflows/update-data.yml`이 담당합니다. 매월 1일 00:20 UTC에 실행되며, GitHub Actions 화면에서 `workflow_dispatch`로 수동 실행할 수 있습니다.
+데이터 갱신은 `.github/workflows/update-data.yml`이 담당합니다. 매일 01:00 UTC와 11:00 UTC에 실행되며, 한국시간 기준 오전 10시와 오후 8시입니다. GitHub Actions 화면에서 `workflow_dispatch`로 수동 실행할 수 있습니다.
 
 데이터 workflow는 다음 순서로 동작합니다.
 

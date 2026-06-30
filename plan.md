@@ -1,5 +1,18 @@
 # Daily Data Update Diagnosis Plan
 
+## 2026-06-30 30년 데이터와 하루 2회 갱신
+
+### 목표
+
+분석 화면에서 30년치 데이터를 볼 수 있게 하고, GitHub Actions 데이터 갱신을 매일 한국시간 오전 10시와 오후 8시에 실행한다.
+
+### 성공 기준
+
+1. `annual_cycle.json`은 최신 연도 포함 30개 연도를 생성한다.
+2. `yield_curve.json`은 약 30년 월간 데이터를 생성한다.
+3. `.github/workflows/update-data.yml` schedule은 01:00 UTC와 11:00 UTC에 실행된다.
+4. `npm run cycle:data`, `npm run yield:data`, `npm test`, `npm run build`가 통과한다.
+
 ## 2026-06-30 장단기금리차 경기 위험 모듈
 
 ### 목표

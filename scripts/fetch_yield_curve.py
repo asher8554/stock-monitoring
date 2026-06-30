@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import urllib.error
 import urllib.parse
@@ -14,6 +15,7 @@ from statistics import mean
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 DATA_DIR = PROJECT_DIR / "public" / "data"
 RAW_PATH = DATA_DIR / "yield_curve_raw.json"
+LOOKBACK_YEARS = 30
 
 FRED_SERIES = {
     "us10y3m": "T10Y3M",
@@ -80,7 +82,7 @@ def fetch_fred_monthly(series_id: str, api_key: str) -> dict[str, float | None]:
             "series_id": series_id,
             "api_key": api_key,
             "file_type": "json",
-            "observation_start": "2000-01-01",
+            "observation_start": lookback_start_date(),
             "observation_end": date.today().isoformat(),
         }
     )
@@ -99,7 +101,7 @@ def fetch_fred_monthly(series_id: str, api_key: str) -> dict[str, float | None]:
 
 
 def build_mock_series() -> list[dict[str, float | None]]:
-    months = month_range("2024-01", current_month())
+    months = month_range(lookback_start_month(), current_month())
     us10y3m_values = [
         -1.20,
         -1.10,
@@ -164,18 +166,28 @@ def build_mock_series() -> list[dict[str, float | None]]:
         0.27,
         0.28,
     ]
+    tail_start = max(0, len(months) - len(us10y3m_values))
     rows = []
     for index, month in enumerate(months):
+        tail_index = index - tail_start
         rows.append(
             {
                 "date": month,
-                "us10y3m": extend_value(us10y3m_values, index),
-                "us10y2y": extend_value(us10y2y_values, index),
+                "us10y3m": us10y3m_values[tail_index] if tail_index >= 0 else historical_mock_value(index, 0.7, 1.05, 0),
+                "us10y2y": us10y2y_values[tail_index] if tail_index >= 0 else historical_mock_value(index, 0.35, 0.55, 9),
                 "kr10y3y": None,
                 "kr3y91d": None,
             }
         )
     return rows
+
+
+def lookback_start_date() -> str:
+    return f"{date.today().year - LOOKBACK_YEARS + 1:04d}-01-01"
+
+
+def lookback_start_month() -> str:
+    return lookback_start_date()[:7]
 
 
 def current_month() -> str:
@@ -198,10 +210,10 @@ def month_range(start: str, end: str) -> list[str]:
     return rows
 
 
-def extend_value(values: list[float], index: int) -> float:
-    if index < len(values):
-        return values[index]
-    return round(values[-1] + min(index - len(values) + 1, 12) * 0.02, 2)
+def historical_mock_value(index: int, base: float, amplitude: float, phase: int) -> float:
+    cycle = math.sin((index + phase) / 18) * amplitude
+    inversion = -0.9 if 32 <= index % 96 <= 52 else 0
+    return round(base + cycle + inversion, 2)
 
 
 def parse_float(value: object) -> float | None:
