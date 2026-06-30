@@ -1,5 +1,13 @@
 # Checklist
 
+## 2026-06-30 예전 포트폴리오 자산비중과 실현손익 복구
+
+- [x] legacy 포트폴리오 화면에 자산비중 목록을 다시 표시한다.
+- [x] legacy 포트폴리오 화면에 올해와 누적 실현손익을 다시 표시한다.
+- [x] `npm test`와 `npm run build`를 통과한다.
+- [x] 브라우저에서 `?view=portfolio` 복호화 후 항목이 보이는지 확인한다.
+- [x] commit, push, Pages 배포를 확인한다.
+
 ## 2026-06-30 지표 그래프 tooltip 연도 대비
 
 - [x] `IndicatorLineChart` tooltip 연도 label 색상과 굵기를 지정했다.

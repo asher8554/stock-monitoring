@@ -1,5 +1,14 @@
 # Context Notes
 
+## 2026-06-30 예전 포트폴리오 자산비중과 실현손익 복구
+
+- 사용자는 예전 포트폴리오 화면에서 원래 있던 자산비중과 과거 이력 기반 실현손익 내용이 사라졌다고 했다.
+- 원인은 사이클 대시보드 추가 후 만든 `LegacyPortfolioView`가 기존 dashboard 전체가 아니라 요약 카드와 종목별 통합만 그리던 축소 구현이었기 때문이다.
+- 데이터 모델에는 `model.holdings`, `model.summary.totalCashKrw`, `model.summary.ytdRealizedProfitKrw`, `model.summary.lifetimeRealizedProfitKrw`가 남아 있어 수집이나 payload는 바꾸지 않는다.
+- 최소 복구로 legacy 화면에 종목+현금 기준 `자산비중` 목록과 `올해 실현손익`, `누적 실현손익` 카드를 다시 추가한다.
+- `npm test`는 13개 파일 41개 테스트가 통과했고, `npm run build`도 통과했다.
+- 브라우저 QA에서 `?view=portfolio` 복호화 후 `자산비중`, `올해 실현손익`, `누적 실현손익`이 보이고 console error/warn이 0개임을 확인했다.
+
 ## 2026-06-30 지표 그래프 tooltip 연도 대비
 
 - 사용자는 지표 그래프 hover tooltip의 연도 텍스트가 다크 모드에서 거의 보이지 않는다고 했다.

@@ -6,6 +6,15 @@ import { buildDashboardModel } from "../lib/portfolio";
 import type { ThemeMode } from "../lib/theme";
 import type { DashboardModel, PortfolioPayload } from "../types/portfolio";
 
+const allocationColors = ["#0f766e", "#2563eb", "#7c3aed", "#d97706", "#be123c", "#475569"];
+
+interface AllocationItem {
+  id: string;
+  name: string;
+  valuationKrw: number;
+  weight: number;
+}
+
 export function LegacyPortfolioView({ theme, onToggleTheme }: { theme: ThemeMode; onToggleTheme: () => void }) {
   const [encrypted, setEncrypted] = useState<EncryptedPayload | null>(null);
   const [password, setPassword] = useState("");
@@ -132,6 +141,8 @@ function UnlockForm({
 }
 
 function PortfolioDashboard({ model, asOf }: { model: DashboardModel; asOf: string }) {
+  const allocationItems = buildAllocationItems(model);
+
   return (
     <>
       <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
@@ -139,6 +150,63 @@ function PortfolioDashboard({ model, asOf }: { model: DashboardModel; asOf: stri
         <SummaryCard label="종목 평가금액" value={formatCurrency(model.summary.totalValuationKrw)} helper="현금 제외." />
         <SummaryCard label="현금" value={formatCurrency(model.summary.totalCashKrw)} helper={`비중 ${formatPercent(model.summary.cashWeight)}`} />
         <SummaryCard label="평가손익률" value={formatPercent(model.summary.unrealizedProfitRate)} helper={formatCurrency(model.summary.unrealizedProfitKrw)} />
+      </section>
+
+      <section className="grid gap-3 lg:grid-cols-[1.25fr_0.75fr]">
+        <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-bold text-slate-950">자산비중</h2>
+              <p className="mt-1 text-sm text-slate-500">종목과 현금 기준.</p>
+            </div>
+            <span className="text-sm font-semibold text-slate-500">{allocationItems.length}개</span>
+          </div>
+          <ul className="mt-4 space-y-3">
+            {allocationItems.map((item, index) => (
+              <li key={item.id}>
+                <div className="flex items-center justify-between gap-3 text-sm">
+                  <span className="flex min-w-0 items-center gap-2 font-semibold text-slate-900">
+                    <span
+                      className="h-3 w-3 shrink-0 rounded-sm"
+                      style={{ backgroundColor: allocationColors[index % allocationColors.length] }}
+                    />
+                    <span className="truncate">{item.name}</span>
+                  </span>
+                  <span className="shrink-0 text-right font-bold text-slate-950">{formatPercent(item.weight)}</span>
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
+                  <span
+                    className="block h-full rounded-full"
+                    style={{
+                      width: `${Math.max(item.weight * 100, item.weight > 0 ? 1 : 0)}%`,
+                      backgroundColor: allocationColors[index % allocationColors.length],
+                    }}
+                  />
+                </div>
+                <div className="mt-1 text-right text-xs text-slate-500">{formatCurrency(item.valuationKrw)}</div>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
+          <h2 className="text-lg font-bold text-slate-950">실현손익</h2>
+          <p className="mt-1 text-sm text-slate-500">수집된 거래 이력 기준.</p>
+          <div className="mt-4 grid gap-3">
+            <MiniStat
+              label="올해 실현손익"
+              value={formatCurrency(model.summary.ytdRealizedProfitKrw)}
+              helper={formatPercent(model.summary.ytdRealizedProfitRate)}
+              tone={toneClass(model.summary.ytdRealizedProfitKrw)}
+            />
+            <MiniStat
+              label="누적 실현손익"
+              value={formatCurrency(model.summary.lifetimeRealizedProfitKrw)}
+              helper={formatPercent(model.summary.lifetimeRealizedProfitRate)}
+              tone={toneClass(model.summary.lifetimeRealizedProfitKrw)}
+            />
+          </div>
+        </section>
       </section>
 
       <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
@@ -175,6 +243,16 @@ function PortfolioDashboard({ model, asOf }: { model: DashboardModel; asOf: stri
   );
 }
 
+function MiniStat({ label, value, helper, tone }: { label: string; value: string; helper: string; tone: string }) {
+  return (
+    <article className="rounded-lg bg-slate-100 p-3">
+      <p className="text-sm font-semibold text-slate-500">{label}</p>
+      <strong className={`mt-2 block text-xl font-bold tracking-normal ${tone}`}>{value}</strong>
+      <span className="mt-1 block text-sm text-slate-500">{helper}</span>
+    </article>
+  );
+}
+
 function SummaryCard({ label, value, helper }: { label: string; value: string; helper: string }) {
   return (
     <article className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
@@ -183,6 +261,37 @@ function SummaryCard({ label, value, helper }: { label: string; value: string; h
       <span className="mt-2 block text-sm text-slate-500">{helper}</span>
     </article>
   );
+}
+
+function buildAllocationItems(model: DashboardModel): AllocationItem[] {
+  const total = model.summary.totalBalanceKrw;
+  const items = model.holdings.map((holding) => ({
+    id: holding.id,
+    name: holding.name,
+    valuationKrw: holding.valuationKrw,
+    weight: total > 0 ? holding.valuationKrw / total : 0,
+  }));
+
+  if (model.summary.totalCashKrw > 0) {
+    items.push({
+      id: "CASH:KRW",
+      name: "현금",
+      valuationKrw: model.summary.totalCashKrw,
+      weight: total > 0 ? model.summary.totalCashKrw / total : 0,
+    });
+  }
+
+  return items;
+}
+
+function toneClass(value: number): string {
+  if (value > 0) {
+    return "text-emerald-700";
+  }
+  if (value < 0) {
+    return "text-rose-700";
+  }
+  return "text-slate-950";
 }
 
 function formatCurrency(value: number): string {
