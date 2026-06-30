@@ -7,6 +7,8 @@
 - 데이터 생성 구조는 바꾸지 않고 `YieldCurveChart`에서 tooltip label을 `YYYY년 MM월`로 표시하고, `2008-09` 리먼, `2020-03` 코로나19 기준선을 화면 상수로 표시한다.
 - 브라우저 QA에서 chart hover tooltip이 `2017년 02월`처럼 표시되고, 리먼과 코로나19 점선 기준선/범례가 보이며, console error/warn 0개임을 확인했다.
 - `npm test`는 13개 파일 41개 테스트 통과, `npm run build`는 성공했다.
+- commit `0c7ea48`을 push했고 Pages run `28443814621`이 성공했다.
+- 라이브 Pages에서도 chart hover tooltip `2017년 02월`, 리먼/코로나19 기준선 범례, console error/warn 0개를 확인했다.
 
 ## 2026-06-30 30년 데이터와 하루 2회 갱신
 
