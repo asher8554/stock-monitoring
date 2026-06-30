@@ -1,138 +1,104 @@
-# Stock Monitoring
+# 한국 투자 사이클 대시보드
 
-GitHub Pages에서 암호화된 포트폴리오 파일을 복호화해 수익률, 비중, 리밸런싱 상태를 보는 개인 대시보드다.
+코스톨라니의 달걀 모델을 한국 시장 지표에 맞게 단순화해, 연도별 시장 위치를 A-F 사이클로 보여주는 GitHub Pages용 정적 웹앱입니다.
 
-## 현재 구현
+이 프로젝트는 투자 추천이 아니라 시장 상태 해석용 참고 도구입니다.
 
-- Vite + React + TypeScript 단일 대시보드.
-- `PBKDF2-SHA-256 + AES-GCM` 암호화와 브라우저 복호화.
-- `portfolio.enc.json` 기반 비밀번호 잠금 화면.
-- 라이트/다크 모드 토글과 로컬 테마 저장.
-- 전체 평가금액, YTD 실현손익, 평가손익률, 현금 비중 KPI.
-- 포트폴리오 비중 범례, 종목별 통합, 리밸런싱 테이블.
-- 대시보드 내 목표비중과 허용오차 설정, 브라우저 로컬 저장.
-- 한국투자증권 Open API 국내주식 잔고와 미국주식 잔고 수집.
-- 토스증권 Open API 보유 주식 수집.
-- 미래에셋 표준 CSV/XLSX 행 파서.
-- Windows 작업 스케줄러 enable/disable 명령.
-- GitHub Pages Actions 배포 workflow.
+## 현재 구현 범위
 
-## 보안 원칙
+- Vite + React + TypeScript 기반 정적 웹앱.
+- Tailwind CSS 화면 구성.
+- Recharts 지표 선 그래프.
+- SVG 기반 코스톨라니 달걀 차트.
+- Python mock data 생성과 rule-based scoring.
+- `public/data/annual_cycle.json`과 `public/data/current_cycle.json`만 읽는 프론트엔드.
+- 월 1회 자동 실행과 수동 실행을 지원하는 GitHub Actions 데이터 갱신 workflow.
 
-GitHub에는 평문 투자 데이터를 올리지 않는다.
+## 데이터 출처
 
-올려도 되는 파일은 암호화된 `public/portfolio.enc.json`이다.
+현재 단계는 mock data입니다.
 
-로컬 평문 파일은 `local/` 아래에 둔다. 이 폴더는 `.gitignore`로 제외되어 있다.
+실제 API 연동은 `scripts/fetch_data.py`에 인터페이스만 두고 TODO로 남겨두었습니다. 이후 다음 출처를 GitHub Actions에서 수집하도록 붙일 수 있습니다.
+
+- 기준금리 평균: 한국은행 ECOS.
+- 국고채 10년 금리 평균: 한국은행 ECOS 또는 공공 금리 데이터.
+- CPI YoY: KOSIS 또는 한국은행 ECOS.
+- M2 YoY: 한국은행 ECOS.
+- KOSPI 연간 수익률: KRX 또는 공공 시세 데이터.
+- 부동산 가격지수 YoY: 한국부동산원 또는 KOSIS.
+- GDP 성장률: 한국은행 ECOS.
+- 원/달러 환율 변화율: 한국은행 ECOS 또는 FRED.
+
+프론트엔드에는 API 키를 넣지 않습니다. API 키가 필요한 수집은 GitHub Actions에서 Python으로 실행합니다.
+
+## 지표 의미
+
+- 기준금리 평균: 통화정책 긴축 또는 완화 수준을 나타냅니다.
+- 국고채 10년 금리 평균: 장기 금리와 채권 가격 환경을 나타냅니다.
+- CPI YoY: 물가 압력과 긴축 가능성을 나타냅니다.
+- M2 YoY: 유동성 확장 또는 축소를 나타냅니다.
+- KOSPI 연간 수익률: 주식시장 강도와 위험자산 심리를 나타냅니다.
+- 부동산 가격지수 YoY: 부동산 경기 강도를 나타냅니다.
+- GDP 성장률: 실물 경기의 둔화 또는 회복을 나타냅니다.
+- 원/달러 환율 변화율: 대외 금융 여건과 원화 약세 부담을 나타냅니다.
+
+## A-F 판정 로직
+
+판정은 머신러닝이 아니라 설명 가능한 rule-based scoring입니다.
+
+각 feature는 0-1 사이로 정규화합니다. 예를 들어 `rate_high`는 기준금리의 과거 백분위, `rate_low`는 `1 - rate_high`, `rate_rising`은 전년 대비 금리 상승 정도입니다.
+
+각 phase는 feature 가중합으로 계산하고, phase score는 합계가 1이 되도록 정규화합니다. 1위와 2위 score 차이가 0.08 미만이면 `A/B 과도기`처럼 표시합니다.
+
+- A: 금리 높음, 물가 높음, 금리 상승 또는 동결, 위험자산 부담.
+- B: 금리 높음, 금리 하락 시작, 물가 둔화, 채권 매력.
+- C: 금리 하락, 성장 둔화, 위험자산 약세, 부동산 저점 접근.
+- D: 금리 낮음, 유동성 증가, 물가 안정, 경기 바닥.
+- E: 주식 회복, 유동성 증가, 금리 안정, 경기 회복.
+- F: 주식과 부동산 강세, 물가 상승, 금리 상승 압력.
+
+핵심 구현은 `scripts/classify_cycle.py`에 있습니다.
 
 ## 로컬 실행
 
 ```powershell
 npm install
-npm run demo:data
+npm run cycle:data
 npm run dev
 ```
 
-데모 데이터 비밀번호는 `demo-password`다.
-
-## 실제 데이터 생성
-
-먼저 `.env.example`을 참고해 `.env.local`을 만든다.
+빌드와 테스트는 다음 명령으로 확인합니다.
 
 ```powershell
-npm run collect
-$env:PORTFOLIO_PASSWORD="강한 비밀번호"
-npm run publish-data
-Remove-Item Env:\PORTFOLIO_PASSWORD
+npm test
+npm run build
 ```
 
-`npm run publish-data`는 `public/portfolio.enc.json`만 만든다. git commit과 push는 직접 한다.
+## GitHub Pages 배포
 
-매일 사이트까지 갱신하려면 `.env.local`에 `PORTFOLIO_PASSWORD`를 추가한 뒤 다음 명령을 사용한다.
+`main` 브랜치에 push하면 `.github/workflows/pages.yml`이 사이트를 빌드하고 GitHub Pages에 배포합니다.
 
-```powershell
-npm run daily-update
+데이터 갱신은 `.github/workflows/update-data.yml`이 담당합니다. 매월 1일 00:20 UTC에 실행되며, GitHub Actions 화면에서 `workflow_dispatch`로 수동 실행할 수 있습니다.
+
+데이터 workflow는 다음 순서로 동작합니다.
+
+- Python으로 JSON 생성.
+- `public/data/annual_cycle.json`과 `public/data/current_cycle.json` 변경이 있으면 commit.
+- 테스트 실행.
+- 사이트 build.
+- GitHub Pages 배포.
+
+## API 키 설정 방법
+
+현재 mock data 단계에서는 API 키가 필요 없습니다.
+
+실제 API 연동 단계에서는 GitHub repository secrets에 키를 저장합니다. 예시 이름은 다음과 같습니다.
+
+```text
+ECOS_API_KEY
+KOSIS_API_KEY
+KRX_API_KEY
+FRED_API_KEY
 ```
 
-`npm run daily-update`는 수집, 암호화, `public/portfolio.enc.json` 커밋, push를 순서대로 실행한다. 변경된 암호화 payload가 없으면 commit과 push를 건너뛴다.
-
-홈 폴더처럼 프로젝트 밖에서 실행하려면 새 PowerShell 창에서 다음 명령만 입력한다.
-
-```powershell
-Update-StockMonitoring
-```
-
-비밀번호를 매번 묻지 않게 하려면 `.env.local`에 다음 값을 한 번 저장한다.
-
-```env
-PORTFOLIO_PASSWORD="사이트 잠금해제 비밀번호"
-```
-
-또는 PowerShell에서 한 번만 저장 옵션을 실행한다.
-
-```powershell
-Update-StockMonitoring -SavePassword
-```
-
-현재 열려 있는 PowerShell 창에서 바로 쓰려면 한 번만 프로필을 다시 읽는다.
-
-```powershell
-. $PROFILE
-Update-StockMonitoring
-```
-
-`Update-StockMonitoring`은 `E:\Github\stock-monitoring`으로 이동해 `npm run daily-update`를 실행하고, 현재 세션이나 `.env.local`에 비밀번호가 없을 때만 실행 중에 입력받는다. GitHub CLI `gh`가 있으면 push 뒤 Pages 배포도 기다린다.
-
-## 화면 새로고침
-
-잠금 해제 후 화면은 10분마다 GitHub Pages의 최신 `portfolio.enc.json`을 다시 확인한다.
-
-`새 데이터 확인` 버튼을 누르면 즉시 같은 확인을 실행한다.
-
-화면의 `데이터 확인` 시각은 브라우저가 암호화 파일을 새로 받아온 시각이다.
-
-이 기능은 이미 배포된 암호화 파일을 다시 받는 것이다. 증권사 수집과 배포는 로컬 `npm run daily-update` 또는 작업 스케줄러가 먼저 실행해야 한다.
-
-## 리밸런싱 설정
-
-대시보드 잠금 해제 후 `리밸런싱 설정`에서 종목별 목표비중과 허용오차를 수정할 수 있다.
-
-이 설정은 현재 브라우저의 `localStorage`에 저장된다. 암호화 payload나 GitHub에는 자동 반영되지 않는다.
-
-초기화 버튼을 누르면 암호화 payload의 `targets.local.json` 값으로 돌아가고, payload 목표값이 없는 종목은 현재 비중을 기본 목표값으로 사용한다.
-
-## 로컬 파일 위치
-
-- `local/portfolio.local.json`.
-- `local/targets.local.json`.
-- `local/imports/miraeasset/`.
-- `public/portfolio.enc.json`.
-
-## 작업 스케줄러
-
-```powershell
-npm run schedule:enable -- --time 16:10
-npm run schedule:disable
-```
-
-작업 스케줄러는 로컬 PC에서만 의미가 있다. 등록된 작업은 `npm run daily-update`를 실행하므로 `.env.local`에 `PORTFOLIO_PASSWORD`가 있어야 한다.
-
-## 시작프로그램 자동 갱신 EXE
-
-`local/startup-updater/StockMonitoringStartupUpdater.exe`는 Windows 로그인 시 인터넷 연결을 확인한 뒤 `Update-StockMonitoring.ps1 -NoWaitPages`를 실행하고 종료한다.
-
-인터넷 연결이 없거나 갱신 명령이 실패하면 30초 간격으로 최대 30회 재시도한다. 실행 로그는 `local/startup-updater.log`에 남는다.
-
-## 외부 입력 필요
-
-- 미래에셋 실제 샘플 파일 기준 파서 매핑 보강은 사용자가 내려받은 실제 CSV/XLSX 샘플이 필요하다.
-
-API 키 전달 방식은 [docs/broker-api-credentials.md](docs/broker-api-credentials.md)에 정리했다.
-
-## KIS 실현손익 자동수집
-
-`npm run collect`는 한국투자증권 국내 기간별손익일별합산조회 API로 YTD와 누적 실현손익을 자동 갱신한다.
-
-YTD는 실행 연도의 1월 1일부터 실행일까지 조회한다. 누적은 `.env.local`의 `KIS_LIFETIME_START_DATE`부터 조회하되, KIS API 조회기간 제한 때문에 실행일 기준 10년 전 다음 날로 자동 보정한다.
-
-KIS OAuth 접근 토큰은 `local/kis-token.local.json`에 저장해 재발급 403을 줄인다. `local/`은 Git에 커밋하지 않는다.
+Python 수집 스크립트는 GitHub Actions 환경 변수에서 이 값을 읽고, 생성된 JSON만 `public/data`에 저장해야 합니다. React 앱은 API 키와 원천 API를 직접 호출하지 않습니다.

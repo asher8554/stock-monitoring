@@ -1,5 +1,15 @@
 # Checklist
 
+## 2026-06-30 한국 투자 사이클 대시보드 완료 상태
+
+- [x] Tailwind 설정을 추가했다.
+- [x] Python mock data와 rule-based scoring을 만들었다.
+- [x] React 대시보드 화면을 새 구조로 교체했다.
+- [x] GitHub Actions data update workflow를 추가했다.
+- [x] README를 새 프로젝트 설명으로 정리했다.
+- [x] 테스트, 빌드, 브라우저 확인을 완료했다.
+- [x] commit, push, Pages 배포를 완료한다.
+
 ## 문서 계약
 
 - [x] MVP 범위를 계좌 통합, 수익률, 비중, 목표 비중, 리밸런싱으로 제한한다.
@@ -152,3 +162,13 @@
 - [x] 잠금 전에도 보이는 상단 이미지 패널을 추가한다.
 - [x] 테스트, 빌드, 브라우저 확인을 완료한다.
 - [x] commit, push, Pages 배포를 완료한다.
+
+## 2026-06-30 한국 투자 사이클 대시보드
+
+- [ ] Tailwind 설정을 추가한다.
+- [ ] Python mock data와 rule-based scoring을 만든다.
+- [ ] React 대시보드 화면을 새 구조로 교체한다.
+- [ ] GitHub Actions data update workflow를 추가한다.
+- [ ] README를 새 프로젝트 설명으로 정리한다.
+- [ ] 테스트, 빌드, 브라우저 확인을 완료한다.
+- [ ] commit, push, Pages 배포를 완료한다.

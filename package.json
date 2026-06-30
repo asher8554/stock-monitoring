@@ -14,7 +14,8 @@
     "daily-update": "tsx scripts/cli.ts daily-update",
     "schedule:enable": "tsx scripts/cli.ts schedule enable",
     "schedule:disable": "tsx scripts/cli.ts schedule disable",
-    "demo:data": "tsx scripts/demo-data.ts"
+    "demo:data": "tsx scripts/demo-data.ts",
+    "cycle:data": "python scripts/transform_data.py"
   },
   "dependencies": {
     "lucide-react": "^1.17.0",
@@ -24,10 +25,12 @@
     "recharts": "^3.8.1"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.2",
     "@types/node": "^25.0.3",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.2",
+    "tailwindcss": "^4.3.2",
     "tsx": "^4.22.4",
     "typescript": "^5.9.3",
     "vite": "^8.0.16",

@@ -1,5 +1,14 @@
 # Context Notes
 
+## 2026-06-30 한국 투자 사이클 대시보드 구현 기록
+
+- 프론트엔드는 API를 직접 호출하지 않고 `public/data/annual_cycle.json`과 `public/data/current_cycle.json`만 읽도록 구성했다.
+- `scripts/classify_cycle.py`는 기준금리, 물가, 유동성, 주식, 부동산, 성장률, 환율 feature를 0-1로 정규화하고 A-F phase score를 설명 가능한 가중합으로 계산한다.
+- 1위와 2위 score 차이가 0.08 미만이면 `A/B 과도기` 형식으로 표시한다.
+- `scripts/fetch_data.py`는 실제 API 연동용 인터페이스와 TODO만 둔다. API 키는 GitHub Actions secrets에서 Python 스크립트로만 읽어야 한다.
+- `.github/workflows/update-data.yml`은 매월 1일과 수동 실행에서 mock JSON 생성, 변경 commit, 테스트, 빌드, Pages 배포를 수행한다.
+- Edge headless QA에서 데스크톱과 모바일 모두 가로 overflow 없음, SVG 차트, Recharts 차트, 27개 연도 버튼, 2024년 선택 동작을 확인했다.
+
 ## 2026-06-10
 
 - 로컬 폴더 `E:\Github\stock-monitoring`은 비어 있었고 `.git`이 없었다.
@@ -208,3 +217,10 @@
 - 이미지 패널은 잠금 화면과 잠금 해제 후 대시보드 모두에서 topbar 바로 아래에 보인다.
 - `npm test`와 `npm run build`는 통과했다.
 - Edge headless QA에서 `investment-cycle.png`가 1491x1055 자연 크기로 로드되고 화면에 표시됨을 확인했다.
+
+## 2026-06-30 한국 투자 사이클 대시보드
+
+- 사용자는 기존 포트폴리오 화면이 아니라 코스톨라니 달걀 기반 한국 시장 사이클 대시보드 웹앱을 요청했다.
+- 이번 단계는 mock data 기반 UI와 scoring 구조를 완성하고, 실제 API는 Python interface와 TODO로 남긴다.
+- 프론트엔드는 API 키 없이 `public/data/annual_cycle.json`과 `public/data/current_cycle.json`만 fetch한다.
+- 기존 민감한 포트폴리오 수집 코드는 남기되, 화면의 기본 앱은 새 투자 사이클 대시보드로 교체한다.

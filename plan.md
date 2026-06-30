@@ -1,5 +1,19 @@
 # Daily Data Update Diagnosis Plan
 
+## 2026-06-30 한국 투자 사이클 대시보드 실행 계획 결과
+
+### 목표
+
+기존 포트폴리오 대시보드 화면을 GitHub Pages용 한국 투자 사이클 대시보드로 교체한다.
+
+### 완료 기준
+
+1. mock data 기반 `annual_cycle.json`과 `current_cycle.json`이 생성된다.
+2. React 앱이 JSON만 읽고 A-F 요약, SVG 달걀 차트, 연도별 타임라인, 지표 그래프, 상세 설명을 보여준다.
+3. 실제 API 연동은 Python 인터페이스와 TODO로 남는다.
+4. GitHub Actions가 월 1회와 수동 실행으로 데이터 생성, commit, build, Pages deploy를 수행한다.
+5. `npm test`, `npm run build`, Edge headless QA가 통과한다.
+
 ## 목표
 
 GitHub Pages 사이트는 열리지만 매일 포트폴리오 데이터가 갱신되지 않는 원인을 찾고, 가능한 범위에서 자동 갱신 경로를 복구한다.
@@ -153,3 +167,22 @@ Windows 로그인 시 EXE가 인터넷 연결을 기다렸다가 `Update-StockMo
 1. 이미지가 `public/investment-cycle.png`로 배포된다.
 2. 잠금 화면과 대시보드 모두에서 상단 참고 이미지로 보인다.
 3. 테스트, 빌드, 브라우저 확인, commit, push, Pages 배포를 완료한다.
+
+## 2026-06-30 한국 투자 사이클 대시보드
+
+### 목표
+
+코스톨라니 달걀 모델을 한국 시장 지표 기반 A~F rule-based scoring으로 보여주는 GitHub Pages 정적 대시보드로 전환한다.
+
+### 가정
+
+- 이번 단계는 mock data 기반 UI와 scoring 구조까지다.
+- 실제 API 연동은 Python 함수 인터페이스와 TODO만 남긴다.
+- React는 `public/data/*.json`만 읽고 API 키는 프론트엔드에 넣지 않는다.
+
+### 성공 기준
+
+1. `annual_cycle.json`과 `current_cycle.json` mock data가 생성된다.
+2. SVG 달걀 차트, 연도 타임라인, 지표 그래프, 상세 설명 패널이 동작한다.
+3. GitHub Actions 월 1회 data update workflow가 있다.
+4. 테스트, 빌드, 브라우저 확인, commit, push, Pages 배포를 완료한다.

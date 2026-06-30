@@ -1,0 +1,1433 @@
+[
+  {
+    "year": 2000,
+    "indicators": {
+      "base_rate_avg": 4.0,
+      "ktb10y_avg": 4.4,
+      "cpi_yoy": 3.7,
+      "m2_yoy": 5.5,
+      "kospi_return": -8.0,
+      "house_price_yoy": -1.0,
+      "gdp_growth": 2.0,
+      "usdkrw_change": 7.0
+    },
+    "scores": {
+      "A": 0.3347,
+      "B": 0.2207,
+      "C": 0.2063,
+      "D": 0.1099,
+      "E": 0.0555,
+      "F": 0.073
+    },
+    "primaryPhase": "A",
+    "secondaryPhase": "B",
+    "phaseLabel": "A: 금리 정점",
+    "confidence": 0.3347,
+    "topDrivers": [
+      {
+        "feature": "rate_high",
+        "label": "높은 금리",
+        "phase": "A",
+        "impact": 0.3008,
+        "direction": "기준금리와 장기금리가 높은 축에 있습니다."
+      },
+      {
+        "feature": "inflation_high",
+        "label": "높은 물가",
+        "phase": "A",
+        "impact": 0.2123,
+        "direction": "물가 압력이 남아 있어 완화 전환 확신이 약합니다."
+      },
+      {
+        "feature": "equity_weak",
+        "label": "주식 약세",
+        "phase": "A",
+        "impact": 0.1238,
+        "direction": "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+      }
+    ],
+    "explanation": [
+      "기준금리와 장기금리가 높은 축에 있습니다.",
+      "물가 압력이 남아 있어 완화 전환 확신이 약합니다.",
+      "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+    ]
+  },
+  {
+    "year": 2001,
+    "indicators": {
+      "base_rate_avg": 3.68,
+      "ktb10y_avg": 4.04,
+      "cpi_yoy": 3.06,
+      "m2_yoy": 6.89,
+      "kospi_return": 2.06,
+      "house_price_yoy": 1.83,
+      "gdp_growth": 2.13,
+      "usdkrw_change": 4.84
+    },
+    "scores": {
+      "A": 0.2022,
+      "B": 0.1918,
+      "C": 0.1631,
+      "D": 0.1578,
+      "E": 0.1523,
+      "F": 0.1328
+    },
+    "primaryPhase": "A",
+    "secondaryPhase": "B",
+    "phaseLabel": "A/B 과도기",
+    "confidence": 0.2022,
+    "topDrivers": [
+      {
+        "feature": "rate_high",
+        "label": "높은 금리",
+        "phase": "A",
+        "impact": 0.2485,
+        "direction": "기준금리와 장기금리가 높은 축에 있습니다."
+      },
+      {
+        "feature": "inflation_high",
+        "label": "높은 물가",
+        "phase": "A",
+        "impact": 0.1477,
+        "direction": "물가 압력이 남아 있어 완화 전환 확신이 약합니다."
+      },
+      {
+        "feature": "equity_weak",
+        "label": "주식 약세",
+        "phase": "A",
+        "impact": 0.0646,
+        "direction": "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+      }
+    ],
+    "explanation": [
+      "기준금리와 장기금리가 높은 축에 있습니다.",
+      "물가 압력이 남아 있어 완화 전환 확신이 약합니다.",
+      "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+    ]
+  },
+  {
+    "year": 2002,
+    "indicators": {
+      "base_rate_avg": 2.25,
+      "ktb10y_avg": 2.72,
+      "cpi_yoy": 2.35,
+      "m2_yoy": 9.2,
+      "kospi_return": 23.48,
+      "house_price_yoy": 5.79,
+      "gdp_growth": 3.45,
+      "usdkrw_change": -1.51
+    },
+    "scores": {
+      "A": 0.0679,
+      "B": 0.1508,
+      "C": 0.1245,
+      "D": 0.185,
+      "E": 0.2882,
+      "F": 0.1837
+    },
+    "primaryPhase": "E",
+    "secondaryPhase": "D",
+    "phaseLabel": "E: 부동산 매도 / 주식 투자",
+    "confidence": 0.2882,
+    "topDrivers": [
+      {
+        "feature": "equity_strong",
+        "label": "주식 강세",
+        "phase": "E",
+        "impact": 0.28,
+        "direction": "주식시장에서 회복 신호가 보입니다."
+      },
+      {
+        "feature": "liquidity_rising",
+        "label": "유동성 증가",
+        "phase": "E",
+        "impact": 0.1637,
+        "direction": "유동성 증가가 위험자산 회복을 돕습니다."
+      },
+      {
+        "feature": "rate_low",
+        "label": "낮은 금리",
+        "phase": "E",
+        "impact": 0.1315,
+        "direction": "금리 부담이 낮아진 상태입니다."
+      }
+    ],
+    "explanation": [
+      "주식시장에서 회복 신호가 보입니다.",
+      "유동성 증가가 위험자산 회복을 돕습니다.",
+      "금리 부담이 낮아진 상태입니다."
+    ]
+  },
+  {
+    "year": 2003,
+    "indicators": {
+      "base_rate_avg": 2.95,
+      "ktb10y_avg": 3.39,
+      "cpi_yoy": 3.21,
+      "m2_yoy": 7.73,
+      "kospi_return": 15.34,
+      "house_price_yoy": 8.09,
+      "gdp_growth": 3.07,
+      "usdkrw_change": 5.52
+    },
+    "scores": {
+      "A": 0.2293,
+      "B": 0.089,
+      "C": 0.0353,
+      "D": 0.1167,
+      "E": 0.2326,
+      "F": 0.2972
+    },
+    "primaryPhase": "F",
+    "secondaryPhase": "E",
+    "phaseLabel": "F/E 과도기",
+    "confidence": 0.2972,
+    "topDrivers": [
+      {
+        "feature": "housing_strong",
+        "label": "부동산 강세",
+        "phase": "F",
+        "impact": 0.2115,
+        "direction": "부동산 가격 강세가 과열권 신호가 될 수 있습니다."
+      },
+      {
+        "feature": "equity_strong",
+        "label": "주식 강세",
+        "phase": "F",
+        "impact": 0.1938,
+        "direction": "주식시장이 강한 구간입니다."
+      },
+      {
+        "feature": "inflation_rising",
+        "label": "물가 상승",
+        "phase": "F",
+        "impact": 0.1032,
+        "direction": "물가 상승 압력은 금리 인상 우려를 높입니다."
+      }
+    ],
+    "explanation": [
+      "부동산 가격 강세가 과열권 신호가 될 수 있습니다.",
+      "주식시장이 강한 구간입니다.",
+      "물가 상승 압력은 금리 인상 우려를 높입니다."
+    ]
+  },
+  {
+    "year": 2004,
+    "indicators": {
+      "base_rate_avg": 3.96,
+      "ktb10y_avg": 4.34,
+      "cpi_yoy": 3.64,
+      "m2_yoy": 5.29,
+      "kospi_return": -8.98,
+      "house_price_yoy": -1.32,
+      "gdp_growth": 1.92,
+      "usdkrw_change": 6.56
+    },
+    "scores": {
+      "A": 0.3401,
+      "B": 0.1969,
+      "C": 0.1977,
+      "D": 0.1039,
+      "E": 0.0376,
+      "F": 0.1237
+    },
+    "primaryPhase": "A",
+    "secondaryPhase": "C",
+    "phaseLabel": "A: 금리 정점",
+    "confidence": 0.3401,
+    "topDrivers": [
+      {
+        "feature": "rate_high",
+        "label": "높은 금리",
+        "phase": "A",
+        "impact": 0.2877,
+        "direction": "기준금리와 장기금리가 높은 축에 있습니다."
+      },
+      {
+        "feature": "inflation_high",
+        "label": "높은 물가",
+        "phase": "A",
+        "impact": 0.2031,
+        "direction": "물가 압력이 남아 있어 완화 전환 확신이 약합니다."
+      },
+      {
+        "feature": "equity_weak",
+        "label": "주식 약세",
+        "phase": "A",
+        "impact": 0.1292,
+        "direction": "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+      }
+    ],
+    "explanation": [
+      "기준금리와 장기금리가 높은 축에 있습니다.",
+      "물가 압력이 남아 있어 완화 전환 확신이 약합니다.",
+      "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+    ]
+  },
+  {
+    "year": 2005,
+    "indicators": {
+      "base_rate_avg": 3.29,
+      "ktb10y_avg": 3.53,
+      "cpi_yoy": 2.5,
+      "m2_yoy": 4.98,
+      "kospi_return": -6.65,
+      "house_price_yoy": -1.02,
+      "gdp_growth": 1.42,
+      "usdkrw_change": 0.89
+    },
+    "scores": {
+      "A": 0.1733,
+      "B": 0.2609,
+      "C": 0.2794,
+      "D": 0.1849,
+      "E": 0.0602,
+      "F": 0.0413
+    },
+    "primaryPhase": "C",
+    "secondaryPhase": "B",
+    "phaseLabel": "C/B 과도기",
+    "confidence": 0.2794,
+    "topDrivers": [
+      {
+        "feature": "growth_weak",
+        "label": "성장 둔화",
+        "phase": "C",
+        "impact": 0.1777,
+        "direction": "성장 둔화가 깊어져 경기 민감 자산은 조심스럽습니다."
+      },
+      {
+        "feature": "equity_weak",
+        "label": "주식 약세",
+        "phase": "C",
+        "impact": 0.1692,
+        "direction": "위험자산 약세가 남아 있습니다."
+      },
+      {
+        "feature": "housing_weak",
+        "label": "부동산 약세",
+        "phase": "C",
+        "impact": 0.1315,
+        "direction": "부동산 가격이 약해 저점 접근 가능성이 보입니다."
+      }
+    ],
+    "explanation": [
+      "성장 둔화가 깊어져 경기 민감 자산은 조심스럽습니다.",
+      "위험자산 약세가 남아 있습니다.",
+      "부동산 가격이 약해 저점 접근 가능성이 보입니다."
+    ]
+  },
+  {
+    "year": 2006,
+    "indicators": {
+      "base_rate_avg": 1.76,
+      "ktb10y_avg": 2.09,
+      "cpi_yoy": 1.66,
+      "m2_yoy": 6.84,
+      "kospi_return": 12.7,
+      "house_price_yoy": 2.26,
+      "gdp_growth": 2.57,
+      "usdkrw_change": -6.41
+    },
+    "scores": {
+      "A": 0.0361,
+      "B": 0.1789,
+      "C": 0.1959,
+      "D": 0.2129,
+      "E": 0.239,
+      "F": 0.1372
+    },
+    "primaryPhase": "E",
+    "secondaryPhase": "D",
+    "phaseLabel": "E/D 과도기",
+    "confidence": 0.239,
+    "topDrivers": [
+      {
+        "feature": "equity_strong",
+        "label": "주식 강세",
+        "phase": "E",
+        "impact": 0.2046,
+        "direction": "주식시장에서 회복 신호가 보입니다."
+      },
+      {
+        "feature": "rate_low",
+        "label": "낮은 금리",
+        "phase": "E",
+        "impact": 0.1592,
+        "direction": "금리 부담이 낮아진 상태입니다."
+      },
+      {
+        "feature": "liquidity_rising",
+        "label": "유동성 증가",
+        "phase": "E",
+        "impact": 0.1003,
+        "direction": "유동성 증가가 위험자산 회복을 돕습니다."
+      }
+    ],
+    "explanation": [
+      "주식시장에서 회복 신호가 보입니다.",
+      "금리 부담이 낮아진 상태입니다.",
+      "유동성 증가가 위험자산 회복을 돕습니다."
+    ]
+  },
+  {
+    "year": 2007,
+    "indicators": {
+      "base_rate_avg": 2.69,
+      "ktb10y_avg": 3.05,
+      "cpi_yoy": 2.84,
+      "m2_yoy": 6.45,
+      "kospi_return": 9.49,
+      "house_price_yoy": 6.18,
+      "gdp_growth": 2.59,
+      "usdkrw_change": 2.86
+    },
+    "scores": {
+      "A": 0.2116,
+      "B": 0.096,
+      "C": 0.0645,
+      "D": 0.1224,
+      "E": 0.2076,
+      "F": 0.2979
+    },
+    "primaryPhase": "F",
+    "secondaryPhase": "A",
+    "phaseLabel": "F: 주식 매도 / 예금 시작",
+    "confidence": 0.2979,
+    "topDrivers": [
+      {
+        "feature": "housing_strong",
+        "label": "부동산 강세",
+        "phase": "F",
+        "impact": 0.1946,
+        "direction": "부동산 가격 강세가 과열권 신호가 될 수 있습니다."
+      },
+      {
+        "feature": "equity_strong",
+        "label": "주식 강세",
+        "phase": "F",
+        "impact": 0.1662,
+        "direction": "주식시장이 강한 구간입니다."
+      },
+      {
+        "feature": "inflation_rising",
+        "label": "물가 상승",
+        "phase": "F",
+        "impact": 0.1416,
+        "direction": "물가 상승 압력은 금리 인상 우려를 높입니다."
+      }
+    ],
+    "explanation": [
+      "부동산 가격 강세가 과열권 신호가 될 수 있습니다.",
+      "주식시장이 강한 구간입니다.",
+      "물가 상승 압력은 금리 인상 우려를 높입니다."
+    ]
+  },
+  {
+    "year": 2008,
+    "indicators": {
+      "base_rate_avg": 4.09,
+      "ktb10y_avg": 4.51,
+      "cpi_yoy": 3.82,
+      "m2_yoy": 5.92,
+      "kospi_return": -6.08,
+      "house_price_yoy": -0.37,
+      "gdp_growth": 2.16,
+      "usdkrw_change": 7.87
+    },
+    "scores": {
+      "A": 0.3439,
+      "B": 0.1732,
+      "C": 0.1469,
+      "D": 0.0806,
+      "E": 0.0625,
+      "F": 0.1928
+    },
+    "primaryPhase": "A",
+    "secondaryPhase": "F",
+    "phaseLabel": "A: 금리 정점",
+    "confidence": 0.3439,
+    "topDrivers": [
+      {
+        "feature": "rate_high",
+        "label": "높은 금리",
+        "phase": "A",
+        "impact": 0.3139,
+        "direction": "기준금리와 장기금리가 높은 축에 있습니다."
+      },
+      {
+        "feature": "inflation_high",
+        "label": "높은 물가",
+        "phase": "A",
+        "impact": 0.2215,
+        "direction": "물가 압력이 남아 있어 완화 전환 확신이 약합니다."
+      },
+      {
+        "feature": "rate_rising",
+        "label": "금리 상승",
+        "phase": "A",
+        "impact": 0.168,
+        "direction": "금리 상승 또는 동결 압력이 위험자산 부담을 키웁니다."
+      }
+    ],
+    "explanation": [
+      "기준금리와 장기금리가 높은 축에 있습니다.",
+      "물가 압력이 남아 있어 완화 전환 확신이 약합니다.",
+      "금리 상승 또는 동결 압력이 위험자산 부담을 키웁니다."
+    ]
+  },
+  {
+    "year": 2009,
+    "indicators": {
+      "base_rate_avg": 1.73,
+      "ktb10y_avg": 2.2,
+      "cpi_yoy": 1.72,
+      "m2_yoy": 9.61,
+      "kospi_return": 9.1,
+      "house_price_yoy": 1.67,
+      "gdp_growth": 1.92,
+      "usdkrw_change": 0.32
+    },
+    "scores": {
+      "A": 0.0328,
+      "B": 0.1854,
+      "C": 0.2163,
+      "D": 0.2579,
+      "E": 0.1936,
+      "F": 0.1139
+    },
+    "primaryPhase": "D",
+    "secondaryPhase": "C",
+    "phaseLabel": "D/C 과도기",
+    "confidence": 0.2579,
+    "topDrivers": [
+      {
+        "feature": "rate_low",
+        "label": "낮은 금리",
+        "phase": "D",
+        "impact": 0.2769,
+        "direction": "금리가 낮은 축에 가까워져 있습니다."
+      },
+      {
+        "feature": "liquidity_rising",
+        "label": "유동성 증가",
+        "phase": "D",
+        "impact": 0.2172,
+        "direction": "유동성 증가가 다음 회복을 준비합니다."
+      },
+      {
+        "feature": "inflation_cooling",
+        "label": "물가 둔화",
+        "phase": "D",
+        "impact": 0.18,
+        "direction": "물가 안정은 완화 환경을 지지합니다."
+      }
+    ],
+    "explanation": [
+      "금리가 낮은 축에 가까워져 있습니다.",
+      "유동성 증가가 다음 회복을 준비합니다.",
+      "물가 안정은 완화 환경을 지지합니다."
+    ]
+  },
+  {
+    "year": 2010,
+    "indicators": {
+      "base_rate_avg": 2.23,
+      "ktb10y_avg": 2.69,
+      "cpi_yoy": 2.32,
+      "m2_yoy": 9.08,
+      "kospi_return": 22.96,
+      "house_price_yoy": 5.62,
+      "gdp_growth": 3.41,
+      "usdkrw_change": -1.74
+    },
+    "scores": {
+      "A": 0.1112,
+      "B": 0.0369,
+      "C": 0.0249,
+      "D": 0.1837,
+      "E": 0.3558,
+      "F": 0.2874
+    },
+    "primaryPhase": "E",
+    "secondaryPhase": "F",
+    "phaseLabel": "E/F 과도기",
+    "confidence": 0.3558,
+    "topDrivers": [
+      {
+        "feature": "equity_strong",
+        "label": "주식 강세",
+        "phase": "E",
+        "impact": 0.2692,
+        "direction": "주식시장에서 회복 신호가 보입니다."
+      },
+      {
+        "feature": "rate_low",
+        "label": "낮은 금리",
+        "phase": "E",
+        "impact": 0.1385,
+        "direction": "금리 부담이 낮아진 상태입니다."
+      },
+      {
+        "feature": "growth_recovering",
+        "label": "성장 회복",
+        "phase": "E",
+        "impact": 0.1073,
+        "direction": "성장률 개선이 경기 회복 신호입니다."
+      }
+    ],
+    "explanation": [
+      "주식시장에서 회복 신호가 보입니다.",
+      "금리 부담이 낮아진 상태입니다.",
+      "성장률 개선이 경기 회복 신호입니다."
+    ]
+  },
+  {
+    "year": 2011,
+    "indicators": {
+      "base_rate_avg": 2.87,
+      "ktb10y_avg": 3.29,
+      "cpi_yoy": 3.1,
+      "m2_yoy": 7.35,
+      "kospi_return": 13.6,
+      "house_price_yoy": 7.52,
+      "gdp_growth": 2.93,
+      "usdkrw_change": 4.73
+    },
+    "scores": {
+      "A": 0.2172,
+      "B": 0.0935,
+      "C": 0.0506,
+      "D": 0.1259,
+      "E": 0.2286,
+      "F": 0.2843
+    },
+    "primaryPhase": "F",
+    "secondaryPhase": "E",
+    "phaseLabel": "F/E 과도기",
+    "confidence": 0.2843,
+    "topDrivers": [
+      {
+        "feature": "housing_strong",
+        "label": "부동산 강세",
+        "phase": "F",
+        "impact": 0.2031,
+        "direction": "부동산 가격 강세가 과열권 신호가 될 수 있습니다."
+      },
+      {
+        "feature": "equity_strong",
+        "label": "주식 강세",
+        "phase": "F",
+        "impact": 0.1846,
+        "direction": "주식시장이 강한 구간입니다."
+      },
+      {
+        "feature": "inflation_rising",
+        "label": "물가 상승",
+        "phase": "F",
+        "impact": 0.0936,
+        "direction": "물가 상승 압력은 금리 인상 우려를 높입니다."
+      }
+    ],
+    "explanation": [
+      "부동산 가격 강세가 과열권 신호가 될 수 있습니다.",
+      "주식시장이 강한 구간입니다.",
+      "물가 상승 압력은 금리 인상 우려를 높입니다."
+    ]
+  },
+  {
+    "year": 2012,
+    "indicators": {
+      "base_rate_avg": 3.37,
+      "ktb10y_avg": 3.64,
+      "cpi_yoy": 2.62,
+      "m2_yoy": 5.39,
+      "kospi_return": -4.81,
+      "house_price_yoy": -0.42,
+      "gdp_growth": 1.57,
+      "usdkrw_change": 1.72
+    },
+    "scores": {
+      "A": 0.228,
+      "B": 0.2013,
+      "C": 0.2152,
+      "D": 0.1675,
+      "E": 0.0896,
+      "F": 0.0984
+    },
+    "primaryPhase": "A",
+    "secondaryPhase": "C",
+    "phaseLabel": "A/C 과도기",
+    "confidence": 0.228,
+    "topDrivers": [
+      {
+        "feature": "rate_high",
+        "label": "높은 금리",
+        "phase": "A",
+        "impact": 0.2223,
+        "direction": "기준금리와 장기금리가 높은 축에 있습니다."
+      },
+      {
+        "feature": "inflation_high",
+        "label": "높은 물가",
+        "phase": "A",
+        "impact": 0.1108,
+        "direction": "물가 압력이 남아 있어 완화 전환 확신이 약합니다."
+      },
+      {
+        "feature": "equity_weak",
+        "label": "주식 약세",
+        "phase": "A",
+        "impact": 0.1023,
+        "direction": "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+      }
+    ],
+    "explanation": [
+      "기준금리와 장기금리가 높은 축에 있습니다.",
+      "물가 압력이 남아 있어 완화 전환 확신이 약합니다.",
+      "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+    ]
+  },
+  {
+    "year": 2013,
+    "indicators": {
+      "base_rate_avg": 2.26,
+      "ktb10y_avg": 2.59,
+      "cpi_yoy": 1.76,
+      "m2_yoy": 5.33,
+      "kospi_return": -11.38,
+      "house_price_yoy": -4.76,
+      "gdp_growth": 0.76,
+      "usdkrw_change": -1.45
+    },
+    "scores": {
+      "A": 0.1103,
+      "B": 0.2592,
+      "C": 0.3411,
+      "D": 0.2332,
+      "E": 0.054,
+      "F": 0.0023
+    },
+    "primaryPhase": "C",
+    "secondaryPhase": "B",
+    "phaseLabel": "C: 부동산 투자 / 채권 매도",
+    "confidence": 0.3411,
+    "topDrivers": [
+      {
+        "feature": "growth_weak",
+        "label": "성장 둔화",
+        "phase": "C",
+        "impact": 0.22,
+        "direction": "성장 둔화가 깊어져 경기 민감 자산은 조심스럽습니다."
+      },
+      {
+        "feature": "equity_weak",
+        "label": "주식 약세",
+        "phase": "C",
+        "impact": 0.2,
+        "direction": "위험자산 약세가 남아 있습니다."
+      },
+      {
+        "feature": "rate_falling",
+        "label": "금리 하락",
+        "phase": "C",
+        "impact": 0.185,
+        "direction": "금리 하락이 진행되는 구간입니다."
+      }
+    ],
+    "explanation": [
+      "성장 둔화가 깊어져 경기 민감 자산은 조심스럽습니다.",
+      "위험자산 약세가 남아 있습니다.",
+      "금리 하락이 진행되는 구간입니다."
+    ]
+  },
+  {
+    "year": 2014,
+    "indicators": {
+      "base_rate_avg": 1.3,
+      "ktb10y_avg": 1.64,
+      "cpi_yoy": 1.12,
+      "m2_yoy": 7.53,
+      "kospi_return": -0.46,
+      "house_price_yoy": -1.46,
+      "gdp_growth": 1.13,
+      "usdkrw_change": -4.03
+    },
+    "scores": {
+      "A": 0.0283,
+      "B": 0.1668,
+      "C": 0.2608,
+      "D": 0.2865,
+      "E": 0.1822,
+      "F": 0.0754
+    },
+    "primaryPhase": "D",
+    "secondaryPhase": "C",
+    "phaseLabel": "D/C 과도기",
+    "confidence": 0.2865,
+    "topDrivers": [
+      {
+        "feature": "rate_low",
+        "label": "낮은 금리",
+        "phase": "D",
+        "impact": 0.3,
+        "direction": "금리가 낮은 축에 가까워져 있습니다."
+      },
+      {
+        "feature": "growth_weak",
+        "label": "성장 둔화",
+        "phase": "D",
+        "impact": 0.1442,
+        "direction": "경기는 아직 바닥권에 가깝습니다."
+      },
+      {
+        "feature": "liquidity_rising",
+        "label": "유동성 증가",
+        "phase": "D",
+        "impact": 0.1415,
+        "direction": "유동성 증가가 다음 회복을 준비합니다."
+      }
+    ],
+    "explanation": [
+      "금리가 낮은 축에 가까워져 있습니다.",
+      "경기는 아직 바닥권에 가깝습니다.",
+      "유동성 증가가 다음 회복을 준비합니다."
+    ]
+  },
+  {
+    "year": 2015,
+    "indicators": {
+      "base_rate_avg": 1.97,
+      "ktb10y_avg": 2.36,
+      "cpi_yoy": 1.96,
+      "m2_yoy": 7.86,
+      "kospi_return": 17.36,
+      "house_price_yoy": 3.79,
+      "gdp_growth": 2.95,
+      "usdkrw_change": -4.29
+    },
+    "scores": {
+      "A": 0.0937,
+      "B": 0.0424,
+      "C": 0.06,
+      "D": 0.2004,
+      "E": 0.3322,
+      "F": 0.2712
+    },
+    "primaryPhase": "E",
+    "secondaryPhase": "F",
+    "phaseLabel": "E/F 과도기",
+    "confidence": 0.3322,
+    "topDrivers": [
+      {
+        "feature": "equity_strong",
+        "label": "주식 강세",
+        "phase": "E",
+        "impact": 0.2369,
+        "direction": "주식시장에서 회복 신호가 보입니다."
+      },
+      {
+        "feature": "rate_low",
+        "label": "낮은 금리",
+        "phase": "E",
+        "impact": 0.1523,
+        "direction": "금리 부담이 낮아진 상태입니다."
+      },
+      {
+        "feature": "growth_recovering",
+        "label": "성장 회복",
+        "phase": "E",
+        "impact": 0.131,
+        "direction": "성장률 개선이 경기 회복 신호입니다."
+      }
+    ],
+    "explanation": [
+      "주식시장에서 회복 신호가 보입니다.",
+      "금리 부담이 낮아진 상태입니다.",
+      "성장률 개선이 경기 회복 신호입니다."
+    ]
+  },
+  {
+    "year": 2016,
+    "indicators": {
+      "base_rate_avg": 2.16,
+      "ktb10y_avg": 2.61,
+      "cpi_yoy": 2.23,
+      "m2_yoy": 8.79,
+      "kospi_return": 21.6,
+      "house_price_yoy": 5.18,
+      "gdp_growth": 3.29,
+      "usdkrw_change": -2.36
+    },
+    "scores": {
+      "A": 0.0871,
+      "B": 0.0402,
+      "C": 0.043,
+      "D": 0.2237,
+      "E": 0.3444,
+      "F": 0.2616
+    },
+    "primaryPhase": "E",
+    "secondaryPhase": "F",
+    "phaseLabel": "E: 부동산 매도 / 주식 투자",
+    "confidence": 0.3444,
+    "topDrivers": [
+      {
+        "feature": "equity_strong",
+        "label": "주식 강세",
+        "phase": "E",
+        "impact": 0.2585,
+        "direction": "주식시장에서 회복 신호가 보입니다."
+      },
+      {
+        "feature": "rate_low",
+        "label": "낮은 금리",
+        "phase": "E",
+        "impact": 0.1454,
+        "direction": "금리 부담이 낮아진 상태입니다."
+      },
+      {
+        "feature": "liquidity_rising",
+        "label": "유동성 증가",
+        "phase": "E",
+        "impact": 0.1231,
+        "direction": "유동성 증가가 위험자산 회복을 돕습니다."
+      }
+    ],
+    "explanation": [
+      "주식시장에서 회복 신호가 보입니다.",
+      "금리 부담이 낮아진 상태입니다.",
+      "유동성 증가가 위험자산 회복을 돕습니다."
+    ]
+  },
+  {
+    "year": 2017,
+    "indicators": {
+      "base_rate_avg": 3.05,
+      "ktb10y_avg": 3.52,
+      "cpi_yoy": 3.35,
+      "m2_yoy": 8.2,
+      "kospi_return": 17.5,
+      "house_price_yoy": 8.8,
+      "gdp_growth": 3.25,
+      "usdkrw_change": 6.5
+    },
+    "scores": {
+      "A": 0.2363,
+      "B": 0.0821,
+      "C": 0.0205,
+      "D": 0.1059,
+      "E": 0.2335,
+      "F": 0.3216
+    },
+    "primaryPhase": "F",
+    "secondaryPhase": "A",
+    "phaseLabel": "F: 주식 매도 / 예금 시작",
+    "confidence": 0.3216,
+    "topDrivers": [
+      {
+        "feature": "housing_strong",
+        "label": "부동산 강세",
+        "phase": "F",
+        "impact": 0.22,
+        "direction": "부동산 가격 강세가 과열권 신호가 될 수 있습니다."
+      },
+      {
+        "feature": "equity_strong",
+        "label": "주식 강세",
+        "phase": "F",
+        "impact": 0.2123,
+        "direction": "주식시장이 강한 구간입니다."
+      },
+      {
+        "feature": "inflation_rising",
+        "label": "물가 상승",
+        "phase": "F",
+        "impact": 0.1344,
+        "direction": "물가 상승 압력은 금리 인상 우려를 높입니다."
+      }
+    ],
+    "explanation": [
+      "부동산 가격 강세가 과열권 신호가 될 수 있습니다.",
+      "주식시장이 강한 구간입니다.",
+      "물가 상승 압력은 금리 인상 우려를 높입니다."
+    ]
+  },
+  {
+    "year": 2018,
+    "indicators": {
+      "base_rate_avg": 4.17,
+      "ktb10y_avg": 4.62,
+      "cpi_yoy": 3.94,
+      "m2_yoy": 6.33,
+      "kospi_return": -4.18,
+      "house_price_yoy": 0.25,
+      "gdp_growth": 2.31,
+      "usdkrw_change": 8.74
+    },
+    "scores": {
+      "A": 0.3516,
+      "B": 0.1757,
+      "C": 0.1368,
+      "D": 0.0765,
+      "E": 0.0767,
+      "F": 0.1827
+    },
+    "primaryPhase": "A",
+    "secondaryPhase": "F",
+    "phaseLabel": "A: 금리 정점",
+    "confidence": 0.3516,
+    "topDrivers": [
+      {
+        "feature": "rate_high",
+        "label": "높은 금리",
+        "phase": "A",
+        "impact": 0.3269,
+        "direction": "기준금리와 장기금리가 높은 축에 있습니다."
+      },
+      {
+        "feature": "inflation_high",
+        "label": "높은 물가",
+        "phase": "A",
+        "impact": 0.2308,
+        "direction": "물가 압력이 남아 있어 완화 전환 확신이 약합니다."
+      },
+      {
+        "feature": "rate_rising",
+        "label": "금리 상승",
+        "phase": "A",
+        "impact": 0.1344,
+        "direction": "금리 상승 또는 동결 압력이 위험자산 부담을 키웁니다."
+      }
+    ],
+    "explanation": [
+      "기준금리와 장기금리가 높은 축에 있습니다.",
+      "물가 압력이 남아 있어 완화 전환 확신이 약합니다.",
+      "금리 상승 또는 동결 압력이 위험자산 부담을 키웁니다."
+    ]
+  },
+  {
+    "year": 2019,
+    "indicators": {
+      "base_rate_avg": 2.48,
+      "ktb10y_avg": 2.88,
+      "cpi_yoy": 2.08,
+      "m2_yoy": 6.43,
+      "kospi_return": -6.34,
+      "house_price_yoy": -3.11,
+      "gdp_growth": 1.17,
+      "usdkrw_change": 0.85
+    },
+    "scores": {
+      "A": 0.0986,
+      "B": 0.2598,
+      "C": 0.3125,
+      "D": 0.227,
+      "E": 0.075,
+      "F": 0.0271
+    },
+    "primaryPhase": "C",
+    "secondaryPhase": "B",
+    "phaseLabel": "C/B 과도기",
+    "confidence": 0.3125,
+    "topDrivers": [
+      {
+        "feature": "rate_falling",
+        "label": "금리 하락",
+        "phase": "C",
+        "impact": 0.25,
+        "direction": "금리 하락이 진행되는 구간입니다."
+      },
+      {
+        "feature": "growth_weak",
+        "label": "성장 둔화",
+        "phase": "C",
+        "impact": 0.1946,
+        "direction": "성장 둔화가 깊어져 경기 민감 자산은 조심스럽습니다."
+      },
+      {
+        "feature": "housing_weak",
+        "label": "부동산 약세",
+        "phase": "C",
+        "impact": 0.1731,
+        "direction": "부동산 가격이 약해 저점 접근 가능성이 보입니다."
+      }
+    ],
+    "explanation": [
+      "금리 하락이 진행되는 구간입니다.",
+      "성장 둔화가 깊어져 경기 민감 자산은 조심스럽습니다.",
+      "부동산 가격이 약해 저점 접근 가능성이 보입니다."
+    ]
+  },
+  {
+    "year": 2020,
+    "indicators": {
+      "base_rate_avg": 1.31,
+      "ktb10y_avg": 1.65,
+      "cpi_yoy": 1.13,
+      "m2_yoy": 7.57,
+      "kospi_return": -0.28,
+      "house_price_yoy": -1.4,
+      "gdp_growth": 1.15,
+      "usdkrw_change": -3.95
+    },
+    "scores": {
+      "A": 0.0334,
+      "B": 0.1874,
+      "C": 0.267,
+      "D": 0.274,
+      "E": 0.1621,
+      "F": 0.076
+    },
+    "primaryPhase": "D",
+    "secondaryPhase": "C",
+    "phaseLabel": "D/C 과도기",
+    "confidence": 0.274,
+    "topDrivers": [
+      {
+        "feature": "rate_low",
+        "label": "낮은 금리",
+        "phase": "D",
+        "impact": 0.2884,
+        "direction": "금리가 낮은 축에 가까워져 있습니다."
+      },
+      {
+        "feature": "growth_weak",
+        "label": "성장 둔화",
+        "phase": "D",
+        "impact": 0.1385,
+        "direction": "경기는 아직 바닥권에 가깝습니다."
+      },
+      {
+        "feature": "liquidity_rising",
+        "label": "유동성 증가",
+        "phase": "D",
+        "impact": 0.1199,
+        "direction": "유동성 증가가 다음 회복을 준비합니다."
+      }
+    ],
+    "explanation": [
+      "금리가 낮은 축에 가까워져 있습니다.",
+      "경기는 아직 바닥권에 가깝습니다.",
+      "유동성 증가가 다음 회복을 준비합니다."
+    ]
+  },
+  {
+    "year": 2021,
+    "indicators": {
+      "base_rate_avg": 2.55,
+      "ktb10y_avg": 2.88,
+      "cpi_yoy": 2.65,
+      "m2_yoy": 5.81,
+      "kospi_return": 6.56,
+      "house_price_yoy": 5.22,
+      "gdp_growth": 2.36,
+      "usdkrw_change": 1.53
+    },
+    "scores": {
+      "A": 0.1986,
+      "B": 0.0917,
+      "C": 0.0865,
+      "D": 0.1273,
+      "E": 0.2116,
+      "F": 0.2843
+    },
+    "primaryPhase": "F",
+    "secondaryPhase": "E",
+    "phaseLabel": "F/E 과도기",
+    "confidence": 0.2843,
+    "topDrivers": [
+      {
+        "feature": "inflation_rising",
+        "label": "물가 상승",
+        "phase": "F",
+        "impact": 0.18,
+        "direction": "물가 상승 압력은 금리 인상 우려를 높입니다."
+      },
+      {
+        "feature": "housing_strong",
+        "label": "부동산 강세",
+        "phase": "F",
+        "impact": 0.1692,
+        "direction": "부동산 가격 강세가 과열권 신호가 될 수 있습니다."
+      },
+      {
+        "feature": "rate_rising",
+        "label": "금리 상승",
+        "phase": "F",
+        "impact": 0.1488,
+        "direction": "금리 상승 압력이 다시 나타납니다."
+      }
+    ],
+    "explanation": [
+      "물가 상승 압력은 금리 인상 우려를 높입니다.",
+      "부동산 가격 강세가 과열권 신호가 될 수 있습니다.",
+      "금리 상승 압력이 다시 나타납니다."
+    ]
+  },
+  {
+    "year": 2022,
+    "indicators": {
+      "base_rate_avg": 3.86,
+      "ktb10y_avg": 4.22,
+      "cpi_yoy": 3.51,
+      "m2_yoy": 4.83,
+      "kospi_return": -11.06,
+      "house_price_yoy": -2.0,
+      "gdp_growth": 1.75,
+      "usdkrw_change": 5.61
+    },
+    "scores": {
+      "A": 0.329,
+      "B": 0.1906,
+      "C": 0.2088,
+      "D": 0.1115,
+      "E": 0.0246,
+      "F": 0.1355
+    },
+    "primaryPhase": "A",
+    "secondaryPhase": "C",
+    "phaseLabel": "A: 금리 정점",
+    "confidence": 0.329,
+    "topDrivers": [
+      {
+        "feature": "rate_high",
+        "label": "높은 금리",
+        "phase": "A",
+        "impact": 0.2746,
+        "direction": "기준금리와 장기금리가 높은 축에 있습니다."
+      },
+      {
+        "feature": "inflation_high",
+        "label": "높은 물가",
+        "phase": "A",
+        "impact": 0.1938,
+        "direction": "물가 압력이 남아 있어 완화 전환 확신이 약합니다."
+      },
+      {
+        "feature": "rate_rising",
+        "label": "금리 상승",
+        "phase": "A",
+        "impact": 0.1572,
+        "direction": "금리 상승 또는 동결 압력이 위험자산 부담을 키웁니다."
+      }
+    ],
+    "explanation": [
+      "기준금리와 장기금리가 높은 축에 있습니다.",
+      "물가 압력이 남아 있어 완화 전환 확신이 약합니다.",
+      "금리 상승 또는 동결 압력이 위험자산 부담을 키웁니다."
+    ]
+  },
+  {
+    "year": 2023,
+    "indicators": {
+      "base_rate_avg": 3.56,
+      "ktb10y_avg": 3.88,
+      "cpi_yoy": 2.88,
+      "m2_yoy": 6.29,
+      "kospi_return": -0.69,
+      "house_price_yoy": 0.93,
+      "gdp_growth": 1.91,
+      "usdkrw_change": 3.6
+    },
+    "scores": {
+      "A": 0.1983,
+      "B": 0.2033,
+      "C": 0.1926,
+      "D": 0.1664,
+      "E": 0.1307,
+      "F": 0.1087
+    },
+    "primaryPhase": "B",
+    "secondaryPhase": "A",
+    "phaseLabel": "B/A 과도기",
+    "confidence": 0.2033,
+    "topDrivers": [
+      {
+        "feature": "rate_high",
+        "label": "높은 금리",
+        "phase": "B",
+        "impact": 0.1938,
+        "direction": "금리 수준이 아직 높아 채권 기대수익 논리가 커집니다."
+      },
+      {
+        "feature": "equity_weak",
+        "label": "주식 약세",
+        "phase": "B",
+        "impact": 0.0923,
+        "direction": "주식보다 방어적 자산 해석이 강해질 수 있습니다."
+      },
+      {
+        "feature": "growth_weak",
+        "label": "성장 둔화",
+        "phase": "B",
+        "impact": 0.0831,
+        "direction": "성장 둔화가 안전자산 수요를 높입니다."
+      }
+    ],
+    "explanation": [
+      "금리 수준이 아직 높아 채권 기대수익 논리가 커집니다.",
+      "주식보다 방어적 자산 해석이 강해질 수 있습니다.",
+      "성장 둔화가 안전자산 수요를 높입니다."
+    ]
+  },
+  {
+    "year": 2024,
+    "indicators": {
+      "base_rate_avg": 4.22,
+      "ktb10y_avg": 4.68,
+      "cpi_yoy": 4.01,
+      "m2_yoy": 6.55,
+      "kospi_return": -3.17,
+      "house_price_yoy": 0.58,
+      "gdp_growth": 2.39,
+      "usdkrw_change": 9.19
+    },
+    "scores": {
+      "A": 0.332,
+      "B": 0.1697,
+      "C": 0.1196,
+      "D": 0.073,
+      "E": 0.1055,
+      "F": 0.2002
+    },
+    "primaryPhase": "A",
+    "secondaryPhase": "F",
+    "phaseLabel": "A: 금리 정점",
+    "confidence": 0.332,
+    "topDrivers": [
+      {
+        "feature": "rate_high",
+        "label": "높은 금리",
+        "phase": "A",
+        "impact": 0.34,
+        "direction": "기준금리와 장기금리가 높은 축에 있습니다."
+      },
+      {
+        "feature": "inflation_high",
+        "label": "높은 물가",
+        "phase": "A",
+        "impact": 0.24,
+        "direction": "물가 압력이 남아 있어 완화 전환 확신이 약합니다."
+      },
+      {
+        "feature": "equity_weak",
+        "label": "주식 약세",
+        "phase": "A",
+        "impact": 0.0862,
+        "direction": "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+      }
+    ],
+    "explanation": [
+      "기준금리와 장기금리가 높은 축에 있습니다.",
+      "물가 압력이 남아 있어 완화 전환 확신이 약합니다.",
+      "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+    ]
+  },
+  {
+    "year": 2025,
+    "indicators": {
+      "base_rate_avg": 3.74,
+      "ktb10y_avg": 4.1,
+      "cpi_yoy": 3.13,
+      "m2_yoy": 7.14,
+      "kospi_return": 3.2,
+      "house_price_yoy": 2.2,
+      "gdp_growth": 2.23,
+      "usdkrw_change": 5.37
+    },
+    "scores": {
+      "A": 0.2062,
+      "B": 0.2045,
+      "C": 0.1642,
+      "D": 0.1481,
+      "E": 0.1425,
+      "F": 0.1343
+    },
+    "primaryPhase": "A",
+    "secondaryPhase": "B",
+    "phaseLabel": "A/B 과도기",
+    "confidence": 0.2062,
+    "topDrivers": [
+      {
+        "feature": "rate_high",
+        "label": "높은 금리",
+        "phase": "A",
+        "impact": 0.2615,
+        "direction": "기준금리와 장기금리가 높은 축에 있습니다."
+      },
+      {
+        "feature": "inflation_high",
+        "label": "높은 물가",
+        "phase": "A",
+        "impact": 0.1662,
+        "direction": "물가 압력이 남아 있어 완화 전환 확신이 약합니다."
+      },
+      {
+        "feature": "equity_weak",
+        "label": "주식 약세",
+        "phase": "A",
+        "impact": 0.0592,
+        "direction": "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+      }
+    ],
+    "explanation": [
+      "기준금리와 장기금리가 높은 축에 있습니다.",
+      "물가 압력이 남아 있어 완화 전환 확신이 약합니다.",
+      "주식 수익률이 약해 위험자산 심리가 둔화되어 있습니다."
+    ]
+  },
+  {
+    "year": 2026,
+    "indicators": {
+      "base_rate_avg": 2.6,
+      "ktb10y_avg": 3.03,
+      "cpi_yoy": 2.24,
+      "m2_yoy": 6.98,
+      "kospi_return": -3.8,
+      "house_price_yoy": -2.28,
+      "gdp_growth": 1.38,
+      "usdkrw_change": 2.0
+    },
+    "scores": {
+      "A": 0.1196,
+      "B": 0.2307,
+      "C": 0.2796,
+      "D": 0.2163,
+      "E": 0.1017,
+      "F": 0.0522
+    },
+    "primaryPhase": "C",
+    "secondaryPhase": "B",
+    "phaseLabel": "C/B 과도기",
+    "confidence": 0.2796,
+    "topDrivers": [
+      {
+        "feature": "rate_falling",
+        "label": "금리 하락",
+        "phase": "C",
+        "impact": 0.19,
+        "direction": "금리 하락이 진행되는 구간입니다."
+      },
+      {
+        "feature": "growth_weak",
+        "label": "성장 둔화",
+        "phase": "C",
+        "impact": 0.1862,
+        "direction": "성장 둔화가 깊어져 경기 민감 자산은 조심스럽습니다."
+      },
+      {
+        "feature": "housing_weak",
+        "label": "부동산 약세",
+        "phase": "C",
+        "impact": 0.1662,
+        "direction": "부동산 가격이 약해 저점 접근 가능성이 보입니다."
+      }
+    ],
+    "explanation": [
+      "금리 하락이 진행되는 구간입니다.",
+      "성장 둔화가 깊어져 경기 민감 자산은 조심스럽습니다.",
+      "부동산 가격이 약해 저점 접근 가능성이 보입니다."
+    ]
+  }
+]
