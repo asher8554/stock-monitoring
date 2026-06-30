@@ -1,5 +1,11 @@
 # Daily Data Update Diagnosis Plan
 
+## 2026-06-30 다크모드 결과
+
+1. 상단에 다크/라이트 토글 버튼을 둔다.
+2. 선택한 테마는 localStorage에 저장한다.
+3. 기존 색상 utility는 CSS override로 다크모드 대응한다.
+
 ## 2026-06-30 지표 차트 색 블록 결과
 
 1. 지표 그래프 하단에 2000년부터 현재까지 phase 색 블록을 함께 표시한다.

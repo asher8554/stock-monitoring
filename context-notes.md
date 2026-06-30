@@ -1,5 +1,11 @@
 # Context Notes
 
+## 2026-06-30 다크모드
+
+- 기존 `resolveInitialTheme`, `nextTheme` helper를 재사용했다.
+- `stock-monitoring-cycle-theme` localStorage 값으로 라이트/다크 선택을 저장한다.
+- 컴포넌트별 Tailwind class를 대량 수정하지 않고 `[data-theme="dark"]` CSS override로 배경, 테두리, 글자색을 바꾼다.
+
 ## 2026-06-30 지표 차트 색 블록
 
 - `IndicatorLineChart` 아래에 `annual_cycle.json`의 연도별 `primaryPhase`를 그대로 색상 블록으로 표시한다.

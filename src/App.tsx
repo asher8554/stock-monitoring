@@ -1,18 +1,30 @@
 // 한국 투자 사이클 대시보드의 데이터 로드와 화면 상태를 관리한다.
 import { useEffect, useMemo, useState } from "react";
+import { Moon, Sun } from "lucide-react";
 import { EggCycleChart } from "./components/EggCycleChart";
 import { IndicatorLineChart } from "./components/IndicatorLineChart";
 import { PhaseTimeline } from "./components/PhaseTimeline";
 import { YearDetailPanel } from "./components/YearDetailPanel";
 import { formatDateTime, formatPercent, type CycleYear } from "./lib/phase";
+import { nextTheme, resolveInitialTheme, type ThemeMode } from "./lib/theme";
 
 type LoadState = "loading" | "ready" | "error";
+const themeStorageKey = "stock-monitoring-cycle-theme";
 
 export function App() {
   const [annual, setAnnual] = useState<CycleYear[]>([]);
   const [current, setCurrent] = useState<CycleYear | null>(null);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [loadState, setLoadState] = useState<LoadState>("loading");
+  const [theme, setTheme] = useState<ThemeMode>(() =>
+    resolveInitialTheme(localStorage.getItem(themeStorageKey), window.matchMedia("(prefers-color-scheme: dark)").matches),
+  );
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+    localStorage.setItem(themeStorageKey, theme);
+  }, [theme]);
 
   useEffect(() => {
     let mounted = true;
@@ -89,9 +101,20 @@ export function App() {
               한국 투자 사이클 대시보드
             </h1>
           </div>
-          <p className="max-w-xl rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
-            투자 추천이 아니라 시장 상태 해석용 참고 도구입니다.
-          </p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <p className="max-w-xl rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
+              투자 추천이 아니라 시장 상태 해석용 참고 도구입니다.
+            </p>
+            <button
+              type="button"
+              onClick={() => setTheme((currentTheme) => nextTheme(currentTheme))}
+              aria-label={theme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
+              title={theme === "dark" ? "라이트 모드" : "다크 모드"}
+              className="inline-flex h-11 w-11 flex-none items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-sm hover:border-slate-400"
+            >
+              {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+          </div>
         </header>
 
         <section className="grid gap-3 md:grid-cols-2 xl:grid-cols-4" aria-label="현재 시장 사이클 요약">
