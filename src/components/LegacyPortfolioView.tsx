@@ -1,6 +1,7 @@
 // 예전 암호화 포트폴리오 payload를 간단한 읽기 화면으로 보여준다.
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Moon, Sun } from "lucide-react";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import { decryptPayload, type EncryptedPayload } from "../lib/crypto";
 import { buildDashboardModel } from "../lib/portfolio";
 import type { ThemeMode } from "../lib/theme";
@@ -161,10 +162,26 @@ function PortfolioDashboard({ model, asOf }: { model: DashboardModel; asOf: stri
             </div>
             <span className="text-sm font-semibold text-slate-500">{allocationItems.length}개</span>
           </div>
-          <ul className="mt-4 space-y-3">
-            {allocationItems.map((item, index) => (
-              <li key={item.id}>
-                <div className="flex items-center justify-between gap-3 text-sm">
+          <div className="mt-4 grid gap-4 md:grid-cols-[240px_1fr] md:items-center">
+            <div className="relative h-[220px]">
+              <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 240, height: 220 }}>
+                <PieChart>
+                  <Pie data={allocationItems} dataKey="valuationKrw" nameKey="name" innerRadius="58%" outerRadius="82%" paddingAngle={2}>
+                    {allocationItems.map((item, index) => (
+                      <Cell key={item.id} fill={allocationColors[index % allocationColors.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value) => formatCurrency(Number(value))} />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span className="text-xs font-semibold text-slate-500">총 잔고</span>
+                <strong className="text-lg font-bold tracking-normal text-slate-950">{formatCurrency(model.summary.totalBalanceKrw)}</strong>
+              </div>
+            </div>
+            <ul className="space-y-3">
+              {allocationItems.map((item, index) => (
+                <li key={item.id} className="grid grid-cols-[1fr_auto] gap-x-3 gap-y-1 text-sm">
                   <span className="flex min-w-0 items-center gap-2 font-semibold text-slate-900">
                     <span
                       className="h-3 w-3 shrink-0 rounded-sm"
@@ -172,21 +189,12 @@ function PortfolioDashboard({ model, asOf }: { model: DashboardModel; asOf: stri
                     />
                     <span className="truncate">{item.name}</span>
                   </span>
-                  <span className="shrink-0 text-right font-bold text-slate-950">{formatPercent(item.weight)}</span>
-                </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-slate-100">
-                  <span
-                    className="block h-full rounded-full"
-                    style={{
-                      width: `${Math.max(item.weight * 100, item.weight > 0 ? 1 : 0)}%`,
-                      backgroundColor: allocationColors[index % allocationColors.length],
-                    }}
-                  />
-                </div>
-                <div className="mt-1 text-right text-xs text-slate-500">{formatCurrency(item.valuationKrw)}</div>
-              </li>
-            ))}
-          </ul>
+                  <span className="font-bold text-slate-950">{formatPercent(item.weight)}</span>
+                  <span className="col-span-2 text-right text-xs text-slate-500">{formatCurrency(item.valuationKrw)}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
 
         <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
