@@ -15,7 +15,8 @@
     "schedule:enable": "tsx scripts/cli.ts schedule enable",
     "schedule:disable": "tsx scripts/cli.ts schedule disable",
     "demo:data": "tsx scripts/demo-data.ts",
-    "cycle:data": "python scripts/transform_data.py"
+    "cycle:data": "python scripts/transform_data.py",
+    "yield:data": "python scripts/fetch_yield_curve.py && python scripts/classify_yield_curve.py"
   },
   "dependencies": {
     "lucide-react": "^1.17.0",

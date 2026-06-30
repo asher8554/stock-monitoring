@@ -1,5 +1,26 @@
 # Daily Data Update Diagnosis Plan
 
+## 2026-06-30 장단기금리차 경기 위험 모듈
+
+### 목표
+
+미국 10Y-3M, 미국 10Y-2Y 금리차를 중심으로 경기침체 위험 신호를 별도 JSON으로 생성하고, 기존 한국 투자 사이클 대시보드에 보조 해석 패널로 표시한다.
+
+### 가정
+
+- 프론트엔드는 기존 원칙대로 `public/data/*.json`만 읽고 외부 API나 API 키를 직접 호출하지 않는다.
+- FRED API 키가 있으면 Python 스크립트에서만 사용하고, 없으면 mock 데이터를 생성한다.
+- 한국 금리차는 MVP에서 adapter 자리와 UI placeholder만 둔다.
+- 기존 A-F primary phase는 강제로 바꾸지 않고 장단기금리차 보정 위치만 별도 표시한다.
+
+### 성공 기준
+
+1. `npm run yield:data`가 `public/data/yield_curve.json`을 생성한다.
+2. 기존 `npm run cycle:data`가 그대로 통과한다.
+3. 화면에 “장단기금리차 경기 위험 신호” 섹션이 보이고, 데이터 실패 시 해당 섹션만 fallback 된다.
+4. normal, near inversion, inverted, deep inversion, re-steepening, missing Korean data, schema 검증 테스트가 있다.
+5. `npm test`, `npm run build`, 브라우저 렌더링 확인을 완료한다.
+
 ## 2026-06-30 예전 포트폴리오 진입 버튼 결과
 
 1. 상단 오른쪽에 `포트폴리오` 링크를 둔다.

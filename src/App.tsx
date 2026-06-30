@@ -5,9 +5,11 @@ import { EggCycleChart } from "./components/EggCycleChart";
 import { IndicatorLineChart } from "./components/IndicatorLineChart";
 import { LegacyPortfolioView } from "./components/LegacyPortfolioView";
 import { PhaseTimeline } from "./components/PhaseTimeline";
+import { YieldCurvePanel } from "./components/YieldCurvePanel";
 import { YearDetailPanel } from "./components/YearDetailPanel";
 import { formatDateTime, formatPercent, type CycleYear } from "./lib/phase";
 import { nextTheme, resolveInitialTheme, type ThemeMode } from "./lib/theme";
+import type { YieldCurveData } from "./lib/yield-curve";
 
 type LoadState = "loading" | "ready" | "error";
 const themeStorageKey = "stock-monitoring-cycle-theme";
@@ -35,6 +37,8 @@ function CycleDashboard({ theme, onToggleTheme }: { theme: ThemeMode; onToggleTh
   const [current, setCurrent] = useState<CycleYear | null>(null);
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [loadState, setLoadState] = useState<LoadState>("loading");
+  const [yieldCurve, setYieldCurve] = useState<YieldCurveData | null>(null);
+  const [yieldCurveState, setYieldCurveState] = useState<LoadState>("loading");
 
   useEffect(() => {
     let mounted = true;
@@ -66,6 +70,36 @@ function CycleDashboard({ theme, onToggleTheme }: { theme: ThemeMode; onToggleTh
     }
 
     void loadCycleData();
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadYieldCurveData() {
+      setYieldCurveState("loading");
+      try {
+        const response = await fetch("./data/yield_curve.json", { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error("yield curve data fetch failed");
+        }
+        const row = (await response.json()) as YieldCurveData;
+        if (!mounted) {
+          return;
+        }
+        setYieldCurve(row);
+        setYieldCurveState("ready");
+      } catch {
+        if (mounted) {
+          setYieldCurve(null);
+          setYieldCurveState("error");
+        }
+      }
+    }
+
+    void loadYieldCurveData();
     return () => {
       mounted = false;
     };
@@ -154,6 +188,8 @@ function CycleDashboard({ theme, onToggleTheme }: { theme: ThemeMode; onToggleTh
           <EggCycleChart selected={selected} />
           <YearDetailPanel row={selected} />
         </section>
+
+        <YieldCurvePanel data={yieldCurve} loadState={yieldCurveState} />
 
         <PhaseTimeline rows={annual} selectedYear={selected.year} onSelectYear={setSelectedYear} />
 

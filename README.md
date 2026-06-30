@@ -12,6 +12,7 @@
 - SVG 기반 코스톨라니 달걀 차트.
 - Python mock data 생성과 rule-based scoring.
 - `public/data/annual_cycle.json`과 `public/data/current_cycle.json`만 읽는 프론트엔드.
+- `public/data/yield_curve.json` 기반 장단기금리차 경기 위험 보조 신호.
 - 월 1회 자동 실행과 수동 실행을 지원하는 GitHub Actions 데이터 갱신 workflow.
 
 ## 데이터 출처
@@ -28,8 +29,13 @@
 - 부동산 가격지수 YoY: 한국부동산원 또는 KOSIS.
 - GDP 성장률: 한국은행 ECOS.
 - 원/달러 환율 변화율: 한국은행 ECOS 또는 FRED.
+- 미국 10Y-3M 장단기금리차: FRED `T10Y3M`.
+- 미국 10Y-2Y 장단기금리차: FRED `T10Y2Y`.
+- 한국 장단기금리차: 한국은행 ECOS 또는 수동 adapter. MVP에서는 연결 전 placeholder입니다.
 
 프론트엔드에는 API 키를 넣지 않습니다. API 키가 필요한 수집은 GitHub Actions에서 Python으로 실행합니다.
+
+ICE BofA High Yield OAS 같은 ICE 계열 신용스프레드 데이터는 공개 재배포 제한 가능성이 있어 현재 public JSON에는 저장하지 않습니다. 신용스트레스 지표는 재배포 가능한 대체 지표를 확인한 뒤 추가합니다.
 
 ## 지표 의미
 
@@ -59,11 +65,31 @@
 
 핵심 구현은 `scripts/classify_cycle.py`에 있습니다.
 
+## 장단기금리차 위험 모듈
+
+장단기금리차 모듈은 기존 A-F 판정을 대체하지 않고 보조 신호로만 표시합니다.
+
+- 미국 10Y-3M spread를 메인 경기침체 선행 신호로 사용합니다.
+- 미국 10Y-2Y spread를 시장 심리와 정책 기대 보조 지표로 사용합니다.
+- 한국 10Y-3Y, 한국 3Y-91D 또는 CD91 spread는 한국 시장 보정용으로 연결할 예정입니다.
+- 최근 12개월 안에 역전됐다가 현재 플러스가 된 경우 재가팔라짐 또는 역전 해소 구간으로 표시합니다.
+
+기본 임계값은 다음과 같습니다.
+
+- `spread > 1.0`: 정상.
+- `0.5 < spread <= 1.0`: 평탄화.
+- `0 < spread <= 0.5`: 역전 근접.
+- `spread <= 0`: 역전.
+- `spread <= -0.5`이고 역전이 3개월 이상 지속되면 깊은 역전.
+
+자세한 내용은 [docs/yield-curve.md](docs/yield-curve.md)에 정리했습니다.
+
 ## 로컬 실행
 
 ```powershell
 npm install
 npm run cycle:data
+npm run yield:data
 npm run dev
 ```
 
@@ -72,6 +98,7 @@ npm run dev
 ```powershell
 npm test
 npm run build
+npm run cycle:data
 ```
 
 ## GitHub Pages 배포
@@ -83,7 +110,8 @@ npm run build
 데이터 workflow는 다음 순서로 동작합니다.
 
 - Python으로 JSON 생성.
-- `public/data/annual_cycle.json`과 `public/data/current_cycle.json` 변경이 있으면 commit.
+- 장단기금리차 JSON은 FRED 키가 있으면 FRED에서 수집하고, 없으면 mock 데이터로 생성.
+- `public/data/annual_cycle.json`, `public/data/current_cycle.json`, `public/data/yield_curve.json` 변경이 있으면 commit.
 - 테스트 실행.
 - 사이트 build.
 - GitHub Pages 배포.

@@ -1,5 +1,18 @@
 # Context Notes
 
+## 2026-06-30 장단기금리차 경기 위험 모듈
+
+- 사용자는 기존 한국 투자 사이클 대시보드에 “장단기금리차 기반 경기침체 위험 / 코스톨라니 달걀 보정 모듈”을 추가하길 원했다.
+- 기존 `annual_cycle.json`, `current_cycle.json`, A-F 판정 로직은 유지하고, 장단기금리차는 `yield_curve.json` 별도 산출물과 별도 화면 섹션으로 분리한다.
+- 미국 FRED `T10Y3M`, `T10Y2Y`는 Python 수집 스크립트에서만 사용한다. 프론트엔드는 API 키 없이 생성된 JSON만 읽는다.
+- ICE 계열 신용스프레드 원시 데이터는 공개 재배포 제한 가능성이 있어 이번 MVP에서 제외하고 문서 TODO로 남긴다.
+- 한국 금리차는 MVP에서 null-safe placeholder와 adapter TODO만 둔다.
+- 보정 신호는 기존 primaryPhase를 덮어쓰지 않고 `cycleBias`와 설명 문구로만 표시한다.
+- mock 기준 `yield_curve.json` 최신값은 2026-06, 미국 10Y-3M 0.51%p, 상태 `normal_after_inversion`, 위험 `watch`, 보정 위치 C/D다.
+- `npm run yield:data`는 raw 30행과 classified JSON을 생성했다.
+- `npm test`는 13개 파일 39개 테스트 통과, `npm run build`는 성공, `npm run cycle:data`는 기존 27개 annual row 생성을 유지했다.
+- 인앱 브라우저 QA에서 `http://127.0.0.1:5173/`의 새 섹션, 한국 금리차 연결 전 placeholder, 콘솔 error/warn 0개, 다크모드 토글 후 섹션 유지, 모바일 390px overflow 없음으로 확인했다.
+
 ## 2026-06-30 예전 포트폴리오 진입 버튼
 
 - 새 사이클 대시보드는 기본 화면으로 유지한다.

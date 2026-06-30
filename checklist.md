@@ -1,5 +1,18 @@
 # Checklist
 
+## 2026-06-30 장단기금리차 경기 위험 모듈
+
+- [x] 작업 계획과 판단 기준을 `plan.md`, `context-notes.md`에 기록했다.
+- [x] `scripts/fetch_yield_curve.py`와 `scripts/classify_yield_curve.py`를 추가했다.
+- [x] `public/data/yield_curve.json`을 생성했다.
+- [x] `src/lib/yield-curve.ts`와 YieldCurve UI 컴포넌트를 추가했다.
+- [x] `src/App.tsx`에서 `yield_curve.json`을 별도로 fetch하고 fallback을 분리했다.
+- [x] `package.json`, `.github/workflows/update-data.yml`, README를 갱신했다.
+- [x] 장단기금리차 판정과 schema 테스트를 추가했다.
+- [x] `npm run yield:data`, `npm test`, `npm run build`, `npm run cycle:data`를 실행했다.
+- [x] 브라우저 렌더링과 모바일 레이아웃을 확인했다.
+- [x] commit, push, Pages 배포 확인을 완료한다.
+
 ## 2026-06-30 예전 포트폴리오 진입 버튼
 
 - [x] 우측 상단에 포트폴리오 버튼을 추가했다.
