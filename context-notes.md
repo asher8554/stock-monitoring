@@ -1,5 +1,11 @@
 # Context Notes
 
+## 2026-06-30 지표 차트 색 블록
+
+- `IndicatorLineChart` 아래에 `annual_cycle.json`의 연도별 `primaryPhase`를 그대로 색상 블록으로 표시한다.
+- 선택 연도는 같은 블록 strip에서 검은 outline으로 표시한다.
+- 달걀 위치 설명은 `phasePositionText`에서 과도기면 `C와 B 사이`, 단독 구간이면 `C 구간`처럼 만든다.
+
 ## 2026-06-30 한국 투자 사이클 대시보드 구현 기록
 
 - 프론트엔드는 API를 직접 호출하지 않고 `public/data/annual_cycle.json`과 `public/data/current_cycle.json`만 읽도록 구성했다.

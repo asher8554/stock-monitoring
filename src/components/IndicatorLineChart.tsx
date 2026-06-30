@@ -1,7 +1,7 @@
 // 연도별 거시 지표 추이를 선택 지표별 선 그래프로 보여준다.
 import { useMemo, useState } from "react";
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { formatIndicator, INDICATOR_META, INDICATOR_KEYS, type CycleYear, type IndicatorKey } from "../lib/phase";
+import { formatIndicator, INDICATOR_META, INDICATOR_KEYS, phasePoint, type CycleYear, type IndicatorKey } from "../lib/phase";
 
 export function IndicatorLineChart({ rows, selectedYear }: { rows: CycleYear[]; selectedYear: number }) {
   const [metric, setMetric] = useState<IndicatorKey>("base_rate_avg");
@@ -62,6 +62,25 @@ export function IndicatorLineChart({ rows, selectedYear }: { rows: CycleYear[]; 
             />
           </LineChart>
         </ResponsiveContainer>
+      </div>
+      <div
+        className="mt-3 grid h-8 overflow-hidden rounded-lg border border-slate-200"
+        style={{ gridTemplateColumns: `repeat(${rows.length}, minmax(10px, 1fr))` }}
+        aria-label="지표 그래프 연도별 phase 색상 블록"
+      >
+        {rows.map((row) => (
+          <span
+            key={row.year}
+            title={`${row.year}년 ${row.phaseLabel}`}
+            aria-label={`${row.year}년 ${row.phaseLabel}`}
+            className="block border-r border-white/50 last:border-r-0"
+            style={{
+              backgroundColor: phasePoint(row.primaryPhase).color,
+              outline: row.year === selectedYear ? "3px solid #0f172a" : undefined,
+              outlineOffset: "-3px",
+            }}
+          />
+        ))}
       </div>
     </section>
   );

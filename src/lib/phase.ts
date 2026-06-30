@@ -107,6 +107,11 @@ export function phaseTransitionPoint(row: CycleYear): { x: number; y: number } {
   };
 }
 
+export function phasePositionText(row: CycleYear): string {
+  const secondScore = row.scores[row.secondaryPhase] ?? 0;
+  return row.confidence - secondScore < 0.08 ? `${row.primaryPhase}와 ${row.secondaryPhase} 사이` : `${row.primaryPhase} 구간`;
+}
+
 export function formatPercent(value: number): string {
   return new Intl.NumberFormat("ko-KR", {
     style: "percent",

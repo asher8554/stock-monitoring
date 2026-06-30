@@ -1,6 +1,6 @@
 // 투자 사이클 phase 유틸의 포맷과 위치 계산을 검증한다.
 import { describe, expect, it } from "vitest";
-import { formatIndicator, formatPercent, phaseTransitionPoint, type CycleYear } from "../src/lib/phase";
+import { formatIndicator, formatPercent, phasePositionText, phaseTransitionPoint, type CycleYear } from "../src/lib/phase";
 
 const baseRow: CycleYear = {
   year: 2026,
@@ -32,12 +32,15 @@ describe("phase utilities", () => {
 
   it("places transition years between primary and secondary phase points", () => {
     expect(phaseTransitionPoint(baseRow)).toEqual({ x: 330, y: 257 });
+    expect(phasePositionText(baseRow)).toBe("C와 B 사이");
   });
 
   it("uses the primary phase point when confidence gap is wide", () => {
-    expect(phaseTransitionPoint({ ...baseRow, confidence: 0.42, scores: { ...baseRow.scores, C: 0.42 } })).toEqual({
+    const row = { ...baseRow, confidence: 0.42, scores: { ...baseRow.scores, C: 0.42 } };
+    expect(phaseTransitionPoint(row)).toEqual({
       x: 326,
       y: 350,
     });
+    expect(phasePositionText(row)).toBe("C 구간");
   });
 });

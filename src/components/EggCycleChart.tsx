@@ -1,5 +1,5 @@
 // 코스톨라니 달걀 SVG와 선택 연도 위치 점을 렌더링한다.
-import { PHASES, phasePoint, phaseTextPoint, phaseTransitionPoint, type CycleYear, type Phase } from "../lib/phase";
+import { PHASES, phasePoint, phasePositionText, phaseTextPoint, phaseTransitionPoint, type CycleYear, type Phase } from "../lib/phase";
 
 const phaseLabelLines: Record<Phase, string[]> = {
   A: ["A: 금리 정점"],
@@ -19,6 +19,7 @@ export function EggCycleChart({ selected }: { selected: CycleYear }) {
         <div>
           <h2 className="text-lg font-bold text-slate-950">코스톨라니 달걀 위치</h2>
           <p className="mt-1 text-sm text-slate-500">{selected.year}년 선택 위치입니다.</p>
+          <p className="mt-1 text-sm font-semibold text-slate-700">달걀 위 위치: {phasePositionText(selected)}.</p>
         </div>
         <span className="rounded-full bg-slate-900 px-3 py-1 text-sm font-semibold text-white">{selected.phaseLabel}</span>
       </div>
