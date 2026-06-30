@@ -218,6 +218,18 @@ input:disabled {
   background: var(--accent);
 }
 
+.cycle-panel {
+  margin-bottom: 16px;
+  padding: 10px;
+}
+
+.cycle-panel img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
 .status-line,
 .error-line {
   min-height: 20px;

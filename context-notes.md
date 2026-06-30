@@ -200,3 +200,11 @@
 - EXE는 `local/startup-updater/StockMonitoringStartupUpdater.exe`에 publish했다. 단일 파일 크기는 약 35MB다.
 - 시작프로그램 바로가기는 `C:\Users\asher\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\StockMonitoringStartupUpdater.lnk`에 등록했다.
 - self-test는 `local/startup-updater.log`에 `Self-test ok.`를 남기고 exit 0으로 통과했다.
+
+## 2026-06-30 투자 사이클 이미지 배치
+
+- 사용자는 첨부한 투자 사이클 이미지를 GitHub Pages에서 쉽게 확인할 수 있게 배치하길 원했다.
+- 이미지는 `public/investment-cycle.png`로 복사했다.
+- 이미지 패널은 잠금 화면과 잠금 해제 후 대시보드 모두에서 topbar 바로 아래에 보인다.
+- `npm test`와 `npm run build`는 통과했다.
+- Edge headless QA에서 `investment-cycle.png`가 1491x1055 자연 크기로 로드되고 화면에 표시됨을 확인했다.

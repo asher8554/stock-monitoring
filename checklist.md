@@ -145,3 +145,10 @@
 - [x] 단일 EXE를 `local/startup-updater`에 publish한다.
 - [x] 시작프로그램 바로가기를 등록한다.
 - [x] self-test, 테스트, commit, push를 완료한다.
+
+## 2026-06-30 투자 사이클 이미지 배치
+
+- [x] 첨부 이미지를 public asset으로 복사한다.
+- [x] 잠금 전에도 보이는 상단 이미지 패널을 추가한다.
+- [x] 테스트, 빌드, 브라우저 확인을 완료한다.
+- [x] commit, push, Pages 배포를 완료한다.

@@ -242,6 +242,8 @@ export function App() {
         </div>
       </header>
 
+      <InvestmentCyclePanel />
+
       {model && payload ? (
         <Dashboard
           model={model}
@@ -267,6 +269,14 @@ export function App() {
         />
       )}
     </main>
+  );
+}
+
+function InvestmentCyclePanel() {
+  return (
+    <section className="panel cycle-panel" aria-label="투자 사이클 참고 이미지">
+      <img src="./investment-cycle.png" alt="금리, 유동성, 자산 이동 흐름을 정리한 투자 사이클 개념도" />
+    </section>
   );
 }
 
