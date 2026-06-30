@@ -55,6 +55,7 @@ export function YieldCurveChart({ data }: { data: YieldCurveData }) {
                 YIELD_CURVE_METRIC_META[name as YieldCurveSeriesKey]?.label ?? name,
               ]}
               labelFormatter={(label) => formatYieldDate(String(label))}
+              labelStyle={{ color: "#0f172a", fontWeight: 800, marginBottom: 8 }}
             />
             <ReferenceLine y={0} stroke="#ef4444" strokeDasharray="4 4" label={{ value: "0%p", position: "insideTopRight" }} />
             {YIELD_CURVE_CRISIS_MARKERS.map((marker) => (
