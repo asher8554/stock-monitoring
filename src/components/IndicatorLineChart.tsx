@@ -37,7 +37,7 @@ export function IndicatorLineChart({ rows, selectedYear }: { rows: CycleYear[]; 
       </div>
 
       <div className="mt-4 h-[320px] w-full">
-        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
+        <ResponsiveContainer width="100%" height="100%" minWidth={0} initialDimension={{ width: 720, height: 320 }}>
           <LineChart data={data} margin={{ top: 12, right: 18, bottom: 6, left: 0 }}>
             <CartesianGrid stroke="#e2e8f0" vertical={false} />
             <XAxis dataKey="year" tickLine={false} axisLine={false} tickMargin={10} minTickGap={18} />
