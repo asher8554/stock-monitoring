@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import { EggCycleChart } from "./components/EggCycleChart";
 import { IndicatorLineChart } from "./components/IndicatorLineChart";
+import { LegacyPortfolioView } from "./components/LegacyPortfolioView";
 import { PhaseTimeline } from "./components/PhaseTimeline";
 import { YearDetailPanel } from "./components/YearDetailPanel";
 import { formatDateTime, formatPercent, type CycleYear } from "./lib/phase";
@@ -12,10 +13,6 @@ type LoadState = "loading" | "ready" | "error";
 const themeStorageKey = "stock-monitoring-cycle-theme";
 
 export function App() {
-  const [annual, setAnnual] = useState<CycleYear[]>([]);
-  const [current, setCurrent] = useState<CycleYear | null>(null);
-  const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  const [loadState, setLoadState] = useState<LoadState>("loading");
   const [theme, setTheme] = useState<ThemeMode>(() =>
     resolveInitialTheme(localStorage.getItem(themeStorageKey), window.matchMedia("(prefers-color-scheme: dark)").matches),
   );
@@ -25,6 +22,19 @@ export function App() {
     document.documentElement.style.colorScheme = theme;
     localStorage.setItem(themeStorageKey, theme);
   }, [theme]);
+
+  if (new URLSearchParams(window.location.search).get("view") === "portfolio") {
+    return <LegacyPortfolioView theme={theme} onToggleTheme={() => setTheme((currentTheme) => nextTheme(currentTheme))} />;
+  }
+
+  return <CycleDashboard theme={theme} onToggleTheme={() => setTheme((currentTheme) => nextTheme(currentTheme))} />;
+}
+
+function CycleDashboard({ theme, onToggleTheme }: { theme: ThemeMode; onToggleTheme: () => void }) {
+  const [annual, setAnnual] = useState<CycleYear[]>([]);
+  const [current, setCurrent] = useState<CycleYear | null>(null);
+  const [selectedYear, setSelectedYear] = useState<number | null>(null);
+  const [loadState, setLoadState] = useState<LoadState>("loading");
 
   useEffect(() => {
     let mounted = true;
@@ -105,9 +115,15 @@ export function App() {
             <p className="max-w-xl rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900">
               투자 추천이 아니라 시장 상태 해석용 참고 도구입니다.
             </p>
+            <a
+              href="?view=portfolio"
+              className="inline-flex h-11 items-center justify-center rounded-lg border border-slate-200 bg-white px-4 text-sm font-bold text-slate-700 shadow-sm hover:border-slate-400"
+            >
+              포트폴리오
+            </a>
             <button
               type="button"
-              onClick={() => setTheme((currentTheme) => nextTheme(currentTheme))}
+              onClick={onToggleTheme}
               aria-label={theme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
               title={theme === "dark" ? "라이트 모드" : "다크 모드"}
               className="inline-flex h-11 w-11 flex-none items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-sm hover:border-slate-400"

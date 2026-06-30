@@ -1,5 +1,11 @@
 # Context Notes
 
+## 2026-06-30 예전 포트폴리오 진입 버튼
+
+- 새 사이클 대시보드는 기본 화면으로 유지한다.
+- `?view=portfolio`에서 기존 `public/portfolio.enc.json`을 fetch하고 기존 `decryptPayload`, `buildDashboardModel`을 재사용한다.
+- 레거시 화면은 보기 전용 요약과 종목별 통합표만 둔다. 기존 리밸런싱 UI 전체 복원은 하지 않았다.
+
 ## 2026-06-30 다크모드
 
 - 기존 `resolveInitialTheme`, `nextTheme` helper를 재사용했다.
