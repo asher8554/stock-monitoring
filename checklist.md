@@ -129,3 +129,11 @@
 - [x] wrapper 문법과 테스트를 검증한다.
 - [x] 실제 `Update-StockMonitoring` 흐름으로 암호화 payload를 갱신한다.
 - [x] commit과 push를 완료한다.
+
+## 2026-06-30 데이터 갱신 실패 진단
+
+- [x] live payload 생성 시각과 예약 작업 상태를 확인한다.
+- [x] Toss 403이 전체 daily update를 중단시키는 원인을 확인한다.
+- [x] Toss 실패 시 KIS/manual 갱신은 계속 진행하게 한다.
+- [x] Windows 예약 작업을 다시 등록한다.
+- [x] 테스트, 실제 갱신, commit, push, Pages 배포를 확인한다.

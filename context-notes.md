@@ -178,3 +178,14 @@
 - 사용자가 `.env.local`에 `PORTFOLIO_PASSWORD`를 저장한 뒤 `Update-StockMonitoring.ps1 -NoWaitPages`를 실행했다.
 - 실제 payload 갱신은 `92c5fa5 데이터 자동 갱신` commit으로 push됐다.
 - 갱신 직후 로컬 포트폴리오는 토스 계좌 1개와 한국투자 보유 종목 4건을 포함했고, 토스 보유 종목은 계속 0건이다.
+
+## 2026-06-30 데이터 갱신 실패 진단
+
+- 사용자는 실제 보유 포트폴리오와 사이트 데이터가 다르며 데이터 갱신이 잘못된 것 같다고 했다.
+- `public/portfolio.enc.json` 생성 시각은 `2026-06-22T14:17:07.901Z`로 2026-06-30 기준 stale 상태였다.
+- `schtasks /Query /TN StockMonitoring`은 예약 작업이 없다고 반환했다.
+- 수동 `Update-StockMonitoring` 실행은 Toss Open API `HTTP 403 IP address not allowed`에서 중단됐다.
+- Toss는 선택 broker이고 현재 자녀계좌도 API에서 노출되지 않으므로, Toss 실패가 KIS/manual 데이터 배포를 막지 않게 처리한다.
+- 수정 후 `Update-StockMonitoring.ps1 -NoWaitPages`는 Toss 403을 warning으로 넘기고 `public/portfolio.enc.json`을 `2026-06-30T08:10:36.566Z`로 갱신해 `29edb24 데이터 자동 갱신` commit을 push했다.
+- 갱신된 로컬 포트폴리오는 한국투자 ISA 계좌 1개와 한국투자 국내 종목 2개만 포함한다.
+- `StockMonitoring` Windows 예약 작업을 매일 16:10 실행으로 다시 등록했다. 다음 실행 시각은 2026-07-01 16:10이다.

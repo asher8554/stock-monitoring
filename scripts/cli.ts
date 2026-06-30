@@ -62,7 +62,15 @@ async function collect(): Promise<void> {
         tokenCache: createFileKisTokenCache(kisTokenCachePath),
       })
     : null;
-  const toss = credentials.toss ? await fetchTossPortfolio(credentials.toss) : null;
+  let toss: Awaited<ReturnType<typeof fetchTossPortfolio>> = null;
+  if (credentials.toss) {
+    try {
+      toss = await fetchTossPortfolio(credentials.toss);
+    } catch (error) {
+      // ponytail: optional broker failure must not block KIS/manual portfolio publishing.
+      console.warn(`Toss collection skipped: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
   const miraePositions = await readMiraeAssetPositions(path.join(localDir, "imports", "miraeasset"), {
     accountId: "miraeasset-general",
     accountAlias: "미래에셋 일반",
