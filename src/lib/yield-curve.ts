@@ -65,6 +65,11 @@ export interface YieldCurveClassification {
 
 export const YIELD_CURVE_METRICS: YieldCurveSeriesKey[] = ["us10y3m", "us10y2y", "kr10y3y", "kr3y91d"];
 
+export const YIELD_CURVE_CRISIS_MARKERS = [
+  { date: "2008-09", label: "리먼" },
+  { date: "2020-03", label: "코로나19" },
+];
+
 export const YIELD_CURVE_METRIC_META: Record<YieldCurveSeriesKey, { label: string; shortLabel: string; color: string }> = {
   us10y3m: { label: "US 10Y-3M", shortLabel: "미국 10Y-3M", color: "#2563eb" },
   us10y2y: { label: "US 10Y-2Y", shortLabel: "미국 10Y-2Y", color: "#0f766e" },

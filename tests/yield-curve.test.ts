@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest";
 import {
   classifyYieldCurveMetrics,
   formatSpread,
+  formatYieldDate,
   hasKoreanYieldData,
   YIELD_CURVE_METRICS,
   type YieldCurveData,
@@ -55,6 +56,10 @@ describe("yield curve classification", () => {
 describe("yield curve data contract", () => {
   it("formats missing Korean spread data as a connection placeholder", () => {
     expect(formatSpread(null)).toBe("연결 전");
+  });
+
+  it("formats monthly labels with the year visible", () => {
+    expect(formatYieldDate("2008-09")).toBe("2008년 09월");
   });
 
   it("validates the generated yield_curve.json schema", () => {

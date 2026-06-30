@@ -2,8 +2,10 @@
 import { useMemo, useState } from "react";
 import { CartesianGrid, Line, LineChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import {
+  formatYieldDate,
   formatSpread,
   hasKoreanYieldData,
+  YIELD_CURVE_CRISIS_MARKERS,
   YIELD_CURVE_METRIC_META,
   type YieldCurveData,
   type YieldCurveSeriesKey,
@@ -52,9 +54,18 @@ export function YieldCurveChart({ data }: { data: YieldCurveData }) {
                 formatSpread(typeof value === "number" ? value : Number(value)),
                 YIELD_CURVE_METRIC_META[name as YieldCurveSeriesKey]?.label ?? name,
               ]}
-              labelFormatter={(label) => `${label}`}
+              labelFormatter={(label) => formatYieldDate(String(label))}
             />
             <ReferenceLine y={0} stroke="#ef4444" strokeDasharray="4 4" label={{ value: "0%p", position: "insideTopRight" }} />
+            {YIELD_CURVE_CRISIS_MARKERS.map((marker) => (
+              <ReferenceLine
+                key={marker.date}
+                x={marker.date}
+                stroke="#64748b"
+                strokeDasharray="2 4"
+                label={{ value: marker.label, position: "insideTop", fill: "#64748b", fontSize: 11 }}
+              />
+            ))}
             {visibleKeys.map((key) => (
               <Line
                 key={key}
@@ -77,6 +88,12 @@ export function YieldCurveChart({ data }: { data: YieldCurveData }) {
           <span key={key} className="inline-flex items-center gap-2 text-xs font-bold text-slate-600">
             <span className="h-2.5 w-2.5 rounded-full" style={{ backgroundColor: YIELD_CURVE_METRIC_META[key].color }} />
             {YIELD_CURVE_METRIC_META[key].label}
+          </span>
+        ))}
+        {YIELD_CURVE_CRISIS_MARKERS.map((marker) => (
+          <span key={marker.date} className="inline-flex items-center gap-2 text-xs font-bold text-slate-600">
+            <span className="h-3 w-px border-l border-dashed border-slate-500" />
+            {formatYieldDate(marker.date)} {marker.label}
           </span>
         ))}
       </div>
