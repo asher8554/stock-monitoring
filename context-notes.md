@@ -189,3 +189,14 @@
 - 수정 후 `Update-StockMonitoring.ps1 -NoWaitPages`는 Toss 403을 warning으로 넘기고 `public/portfolio.enc.json`을 `2026-06-30T08:10:36.566Z`로 갱신해 `29edb24 데이터 자동 갱신` commit을 push했다.
 - 갱신된 로컬 포트폴리오는 한국투자 ISA 계좌 1개와 한국투자 국내 종목 2개만 포함한다.
 - `StockMonitoring` Windows 예약 작업을 매일 16:10 실행으로 다시 등록했다. 다음 실행 시각은 2026-07-01 16:10이다.
+
+## 2026-06-30 시작프로그램 EXE 자동 갱신
+
+- 사용자는 GitHub 자체 갱신 대신 컴퓨터 시작 시 자동 갱신되는 EXE를 만들고 시작프로그램 등록을 원했다.
+- EXE는 새 갱신 로직을 만들지 않고 기존 `Update-StockMonitoring.ps1 -NoWaitPages`를 호출한다.
+- 인터넷 확인은 `https://github.com/` HEAD 요청으로 판단한다. GitHub push가 필요하므로 GitHub 접속 가능성을 기준으로 삼는다.
+- 인터넷이 없거나 update process가 실패하면 30초 후 재시도하고, 최대 30회 재시도한다.
+- 로그는 `local/startup-updater.log`에 남긴다.
+- EXE는 `local/startup-updater/StockMonitoringStartupUpdater.exe`에 publish했다. 단일 파일 크기는 약 35MB다.
+- 시작프로그램 바로가기는 `C:\Users\asher\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\StockMonitoringStartupUpdater.lnk`에 등록했다.
+- self-test는 `local/startup-updater.log`에 `Self-test ok.`를 남기고 exit 0으로 통과했다.

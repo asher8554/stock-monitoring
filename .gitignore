@@ -2,6 +2,8 @@ node_modules/
 dist/
 coverage/
 .forge/
+tools/**/bin/
+tools/**/obj/
 
 .env
 .env.local

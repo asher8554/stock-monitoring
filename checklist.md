@@ -137,3 +137,11 @@
 - [x] Toss 실패 시 KIS/manual 갱신은 계속 진행하게 한다.
 - [x] Windows 예약 작업을 다시 등록한다.
 - [x] 테스트, 실제 갱신, commit, push, Pages 배포를 확인한다.
+
+## 2026-06-30 시작프로그램 EXE 자동 갱신
+
+- [x] 기존 `Update-StockMonitoring.ps1`를 재사용하는 EXE source를 만든다.
+- [x] 인터넷 연결 확인과 재시도 로직을 추가한다.
+- [x] 단일 EXE를 `local/startup-updater`에 publish한다.
+- [x] 시작프로그램 바로가기를 등록한다.
+- [x] self-test, 테스트, commit, push를 완료한다.

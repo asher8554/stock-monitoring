@@ -117,6 +117,12 @@ npm run schedule:disable
 
 작업 스케줄러는 로컬 PC에서만 의미가 있다. 등록된 작업은 `npm run daily-update`를 실행하므로 `.env.local`에 `PORTFOLIO_PASSWORD`가 있어야 한다.
 
+## 시작프로그램 자동 갱신 EXE
+
+`local/startup-updater/StockMonitoringStartupUpdater.exe`는 Windows 로그인 시 인터넷 연결을 확인한 뒤 `Update-StockMonitoring.ps1 -NoWaitPages`를 실행하고 종료한다.
+
+인터넷 연결이 없거나 갱신 명령이 실패하면 30초 간격으로 최대 30회 재시도한다. 실행 로그는 `local/startup-updater.log`에 남는다.
+
 ## 외부 입력 필요
 
 - 미래에셋 실제 샘플 파일 기준 파서 매핑 보강은 사용자가 내려받은 실제 CSV/XLSX 샘플이 필요하다.
