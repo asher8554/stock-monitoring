@@ -1,5 +1,13 @@
 # Context Notes
 
+## 2026-06-30 지표 그래프 tooltip 연도 대비
+
+- 사용자는 지표 그래프 hover tooltip의 연도 텍스트가 다크 모드에서 거의 보이지 않는다고 했다.
+- 금리차 차트 tooltip에서 이미 확인한 대비 개선과 동일하게 `IndicatorLineChart`의 Recharts `Tooltip`에 `labelStyle`을 지정한다.
+- 데이터, 축, phase strip 로직은 바꾸지 않고 tooltip label 표시 대비만 수정한다.
+- `npm test`는 13개 파일 41개 테스트가 통과했고, `npm run build`도 통과했다.
+- 브라우저 QA에서 지표 그래프 hover tooltip의 `2013년` label이 진한 색으로 보이고 console error/warn이 0개임을 확인했다.
+
 ## 2026-06-30 금리차 차트 tooltip과 위기 기준선
 
 - 사용자는 금리차 추이에 마우스를 올렸을 때 해당 연도가 같이 보여 파악하기 쉽게 하길 원했다.

@@ -50,6 +50,7 @@ export function IndicatorLineChart({ rows, selectedYear }: { rows: CycleYear[]; 
             <Tooltip
               formatter={(value) => [formatIndicator(metric, Number(value)), meta.label]}
               labelFormatter={(label) => `${label}년`}
+              labelStyle={{ color: "#0f172a", fontWeight: 800, marginBottom: 8 }}
             />
             <ReferenceLine x={selectedYear} stroke="#0f172a" strokeDasharray="4 4" />
             <Line
