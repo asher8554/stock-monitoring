@@ -73,13 +73,16 @@ export function IndicatorLineChart({ rows, selectedYear }: { rows: CycleYear[]; 
             key={row.year}
             title={`${row.year}년 ${row.phaseLabel}`}
             aria-label={`${row.year}년 ${row.phaseLabel}`}
-            className="block border-r border-white/50 last:border-r-0"
+            className="flex items-center justify-center border-r border-white/50 text-[10px] font-black text-white last:border-r-0"
             style={{
               backgroundColor: phasePoint(row.primaryPhase).color,
               outline: row.year === selectedYear ? "3px solid #0f172a" : undefined,
               outlineOffset: "-3px",
+              textShadow: "0 1px 2px rgb(0 0 0 / 0.55)",
             }}
-          />
+          >
+            {row.primaryPhase}
+          </span>
         ))}
       </div>
     </section>
