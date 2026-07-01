@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-30T12:04:35+00:00",
+  "updatedAt": "2026-07-01T05:22:27+00:00",
   "sourceNotes": [
     {
       "name": "FRED T10Y3M",
@@ -15,7 +15,7 @@
     }
   ],
   "latest": {
-    "date": "2026-06",
+    "date": "2026-07",
     "us10y3m": 0.51,
     "us10y2y": 0.28,
     "kr10y3y": null,
@@ -2304,209 +2304,216 @@
     },
     {
       "date": "2024-01",
+      "us10y3m": -0.99,
+      "us10y2y": -0.74,
+      "kr10y3y": null,
+      "kr3y91d": null
+    },
+    {
+      "date": "2024-02",
       "us10y3m": -1.2,
       "us10y2y": -0.35,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2024-02",
+      "date": "2024-03",
       "us10y3m": -1.1,
       "us10y2y": -0.32,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2024-03",
+      "date": "2024-04",
       "us10y3m": -1.05,
       "us10y2y": -0.31,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2024-04",
+      "date": "2024-05",
       "us10y3m": -0.95,
       "us10y2y": -0.28,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2024-05",
+      "date": "2024-06",
       "us10y3m": -0.88,
       "us10y2y": -0.24,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2024-06",
+      "date": "2024-07",
       "us10y3m": -0.8,
       "us10y2y": -0.22,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2024-07",
+      "date": "2024-08",
       "us10y3m": -0.72,
       "us10y2y": -0.19,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2024-08",
+      "date": "2024-09",
       "us10y3m": -0.68,
       "us10y2y": -0.17,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2024-09",
+      "date": "2024-10",
       "us10y3m": -0.62,
       "us10y2y": -0.15,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2024-10",
+      "date": "2024-11",
       "us10y3m": -0.55,
       "us10y2y": -0.12,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2024-11",
+      "date": "2024-12",
       "us10y3m": -0.5,
       "us10y2y": -0.1,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2024-12",
+      "date": "2025-01",
       "us10y3m": -0.46,
       "us10y2y": -0.08,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-01",
+      "date": "2025-02",
       "us10y3m": -0.44,
       "us10y2y": -0.06,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-02",
+      "date": "2025-03",
       "us10y3m": -0.4,
       "us10y2y": -0.04,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-03",
+      "date": "2025-04",
       "us10y3m": -0.35,
       "us10y2y": -0.03,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-04",
+      "date": "2025-05",
       "us10y3m": -0.32,
       "us10y2y": -0.02,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-05",
+      "date": "2025-06",
       "us10y3m": -0.3,
       "us10y2y": 0.0,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-06",
+      "date": "2025-07",
       "us10y3m": -0.26,
       "us10y2y": 0.02,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-07",
+      "date": "2025-08",
       "us10y3m": -0.22,
       "us10y2y": 0.04,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-08",
+      "date": "2025-09",
       "us10y3m": -0.17,
       "us10y2y": 0.07,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-09",
+      "date": "2025-10",
       "us10y3m": -0.12,
       "us10y2y": 0.1,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-10",
+      "date": "2025-11",
       "us10y3m": -0.06,
       "us10y2y": 0.13,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-11",
+      "date": "2025-12",
       "us10y3m": 0.02,
       "us10y2y": 0.16,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2025-12",
+      "date": "2026-01",
       "us10y3m": 0.1,
       "us10y2y": 0.18,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2026-01",
+      "date": "2026-02",
       "us10y3m": 0.18,
       "us10y2y": 0.2,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2026-02",
+      "date": "2026-03",
       "us10y3m": 0.29,
       "us10y2y": 0.22,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2026-03",
+      "date": "2026-04",
       "us10y3m": 0.38,
       "us10y2y": 0.24,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2026-04",
+      "date": "2026-05",
       "us10y3m": 0.43,
       "us10y2y": 0.25,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2026-05",
+      "date": "2026-06",
       "us10y3m": 0.48,
       "us10y2y": 0.27,
       "kr10y3y": null,
       "kr3y91d": null
     },
     {
-      "date": "2026-06",
+      "date": "2026-07",
       "us10y3m": 0.51,
       "us10y2y": 0.28,
       "kr10y3y": null,
